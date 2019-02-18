@@ -10,7 +10,7 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
     class CreateUsersAndGroupsGenerationTask : DataGenerationTaskBase
     {
         private List<string> prinicpals;
-        private List<string> shuffled;
+        private List<string> shuffled = new List<string>();
 
         public override string Title
         {
@@ -118,6 +118,9 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
             {
                 ou = null;
             }
+
+            prinicpals = principalList;
+
             using (PrincipalContext ctx = new PrincipalContext(contextType, domain, ou))
             {
                 for (int i = 0; i < numOfGroups; i++)
@@ -128,8 +131,6 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
                         groupPrincipal.Name = SampleData.GetSampleValueRandom(SampleData.Accounts);
                         groupPrincipal.DisplayName = groupPrincipal.Name;
                         groupPrincipal.SamAccountName = getSamAccountName(groupPrincipal.Name, null);
-                        shuffled = new List<string>(prinicpals);
-                        shuffled.Shuffle();
                         addPrincipalsToGroup(groupPrincipal);
 
                         groupPrincipal.Save();
