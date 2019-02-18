@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 using System.DirectoryServices.AccountManagement;
 using System.Linq;
+using System.Text;
 using Acceleratio.SPDG.Generator.GenerationTasks;
 
 namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
 {
     class CreateUsersAndGroupsGenerationTask : DataGenerationTaskBase
     {
+        private List<string> prinicpals;
+        private List<string> shuffled;
+
         public override string Title
         {
             get { return "Creating Active Directory users and groups."; }
@@ -35,7 +39,7 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
 
         public override void Execute()
         {
-            var users = new List<Principal>();
+            var users = new List<string>();
             if (WorkingDefinition.NumberOfUsersToCreate > 0)
             {
                 try
@@ -64,7 +68,7 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
             }
         }
 
-        public List<Principal> createUsers(string domain, string ou, int numOfUsers)
+        public List<String> createUsers(string domain, string ou, int numOfUsers)
         {
             ContextType contextType = ContextType.Domain;
             //must pass null parameter to principalcontext if no ou selected
@@ -72,7 +76,7 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
             {
                 ou = null;
             }
-            var createdPrincipals = new List<Principal>();
+            var createdPrincipals = new List<string>();
             using (PrincipalContext ctx = new PrincipalContext(contextType, domain, ou))
             {
                 for (int i = 0; i < numOfUsers; i++)
@@ -81,10 +85,11 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
                     {
                         UserPrincipal userPrincipal = new UserPrincipal(ctx);
                         userPrincipal.Surname = SampleData.GetSampleValueRandom(SampleData.LastNames);
-                        userPrincipal.GivenName = SampleData.GetSampleValueRandom(SampleData.FirstNames); ;
-                        userPrincipal.SamAccountName = userPrincipal.GivenName.ToLower() + "." + userPrincipal.Surname.ToLower();
+                        userPrincipal.GivenName = SampleData.GetSampleValueRandom(SampleData.FirstNames);
+                        userPrincipal.SamAccountName = getSamAccountName(userPrincipal.GivenName.ToLower(), userPrincipal.Surname.ToLower());
                         userPrincipal.Name = userPrincipal.GivenName + " " + userPrincipal.Surname;
                         userPrincipal.DisplayName = userPrincipal.GivenName + " " + userPrincipal.Surname;
+                        userPrincipal.UserPrincipalName = userPrincipal.SamAccountName + "@" + WorkingDefinition.Fqdn;
 
                         string pwdOfNewlyCreatedUser = "Acce1234!";
 
@@ -93,7 +98,7 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
                         userPrincipal.PasswordNeverExpires = true;
                         userPrincipal.Save();
                         Owner.IncrementCurrentTaskProgress(string.Format("Created {0}/{1} users.", i, numOfUsers));
-                        createdPrincipals.Add(userPrincipal);
+                        createdPrincipals.Add(userPrincipal.Sid.Value);
                     }
                     catch (Exception ex)
                     {
@@ -105,7 +110,7 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
             return createdPrincipals;
         }
 
-        public void createGroups(string domain, string ou, int numOfGroups, List<Principal> principalList)
+        public void createGroups(string domain, string ou, int numOfGroups, List<string> principalList)
         {
             ContextType contextType = ContextType.Domain;
             //must pass null parameter to principalcontext if no ou selected
@@ -122,11 +127,14 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
                         GroupPrincipal groupPrincipal = new GroupPrincipal(ctx);
                         groupPrincipal.Name = SampleData.GetSampleValueRandom(SampleData.Accounts);
                         groupPrincipal.DisplayName = groupPrincipal.Name;
-                        addPrincipalsToGroup(groupPrincipal, principalList);
+                        groupPrincipal.SamAccountName = getSamAccountName(groupPrincipal.Name, null);
+                        shuffled = new List<string>(prinicpals);
+                        shuffled.Shuffle();
+                        addPrincipalsToGroup(groupPrincipal);
 
                         groupPrincipal.Save();
                         Owner.IncrementCurrentTaskProgress(string.Format("Created {0}/{1} groups.", i, numOfGroups));
-                        principalList.Add(groupPrincipal);
+                        principalList.Add(groupPrincipal.Sid.Value);
                     }
                     catch (Exception ex)
                     {
@@ -136,20 +144,38 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
             }
         }
 
-        private void addPrincipalsToGroup(GroupPrincipal group, List<Principal> availablePrincipals)
+        private void addPrincipalsToGroup(GroupPrincipal group)
         {
-            var userCount = Math.Min(WorkingDefinition.MaxNumberOfUsersInCreatedSecurityGroups, availablePrincipals.Count);
-
-            if (userCount > 0)
+            if (shuffled.Count == 0)
             {
-                availablePrincipals.Shuffle();
-                var randomPrincipals = availablePrincipals.Take(userCount);
-
+                shuffled.AddRange(prinicpals);
+                shuffled.Shuffle();
+            }
+            int takeCt = Math.Min(WorkingDefinition.MaxNumberOfUsersInCreatedSecurityGroups, shuffled.Count);
+            if (takeCt > 0)
+            {
+                var randomPrincipals = shuffled.Take(takeCt);
+                shuffled.RemoveRange(0, takeCt);
                 foreach (var randomPrincipal in randomPrincipals)
                 {
-                    group.Members.Add(group.Context, IdentityType.Sid, randomPrincipal.Sid.Value);
+                    group.Members.Add(group.Context, IdentityType.Sid, randomPrincipal);
                 }
             }
+        }
+
+        private string getSamAccountName(string fn, string ln)
+        {
+            StringBuilder sb = new StringBuilder();
+            if (fn != null && fn.Length > 0)
+            {
+                sb.Append(fn.Substring(0, 1).ToLower());
+            }
+            if (ln != null && ln.Length > 0)
+            {
+                sb.Append(ln.Substring(0, 1).ToLower());
+            }
+            sb.Append("" + new Random().Next());
+            return sb.ToString();
         }
     }
 }

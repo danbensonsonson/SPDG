@@ -15,5 +15,6 @@
         public string UseExistingWebApplicationName { get; set; }
         public bool CreateOutOfTheBoxWorkflowsToList { get; set; }
         public bool AttachCustomWorkflowToList { get; set; }
+        public string Fqdn { get; set; }
     }
 }

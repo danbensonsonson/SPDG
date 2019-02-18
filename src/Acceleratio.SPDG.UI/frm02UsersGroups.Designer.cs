@@ -45,6 +45,8 @@
             this.lblMaxNumberOfUsersInSecurityGroups = new System.Windows.Forms.Label();
             this.cboDomains = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.tbFqdn = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackNumberOfUsers)).BeginInit();
@@ -102,6 +104,8 @@
             // 
             // flowLayoutPanel1
             // 
+            this.flowLayoutPanel1.Controls.Add(this.label6);
+            this.flowLayoutPanel1.Controls.Add(this.tbFqdn);
             this.flowLayoutPanel1.Controls.Add(this.label2);
             this.flowLayoutPanel1.Controls.Add(this.cboOrganizationalUnit);
             this.flowLayoutPanel1.Controls.Add(this.label3);
@@ -123,7 +127,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.ForeColor = System.Drawing.Color.DarkSlateGray;
-            this.label2.Location = new System.Drawing.Point(3, 0);
+            this.label2.Location = new System.Drawing.Point(3, 29);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(112, 15);
             this.label2.TabIndex = 1;
@@ -132,7 +136,7 @@
             // cboOrganizationalUnit
             // 
             this.cboOrganizationalUnit.FormattingEnabled = true;
-            this.cboOrganizationalUnit.Location = new System.Drawing.Point(3, 18);
+            this.cboOrganizationalUnit.Location = new System.Drawing.Point(3, 47);
             this.cboOrganizationalUnit.Name = "cboOrganizationalUnit";
             this.cboOrganizationalUnit.Size = new System.Drawing.Size(531, 23);
             this.cboOrganizationalUnit.TabIndex = 0;
@@ -141,7 +145,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.ForeColor = System.Drawing.Color.DarkSlateGray;
-            this.label3.Location = new System.Drawing.Point(3, 44);
+            this.label3.Location = new System.Drawing.Point(3, 73);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(147, 15);
             this.label3.TabIndex = 2;
@@ -150,7 +154,7 @@
             // trackNumberOfUsers
             // 
             this.trackNumberOfUsers.LargeChange = 1;
-            this.trackNumberOfUsers.Location = new System.Drawing.Point(3, 62);
+            this.trackNumberOfUsers.Location = new System.Drawing.Point(3, 91);
             this.trackNumberOfUsers.Maximum = 1000;
             this.trackNumberOfUsers.Name = "trackNumberOfUsers";
             this.trackNumberOfUsers.Size = new System.Drawing.Size(517, 45);
@@ -162,7 +166,7 @@
             // lblNumUsers
             // 
             this.lblNumUsers.AutoSize = true;
-            this.lblNumUsers.Location = new System.Drawing.Point(526, 59);
+            this.lblNumUsers.Location = new System.Drawing.Point(526, 88);
             this.lblNumUsers.Name = "lblNumUsers";
             this.lblNumUsers.Padding = new System.Windows.Forms.Padding(0, 5, 0, 0);
             this.lblNumUsers.Size = new System.Drawing.Size(13, 20);
@@ -172,7 +176,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(3, 110);
+            this.label4.Location = new System.Drawing.Point(3, 139);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(203, 15);
             this.label4.TabIndex = 4;
@@ -181,7 +185,7 @@
             // trackNumberOfSecGroups
             // 
             this.trackNumberOfSecGroups.LargeChange = 1;
-            this.trackNumberOfSecGroups.Location = new System.Drawing.Point(3, 128);
+            this.trackNumberOfSecGroups.Location = new System.Drawing.Point(3, 157);
             this.trackNumberOfSecGroups.Maximum = 100;
             this.trackNumberOfSecGroups.Name = "trackNumberOfSecGroups";
             this.trackNumberOfSecGroups.Size = new System.Drawing.Size(517, 45);
@@ -191,7 +195,7 @@
             // lblGroups
             // 
             this.lblGroups.AutoSize = true;
-            this.lblGroups.Location = new System.Drawing.Point(526, 125);
+            this.lblGroups.Location = new System.Drawing.Point(526, 154);
             this.lblGroups.Name = "lblGroups";
             this.lblGroups.Padding = new System.Windows.Forms.Padding(0, 5, 0, 0);
             this.lblGroups.Size = new System.Drawing.Size(13, 20);
@@ -201,7 +205,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(3, 176);
+            this.label5.Location = new System.Drawing.Point(3, 205);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(289, 15);
             this.label5.TabIndex = 8;
@@ -210,7 +214,7 @@
             // trackMaxNumberOfUsersInSecurityGroups
             // 
             this.trackMaxNumberOfUsersInSecurityGroups.LargeChange = 1;
-            this.trackMaxNumberOfUsersInSecurityGroups.Location = new System.Drawing.Point(3, 194);
+            this.trackMaxNumberOfUsersInSecurityGroups.Location = new System.Drawing.Point(3, 223);
             this.trackMaxNumberOfUsersInSecurityGroups.Maximum = 200;
             this.trackMaxNumberOfUsersInSecurityGroups.Name = "trackMaxNumberOfUsersInSecurityGroups";
             this.trackMaxNumberOfUsersInSecurityGroups.Size = new System.Drawing.Size(517, 45);
@@ -222,7 +226,7 @@
             // lblMaxNumberOfUsersInSecurityGroups
             // 
             this.lblMaxNumberOfUsersInSecurityGroups.AutoSize = true;
-            this.lblMaxNumberOfUsersInSecurityGroups.Location = new System.Drawing.Point(526, 191);
+            this.lblMaxNumberOfUsersInSecurityGroups.Location = new System.Drawing.Point(526, 220);
             this.lblMaxNumberOfUsersInSecurityGroups.Name = "lblMaxNumberOfUsersInSecurityGroups";
             this.lblMaxNumberOfUsersInSecurityGroups.Padding = new System.Windows.Forms.Padding(0, 5, 0, 0);
             this.lblMaxNumberOfUsersInSecurityGroups.Size = new System.Drawing.Size(13, 20);
@@ -250,6 +254,22 @@
             this.label1.TabIndex = 11;
             this.label1.Text = "Use this domain to create SharePoint users and groups: ";
             // 
+            // tbFqdn
+            // 
+            this.tbFqdn.Location = new System.Drawing.Point(175, 3);
+            this.tbFqdn.Name = "tbFqdn";
+            this.tbFqdn.Size = new System.Drawing.Size(359, 23);
+            this.tbFqdn.TabIndex = 11;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(3, 0);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(166, 15);
+            this.label6.TabIndex = 12;
+            this.label6.Text = "Fully Qualified Domain Name:";
+            // 
             // frm02UsersGroups
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -260,8 +280,6 @@
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.chkGenerateUsers);
             this.Controls.Add(this.ucSteps1);
-            this.MaximumSize = new System.Drawing.Size(937, 683);
-            this.MinimumSize = new System.Drawing.Size(937, 683);
             this.Name = "frm02UsersGroups";
             this.Text = "frm02UsersGroups";
             this.Controls.SetChildIndex(this.ucSteps1, 0);
@@ -305,5 +323,7 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TrackBar trackMaxNumberOfUsersInSecurityGroups;
         private System.Windows.Forms.Label lblMaxNumberOfUsersInSecurityGroups;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox tbFqdn;
     }
 }

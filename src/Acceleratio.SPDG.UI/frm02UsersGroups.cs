@@ -113,6 +113,7 @@ namespace Acceleratio.SPDG.UI
             {
                 serverDefinition.ADDomainName = cboDomains.Text;
                 serverDefinition.ADOrganizationalUnit = cboOrganizationalUnit.Text;
+                serverDefinition.Fqdn = tbFqdn.Text;
             }
 
             return true;
