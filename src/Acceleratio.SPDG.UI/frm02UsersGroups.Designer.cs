@@ -32,6 +32,8 @@
             this.chkGenerateUsers = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.label6 = new System.Windows.Forms.Label();
+            this.tbFqdn = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.cboOrganizationalUnit = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -45,8 +47,6 @@
             this.lblMaxNumberOfUsersInSecurityGroups = new System.Windows.Forms.Label();
             this.cboDomains = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.tbFqdn = new System.Windows.Forms.TextBox();
-            this.label6 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackNumberOfUsers)).BeginInit();
@@ -123,6 +123,22 @@
             this.flowLayoutPanel1.Size = new System.Drawing.Size(610, 292);
             this.flowLayoutPanel1.TabIndex = 8;
             // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(3, 0);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(166, 15);
+            this.label6.TabIndex = 12;
+            this.label6.Text = "Fully Qualified Domain Name:";
+            // 
+            // tbFqdn
+            // 
+            this.tbFqdn.Location = new System.Drawing.Point(175, 3);
+            this.tbFqdn.Name = "tbFqdn";
+            this.tbFqdn.Size = new System.Drawing.Size(359, 23);
+            this.tbFqdn.TabIndex = 11;
+            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -155,7 +171,7 @@
             // 
             this.trackNumberOfUsers.LargeChange = 1;
             this.trackNumberOfUsers.Location = new System.Drawing.Point(3, 91);
-            this.trackNumberOfUsers.Maximum = 1000;
+            this.trackNumberOfUsers.Maximum = 300000;
             this.trackNumberOfUsers.Name = "trackNumberOfUsers";
             this.trackNumberOfUsers.Size = new System.Drawing.Size(517, 45);
             this.trackNumberOfUsers.SmallChange = 10;
@@ -186,7 +202,7 @@
             // 
             this.trackNumberOfSecGroups.LargeChange = 1;
             this.trackNumberOfSecGroups.Location = new System.Drawing.Point(3, 157);
-            this.trackNumberOfSecGroups.Maximum = 100;
+            this.trackNumberOfSecGroups.Maximum = 400000;
             this.trackNumberOfSecGroups.Name = "trackNumberOfSecGroups";
             this.trackNumberOfSecGroups.Size = new System.Drawing.Size(517, 45);
             this.trackNumberOfSecGroups.TabIndex = 5;
@@ -253,22 +269,6 @@
             this.label1.Size = new System.Drawing.Size(300, 15);
             this.label1.TabIndex = 11;
             this.label1.Text = "Use this domain to create SharePoint users and groups: ";
-            // 
-            // tbFqdn
-            // 
-            this.tbFqdn.Location = new System.Drawing.Point(175, 3);
-            this.tbFqdn.Name = "tbFqdn";
-            this.tbFqdn.Size = new System.Drawing.Size(359, 23);
-            this.tbFqdn.TabIndex = 11;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(3, 0);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(166, 15);
-            this.label6.TabIndex = 12;
-            this.label6.Text = "Fully Qualified Domain Name:";
             // 
             // frm02UsersGroups
             // 
