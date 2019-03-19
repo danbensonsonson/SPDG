@@ -31,14 +31,23 @@ namespace Acceleratio.SPDG.UI
         }      
         void btnBack_Click(object sender, EventArgs e)
         {
-            preventCloseMessage = true;
             RootForm.MovePrevious(this);
+            preventCloseMessage = true;
         }
 
         void btnNext_Click(object sender, EventArgs e)
         {
+            if (chkAddDomain.Checked)
+            {
+                // do something to go back to this wizard page
+                RootForm.MoveAt(2, this);
+            }
+            else
+            {
+                RootForm.MoveNext(this);
+            }
             preventCloseMessage = true;
-            RootForm.MoveNext(this);
+
         }
 
         public override void loadData()
@@ -77,12 +86,10 @@ namespace Acceleratio.SPDG.UI
                 label1.Visible = false;
                 cboDomains.Enabled = false;
                 cboDomains.Visible = false;
+                chkAddDomain.Visible = false;
             }
 
-            chkGenerateUsers.Checked = WorkingDefinition.GenerateUsersAndSecurityGroupsInDirectory;
-            trackNumberOfUsers.Value = WorkingDefinition.NumberOfUsersToCreate;
-            trackNumberOfSecGroups.Value = WorkingDefinition.NumberOfSecurityGroupsToCreate;
-            trackMaxNumberOfUsersInSecurityGroups.Value = WorkingDefinition.MaxNumberOfUsersInCreatedSecurityGroups;
+            // Check if we are in the process of adding multiple domains...            
             var serverDefinition = WorkingDefinition as ServerGeneratorDefinition;
             if (serverDefinition != null)
             {
@@ -91,20 +98,39 @@ namespace Acceleratio.SPDG.UI
                     cboDomains.Text = serverDefinition.ADDomainName;
                 }
                 cboOrganizationalUnit.Text = serverDefinition.ADOrganizationalUnit;
+
+
+                if (serverDefinition.ServerUGDefinition != null && serverDefinition.ServerUGDefinition.Count > 0)
+                {
+                    ServerUsersGroupsDefinition sugd = serverDefinition.ServerUGDefinition[0];
+                    cboDomains.Text = sugd.ADDomainName;
+                    cboOrganizationalUnit.Text = sugd.ADOrganizationalUnit;
+                    trackNumberOfUsers.Value = sugd.NumberOfUsersToCreate;
+                    trackNumberOfSecGroups.Value = sugd.NumberOfSecurityGroupsToCreate;
+                    trackMaxNumberOfUsersInSecurityGroups.Value = sugd.MaxNumberOfUsersInCreatedSecurityGroups;
+                }
+                
             }
-            else
+            else // not a server definition
             {
                 cboOrganizationalUnit.Enabled = false;
+                chkGenerateUsers.Checked = WorkingDefinition.GenerateUsersAndSecurityGroupsInDirectory;
+                trackNumberOfUsers.Value = WorkingDefinition.NumberOfUsersToCreate;
+                trackNumberOfSecGroups.Value = WorkingDefinition.NumberOfSecurityGroupsToCreate;
+                trackMaxNumberOfUsersInSecurityGroups.Value = WorkingDefinition.MaxNumberOfUsersInCreatedSecurityGroups;
             }
+            
 
             this.Show();
             this.Enabled = true;
             this.Cursor = Cursors.Default;
         }
 
+        // Need to change the WorkingDefinition to support multiple of these...
         public override bool saveData()
         {
             WorkingDefinition.GenerateUsersAndSecurityGroupsInDirectory = chkGenerateUsers.Checked;
+
             WorkingDefinition.NumberOfUsersToCreate = trackNumberOfUsers.Value;
             WorkingDefinition.NumberOfSecurityGroupsToCreate = trackNumberOfSecGroups.Value;
             WorkingDefinition.MaxNumberOfUsersInCreatedSecurityGroups = trackMaxNumberOfUsersInSecurityGroups.Value;
@@ -114,6 +140,16 @@ namespace Acceleratio.SPDG.UI
                 serverDefinition.ADDomainName = cboDomains.Text;
                 serverDefinition.ADOrganizationalUnit = cboOrganizationalUnit.Text;
                 serverDefinition.Fqdn = tbFqdn.Text;
+                // Allow for multiple domains
+                ServerUsersGroupsDefinition sugd = new ServerUsersGroupsDefinition();
+                sugd.ADDomainName = cboDomains.Text;
+                sugd.FQDN = tbFqdn.Text;
+                sugd.ADOrganizationalUnit = cboOrganizationalUnit.Text;
+                sugd.NumberOfUsersToCreate = trackNumberOfUsers.Value;
+                sugd.NumberOfSecurityGroupsToCreate = trackNumberOfSecGroups.Value;
+                sugd.MaxNumberOfUsersInCreatedSecurityGroups = trackMaxNumberOfUsersInSecurityGroups.Value;
+                serverDefinition.ServerUGDefinition.Add(sugd);
+
             }
 
             return true;
@@ -124,6 +160,11 @@ namespace Acceleratio.SPDG.UI
             if( chkGenerateUsers.Checked)
             {
                 groupBox1.Enabled = true;
+                // Added the following statements to support adding another domain. Zero out on the next screen
+                trackNumberOfUsers.Value = 0;
+                trackNumberOfSecGroups.Value = 0;
+                trackMaxNumberOfUsersInSecurityGroups.Value = 0;
+                tbFqdn.Text = "";
             }
             else
             {
@@ -186,6 +227,11 @@ namespace Acceleratio.SPDG.UI
         private void trackMaxNumberOfUsersInSecurityGroups_ValueChanged(object sender, EventArgs e)
         {
             lblMaxNumberOfUsersInSecurityGroups.Text = trackMaxNumberOfUsersInSecurityGroups.Value.ToString();
+        }
+
+        private void chkAddDomain_CheckedChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -47,6 +47,8 @@
             this.lblMaxNumberOfUsersInSecurityGroups = new System.Windows.Forms.Label();
             this.cboDomains = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.chkAddDomain = new System.Windows.Forms.CheckBox();
+            this.debugLabel = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackNumberOfUsers)).BeginInit();
@@ -270,18 +272,42 @@
             this.label1.TabIndex = 11;
             this.label1.Text = "Use this domain to create SharePoint users and groups: ";
             // 
+            // chkAddDomain
+            // 
+            this.chkAddDomain.AutoSize = true;
+            this.chkAddDomain.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.chkAddDomain.ForeColor = System.Drawing.Color.DarkSlateGray;
+            this.chkAddDomain.Location = new System.Drawing.Point(271, 547);
+            this.chkAddDomain.Name = "chkAddDomain";
+            this.chkAddDomain.Size = new System.Drawing.Size(139, 19);
+            this.chkAddDomain.TabIndex = 13;
+            this.chkAddDomain.Text = "Add Another Domain";
+            this.chkAddDomain.UseVisualStyleBackColor = true;
+            this.chkAddDomain.CheckedChanged += new System.EventHandler(this.chkAddDomain_CheckedChanged);
+            // 
+            // debugLabel
+            // 
+            this.debugLabel.AutoSize = true;
+            this.debugLabel.Location = new System.Drawing.Point(443, 549);
+            this.debugLabel.Name = "debugLabel";
+            this.debugLabel.Size = new System.Drawing.Size(0, 13);
+            this.debugLabel.TabIndex = 14;
+            // 
             // frm02UsersGroups
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(921, 644);
+            this.Controls.Add(this.debugLabel);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.cboDomains);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.chkGenerateUsers);
             this.Controls.Add(this.ucSteps1);
+            this.Controls.Add(this.chkAddDomain);
             this.Name = "frm02UsersGroups";
             this.Text = "frm02UsersGroups";
+            this.Controls.SetChildIndex(this.chkAddDomain, 0);
             this.Controls.SetChildIndex(this.ucSteps1, 0);
             this.Controls.SetChildIndex(this.chkGenerateUsers, 0);
             this.Controls.SetChildIndex(this.groupBox1, 0);
@@ -293,6 +319,7 @@
             this.Controls.SetChildIndex(this.btnNext, 0);
             this.Controls.SetChildIndex(this.btnHelp, 0);
             this.Controls.SetChildIndex(this.btnClose, 0);
+            this.Controls.SetChildIndex(this.debugLabel, 0);
             this.groupBox1.ResumeLayout(false);
             this.flowLayoutPanel1.ResumeLayout(false);
             this.flowLayoutPanel1.PerformLayout();
@@ -325,5 +352,7 @@
         private System.Windows.Forms.Label lblMaxNumberOfUsersInSecurityGroups;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox tbFqdn;
+        private System.Windows.Forms.CheckBox chkAddDomain;
+        private System.Windows.Forms.Label debugLabel;
     }
 }

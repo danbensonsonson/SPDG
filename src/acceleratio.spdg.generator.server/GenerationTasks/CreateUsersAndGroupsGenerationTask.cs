@@ -39,32 +39,41 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
 
         public override void Execute()
         {
-            var users = new List<string>();
-            if (WorkingDefinition.NumberOfUsersToCreate > 0)
-            {
-                try
-                {
-                    Log.Write("Creating Active Directory users.");
-                    users = createUsers(WorkingDefinition.ADDomainName, WorkingDefinition.ADOrganizationalUnit, WorkingDefinition.NumberOfUsersToCreate);
-                }
-                catch (Exception ex)
-                {
-                    Errors.Log(ex);
-                }
-            }
+            List<ServerUsersGroupsDefinition> ugDefinitions = WorkingDefinition.ServerUGDefinition;
+            // Test if we have one or more user/group definitions
+            if (ugDefinitions == null || ugDefinitions.Count < 1)
+                return;
 
-            if (WorkingDefinition.NumberOfSecurityGroupsToCreate > 0)
+            // Support for multiple domains (of users/groups)
+            foreach (ServerUsersGroupsDefinition sugd in ugDefinitions)
             {
-                try
+                var users = new List<string>();
+                if (sugd.NumberOfUsersToCreate > 0)
                 {
-                    Log.Write("Creating Active Directory groups.");
-                    createGroups(WorkingDefinition.ADDomainName, WorkingDefinition.ADOrganizationalUnit, WorkingDefinition.NumberOfSecurityGroupsToCreate, users);
-                }
-                catch (Exception ex)
-                {
-                    Errors.Log(ex);
+                    try
+                    {
+                        Log.Write("Creating Active Directory users.");
+                        users = createUsers(sugd.ADDomainName, sugd.ADOrganizationalUnit, sugd.NumberOfUsersToCreate);
+                    }
+                    catch (Exception ex)
+                    {
+                        Errors.Log(ex);
+                    }
                 }
 
+                if (sugd.NumberOfSecurityGroupsToCreate > 0)
+                {
+                    try
+                    {
+                        Log.Write("Creating Active Directory groups.");
+                        createGroups(sugd.ADDomainName, sugd.ADOrganizationalUnit, sugd.NumberOfSecurityGroupsToCreate, sugd.MaxNumberOfUsersInCreatedSecurityGroups, users);
+                    }
+                    catch (Exception ex)
+                    {
+                        Errors.Log(ex);
+                    }
+
+                }
             }
         }
 
@@ -110,7 +119,7 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
             return createdPrincipals;
         }
 
-        public void createGroups(string domain, string ou, int numOfGroups, List<string> principalList)
+        public void createGroups(string domain, string ou, int numOfGroups, int maxNumberOfUsersPerGroup, List<string> principalList)
         {
             ContextType contextType = ContextType.Domain;
             //must pass null parameter to principalcontext if no ou selected
@@ -131,7 +140,7 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
                         groupPrincipal.Name = SampleData.GetSampleValueRandom(SampleData.Accounts);
                         groupPrincipal.DisplayName = groupPrincipal.Name;
                         groupPrincipal.SamAccountName = getSamAccountName(groupPrincipal.Name, null);
-                        addPrincipalsToGroup(groupPrincipal);
+                        addPrincipalsToGroup(groupPrincipal, maxNumberOfUsersPerGroup);
 
                         groupPrincipal.Save();
                         Owner.IncrementCurrentTaskProgress(string.Format("Created {0}/{1} groups.", i, numOfGroups));
@@ -145,14 +154,14 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
             }
         }
 
-        private void addPrincipalsToGroup(GroupPrincipal group)
+        private void addPrincipalsToGroup(GroupPrincipal group, int maxNumberOfUsersPerGroup)
         {
             if (shuffled.Count == 0)
             {
                 shuffled.AddRange(prinicpals);
                 shuffled.Shuffle();
             }
-            int takeCt = Math.Min(WorkingDefinition.MaxNumberOfUsersInCreatedSecurityGroups, shuffled.Count);
+            int takeCt = Math.Min(maxNumberOfUsersPerGroup, shuffled.Count);
             if (takeCt > 0)
             {
                 var randomPrincipals = shuffled.Take(takeCt);
