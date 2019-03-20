@@ -38,7 +38,11 @@
             this.label3 = new System.Windows.Forms.Label();
             this.txtOwnerUserName = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.trackNumMySites = new System.Windows.Forms.TrackBar();
+            this.lblCreateMySites = new System.Windows.Forms.Label();
+            this.chkCreateMySites = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.trackNumSiteColls)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackNumMySites)).BeginInit();
             this.SuspendLayout();
             // 
             // btnBack
@@ -76,7 +80,7 @@
             this.radioUseExisting.AutoSize = true;
             this.radioUseExisting.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.radioUseExisting.ForeColor = System.Drawing.Color.DarkSlateGray;
-            this.radioUseExisting.Location = new System.Drawing.Point(261, 333);
+            this.radioUseExisting.Location = new System.Drawing.Point(261, 303);
             this.radioUseExisting.Name = "radioUseExisting";
             this.radioUseExisting.Size = new System.Drawing.Size(166, 19);
             this.radioUseExisting.TabIndex = 8;
@@ -95,13 +99,14 @@
             this.trackNumSiteColls.Size = new System.Drawing.Size(550, 45);
             this.trackNumSiteColls.TabIndex = 11;
             this.trackNumSiteColls.Value = 1;
-            this.trackNumSiteColls.ValueChanged += new System.EventHandler(this.trackNumSiteColls_ValueChanged);
+            this.trackNumSiteColls.Scroll += new System.EventHandler(this.trackNumSiteColls_Scroll);
+            this.trackNumSiteColls.ValueChanged += new System.EventHandler(this.trackNumMySites_ValueChanged);
             // 
             // cboSiteCollection
             // 
             this.cboSiteCollection.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.cboSiteCollection.FormattingEnabled = true;
-            this.cboSiteCollection.Location = new System.Drawing.Point(261, 358);
+            this.cboSiteCollection.Location = new System.Drawing.Point(261, 331);
             this.cboSiteCollection.Name = "cboSiteCollection";
             this.cboSiteCollection.Size = new System.Drawing.Size(542, 23);
             this.cboSiteCollection.TabIndex = 14;
@@ -166,11 +171,50 @@
             this.label1.TabIndex = 19;
             this.label1.Text = "Owner UserName:";
             // 
+            // trackNumMySites
+            // 
+            this.trackNumMySites.Enabled = false;
+            this.trackNumMySites.LargeChange = 25;
+            this.trackNumMySites.Location = new System.Drawing.Point(256, 420);
+            this.trackNumMySites.Maximum = 10000;
+            this.trackNumMySites.Name = "trackNumMySites";
+            this.trackNumMySites.Size = new System.Drawing.Size(550, 45);
+            this.trackNumMySites.TabIndex = 24;
+            this.trackNumMySites.Scroll += new System.EventHandler(this.trackNumMySites_Scroll);
+            // 
+            // lblCreateMySites
+            // 
+            this.lblCreateMySites.AutoSize = true;
+            this.lblCreateMySites.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.lblCreateMySites.ForeColor = System.Drawing.Color.DarkSlateGray;
+            this.lblCreateMySites.Location = new System.Drawing.Point(819, 428);
+            this.lblCreateMySites.Name = "lblCreateMySites";
+            this.lblCreateMySites.Size = new System.Drawing.Size(13, 15);
+            this.lblCreateMySites.TabIndex = 25;
+            this.lblCreateMySites.Text = "0";
+            this.lblCreateMySites.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // chkCreateMySites
+            // 
+            this.chkCreateMySites.AutoSize = true;
+            this.chkCreateMySites.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.chkCreateMySites.ForeColor = System.Drawing.Color.DarkSlateGray;
+            this.chkCreateMySites.Location = new System.Drawing.Point(261, 395);
+            this.chkCreateMySites.Name = "chkCreateMySites";
+            this.chkCreateMySites.Size = new System.Drawing.Size(107, 19);
+            this.chkCreateMySites.TabIndex = 26;
+            this.chkCreateMySites.Text = "Create My Sites";
+            this.chkCreateMySites.UseVisualStyleBackColor = true;
+            this.chkCreateMySites.CheckedChanged += new System.EventHandler(this.chkCreateMySites_CheckedChanged);
+            // 
             // frm04Collections
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(921, 644);
+            this.Controls.Add(this.chkCreateMySites);
+            this.Controls.Add(this.lblCreateMySites);
+            this.Controls.Add(this.trackNumMySites);
             this.Controls.Add(this.txtOwnerEmail);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.txtOwnerUserName);
@@ -181,8 +225,6 @@
             this.Controls.Add(this.trackNumSiteColls);
             this.Controls.Add(this.radioUseExisting);
             this.Controls.Add(this.radioCreateNewSiteColl);
-            this.MaximumSize = new System.Drawing.Size(937, 683);
-            this.MinimumSize = new System.Drawing.Size(937, 683);
             this.Name = "frm04Collections";
             this.Text = "frm04Collections";
             this.Load += new System.EventHandler(this.frm04Collections_Load);
@@ -202,7 +244,11 @@
             this.Controls.SetChildIndex(this.txtOwnerUserName, 0);
             this.Controls.SetChildIndex(this.label3, 0);
             this.Controls.SetChildIndex(this.txtOwnerEmail, 0);
+            this.Controls.SetChildIndex(this.trackNumMySites, 0);
+            this.Controls.SetChildIndex(this.lblCreateMySites, 0);
+            this.Controls.SetChildIndex(this.chkCreateMySites, 0);
             ((System.ComponentModel.ISupportInitialize)(this.trackNumSiteColls)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackNumMySites)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -220,5 +266,8 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox txtOwnerUserName;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TrackBar trackNumMySites;
+        private System.Windows.Forms.Label lblCreateMySites;
+        private System.Windows.Forms.CheckBox chkCreateMySites;
     }
 }

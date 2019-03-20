@@ -131,8 +131,8 @@ namespace Acceleratio.SPDG.UI
         {
             WorkingDefinition.GenerateUsersAndSecurityGroupsInDirectory = chkGenerateUsers.Checked;
 
-            WorkingDefinition.NumberOfUsersToCreate = trackNumberOfUsers.Value;
-            WorkingDefinition.NumberOfSecurityGroupsToCreate = trackNumberOfSecGroups.Value;
+            WorkingDefinition.NumberOfUsersToCreate = trackNumberOfUsers.Value + WorkingDefinition.NumberOfUsersToCreate; // Keep a total in the case of multiple domains
+            WorkingDefinition.NumberOfSecurityGroupsToCreate = trackNumberOfSecGroups.Value + WorkingDefinition.NumberOfSecurityGroupsToCreate;
             WorkingDefinition.MaxNumberOfUsersInCreatedSecurityGroups = trackMaxNumberOfUsersInSecurityGroups.Value;
             var serverDefinition = WorkingDefinition as ServerGeneratorDefinition;
             if (serverDefinition != null)

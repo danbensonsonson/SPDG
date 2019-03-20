@@ -118,16 +118,21 @@ namespace Acceleratio.SPDG.UI
                     trackNumSiteColls.Minimum = 1;
                     Common.WorkingDefinition.CreateNewSiteCollections = 1;
                     radioCreateNewSiteColl.Checked = true;
-                    radioUseExisting.Enabled = false;                                     
-                   
-                    
+                    radioUseExisting.Enabled = false;
                 }
                 else
                 {
                     trackNumSiteColls.Minimum = 0;
                     radioUseExisting.Enabled = true;
                 }
+                trackNumMySites.Value = Common.WorkingDefinition.CreateMySites;
+                if (Common.WorkingDefinition.CreateMySites > 0)
+                    chkCreateMySites.Checked = true;
+                // set the slider to only alllow a maximum of the number of users created
+                trackNumMySites.Maximum = Common.WorkingDefinition.NumberOfUsersToCreate;
             }
+            else
+                chkCreateMySites.Enabled = false; // Only implemented on the server side for now
 
             label3.Visible= !Common.WorkingDefinition.IsClientObjectModel;
             txtOwnerEmail.Visible = !Common.WorkingDefinition.IsClientObjectModel;
@@ -161,7 +166,7 @@ namespace Acceleratio.SPDG.UI
                 return false;
             }
 
-            if( radioCreateNewSiteColl.Checked )
+            if ( radioCreateNewSiteColl.Checked )
             {
                 if (txtOwnerUserName.Text == string.Empty || !WorkingDefinition.IsClientObjectModel && txtOwnerEmail.Text == string.Empty )
                 {
@@ -186,6 +191,9 @@ namespace Acceleratio.SPDG.UI
                 }
             }
 
+            if (chkCreateMySites.Checked)
+                Common.WorkingDefinition.CreateMySites = trackNumMySites.Value;
+
             return true;
         }
 
@@ -205,6 +213,33 @@ namespace Acceleratio.SPDG.UI
          
             this.Enabled = true;
             this.Cursor = Cursors.Default;
+        }
+
+        private void trackNumMySites_ValueChanged(object sender, EventArgs e)
+        {
+            lblCreateMySites.Text = trackNumMySites.Value.ToString();
+        }
+
+        private void trackNumSiteColls_Scroll(object sender, EventArgs e)
+        {
+
+        }
+
+        private void trackNumMySites_Scroll(object sender, EventArgs e)
+        {
+            lblCreateMySites.Text = trackNumMySites.Value.ToString();
+        }
+
+        private void chkCreateMySites_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkCreateMySites.Checked)
+                trackNumMySites.Enabled = true;
+            else
+            {
+                trackNumMySites.Enabled = false;
+                trackNumMySites.Value = 0;
+                lblCreateMySites.Text = "0";
+            }
         }
     }
 }

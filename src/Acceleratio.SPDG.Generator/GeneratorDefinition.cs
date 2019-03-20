@@ -57,6 +57,7 @@ namespace Acceleratio.SPDG.Generator
         public string SiteTemplate { get; set; }
         
         public int CreateNewSiteCollections { get; set; }
+        public int CreateMySites { get; set; }
         public bool UseExistingSiteCollection { get; set; }
         public string SiteCollection { get; set; }
         public bool UseOnlyExistingSites { get; set; }
