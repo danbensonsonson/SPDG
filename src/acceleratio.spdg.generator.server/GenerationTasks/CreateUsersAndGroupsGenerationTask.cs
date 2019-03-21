@@ -29,6 +29,7 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
 
         public override int CalculateTotalSteps()
         {
+            // TODO need to re-work the math here to account for multiple domains
             var totalSteps = WorkingDefinition.NumberOfUsersToCreate + WorkingDefinition.NumberOfSecurityGroupsToCreate;
             if (WorkingDefinition.MaxNumberOfUsersInCreatedSecurityGroups > 0)
             {

@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Acceleratio.SPDG.Generator.GenerationTasks;
 using Acceleratio.SPDG.Generator.Structures;
 using Microsoft.SharePoint;
 using Microsoft.SharePoint.Administration;
+using Microsoft.Office.Server.UserProfiles;
 
 namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
 {
@@ -24,10 +26,10 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
 
         public override int CalculateTotalSteps()
         {
-            var totalSteps = WorkingDefinition.CreateNewSiteCollections;
+            var totalSteps = WorkingDefinition.CreateNewSiteCollections + WorkingDefinition.CreateMySites;
             if (WorkingDefinition.CreateNewWebApplications > 0)
             {
-                totalSteps = (WorkingDefinition.CreateNewSiteCollections * WorkingDefinition.CreateNewWebApplications) + WorkingDefinition.CreateNewWebApplications;
+                totalSteps = (WorkingDefinition.CreateNewSiteCollections * WorkingDefinition.CreateNewWebApplications) + WorkingDefinition.CreateNewWebApplications + WorkingDefinition.CreateMySites;
             }
             return totalSteps;
         }
@@ -38,10 +40,53 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
             {
                 createNewWebApplications();
             }
-            else if (WorkingDefinition.CreateNewSiteCollections > 0)
+            else if (WorkingDefinition.CreateNewSiteCollections > 0 || WorkingDefinition.CreateMySites > 0) //ok?
             {
                 createNewSiteCollections();
+            }
+
+        }
+
+        private void CreateMySites(SPWebApplication webApp)
+        {
+            if (WorkingDefinition.CreateMySites <= 0)
+                return;
+
+            try {
+                //get current service context
+                SPSite site = webApp.Sites[0];
+                SPServiceContext serviceContext = SPServiceContext.GetContext(site);
+
+                //initialize user profile config manager object
+                UserProfileManager upm = new UserProfileManager(serviceContext);
+                // loop through users based on number of CreateMySites
+                List<string> users = AD.GetUsersFromAD(); // This call could be avoided if it becomes a problem, by storing the users in a variable local to this program during user creation.
+                for (int s = 0; s < users.Count; s++)
+                {
+                    // Get the account name
+                    CreateMySite(upm, users[s]);
+                    Owner.IncrementCurrentTaskProgress(string.Format("Created {0}/{1} my sites.", s+1, WorkingDefinition.CreateMySites));
+                    if (s >= WorkingDefinition.CreateMySites)
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Errors.Log(ex);
             }            
+        }
+
+        private void CreateMySite(UserProfileManager upm, string sAccount)
+        {            
+            // TODO add some error handling
+            //create user profile is one doesn't already exist
+            if (!upm.UserExists(sAccount))
+                upm.CreateUserProfile(sAccount);
+
+            //to set prop values on user profile
+            UserProfile u = upm.GetUserProfile(sAccount);
+            u.CreatePersonalSite();
+            Owner.IncrementCurrentTaskProgress("Created my site '" + u.PersonalSite.Url + "'");
         }
 
         private void createNewSiteCollections()
@@ -55,6 +100,8 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
                 {
                     CreateSiteCollection(webApp);
                 }
+
+                CreateMySites(webApp);
             }
             catch (Exception ex)
             {
@@ -80,6 +127,7 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
             web.Title = sitCollName;
             web.Update();
 
+            // TODO Need something like this to store username from a previous step for my site creation
             SiteCollInfo siteCollInfo = new SiteCollInfo();
             siteCollInfo.URL = site.Url;
 
@@ -147,6 +195,8 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
                     {
                         CreateSiteCollection(newApplication);
                     }
+
+                    CreateMySites(newApplication);
                 }
             }
             catch (Exception ex)

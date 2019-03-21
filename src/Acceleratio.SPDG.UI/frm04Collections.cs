@@ -192,7 +192,7 @@ namespace Acceleratio.SPDG.UI
             }
 
             if (chkCreateMySites.Checked)
-                Common.WorkingDefinition.CreateMySites = trackNumMySites.Value;
+                Common.WorkingDefinition.CreateMySites = trackNumMySites.Value; //ok
 
             return true;
         }
