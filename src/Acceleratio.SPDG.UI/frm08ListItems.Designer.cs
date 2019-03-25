@@ -313,7 +313,7 @@
             // trackBarBigListItemsCount
             // 
             this.trackBarBigListItemsCount.Location = new System.Drawing.Point(258, 259);
-            this.trackBarBigListItemsCount.Maximum = 200;
+            this.trackBarBigListItemsCount.Maximum = 1000;
             this.trackBarBigListItemsCount.Name = "trackBarBigListItemsCount";
             this.trackBarBigListItemsCount.Size = new System.Drawing.Size(543, 45);
             this.trackBarBigListItemsCount.TabIndex = 39;
@@ -356,8 +356,6 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.chkPrefil);
             this.Controls.Add(this.ucSteps1);
-            this.MaximumSize = new System.Drawing.Size(937, 683);
-            this.MinimumSize = new System.Drawing.Size(937, 683);
             this.Name = "frm08ListItems";
             this.Text = "frm08ListItems";
             this.Controls.SetChildIndex(this.lblTitle, 0);

@@ -60,7 +60,11 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
                 //initialize user profile config manager object
                 UserProfileManager upm = new UserProfileManager(serviceContext);
                 // loop through users based on number of CreateMySites
-                List<string> users = AD.GetUsersFromAD(); // This call could be avoided if it becomes a problem, by storing the users in a variable local to this program during user creation.
+                List<string> users = Owner.WorkingUsers;
+
+                if (users.Count < WorkingDefinition.CreateMySites) 
+                    users = AD.GetUsersFromAD();
+
                 for (int s = 0; s < users.Count; s++)
                 {
                     // Get the account name
@@ -78,7 +82,6 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
 
         private void CreateMySite(UserProfileManager upm, string sAccount)
         {            
-            // TODO add some error handling
             //create user profile is one doesn't already exist
             if (!upm.UserExists(sAccount))
                 upm.CreateUserProfile(sAccount);
@@ -127,7 +130,6 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
             web.Title = sitCollName;
             web.Update();
 
-            // TODO Need something like this to store username from a previous step for my site creation
             SiteCollInfo siteCollInfo = new SiteCollInfo();
             siteCollInfo.URL = site.Url;
 

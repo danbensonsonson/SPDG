@@ -88,6 +88,7 @@
             // 
             this.trackNumColumnsPerList.LargeChange = 1;
             this.trackNumColumnsPerList.Location = new System.Drawing.Point(260, 205);
+            this.trackNumColumnsPerList.Maximum = 20;
             this.trackNumColumnsPerList.Name = "trackNumColumnsPerList";
             this.trackNumColumnsPerList.Size = new System.Drawing.Size(543, 45);
             this.trackNumColumnsPerList.TabIndex = 18;
@@ -166,8 +167,6 @@
             this.Controls.Add(this.trackNumViewsPerList);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.ucSteps1);
-            this.MaximumSize = new System.Drawing.Size(937, 683);
-            this.MinimumSize = new System.Drawing.Size(937, 683);
             this.Name = "frm07ViewsColumns";
             this.Text = "frm07ViewsColumns";
             this.Controls.SetChildIndex(this.lblTitle, 0);

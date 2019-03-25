@@ -9,6 +9,7 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
         GeneratorDefinitionBase WorkingDefinition { get; }
         SPDGObjectsFactory ObjectsFactory { get; }
         List<SiteCollInfo> WorkingSiteCollections { get; }
+        List<string> WorkingUsers { get; }
         void IncrementCurrentTaskProgress(string message, int incrementInProgress = 1);
     }
 }

@@ -97,6 +97,7 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
                         userPrincipal.Surname = SampleData.GetSampleValueRandom(SampleData.LastNames);
                         userPrincipal.GivenName = SampleData.GetSampleValueRandom(SampleData.FirstNames);
                         userPrincipal.SamAccountName = getSamAccountName(userPrincipal.GivenName.ToLower(), userPrincipal.Surname.ToLower());
+                        Owner.WorkingUsers.Add(domain + "\\" + userPrincipal.SamAccountName);
                         userPrincipal.Name = userPrincipal.GivenName + " " + userPrincipal.Surname;
                         userPrincipal.DisplayName = userPrincipal.GivenName + " " + userPrincipal.Surname;
                         userPrincipal.UserPrincipalName = userPrincipal.SamAccountName + "@" + WorkingDefinition.Fqdn;
@@ -107,7 +108,7 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
                         userPrincipal.Enabled = true;
                         userPrincipal.PasswordNeverExpires = true;
                         userPrincipal.Save();
-                        Owner.IncrementCurrentTaskProgress(string.Format("Created {0}/{1} users.", i, numOfUsers));
+                        Owner.IncrementCurrentTaskProgress(string.Format("Created {0}/{1} users: {2}", i, numOfUsers, userPrincipal.SamAccountName));
                         createdPrincipals.Add(userPrincipal.Sid.Value);
                     }
                     catch (Exception ex)
