@@ -15,6 +15,7 @@ namespace Acceleratio.SPDG.Generator
 
             using (var forest = Forest.GetCurrentForest())
             {
+                
                 foreach (Domain domain in forest.Domains)
                 {
                     domains.Add(domain.Name);
@@ -74,6 +75,30 @@ namespace Acceleratio.SPDG.Generator
             return domainList;
         }
 
+        public static List<string> GetUsersFromAD(string name)
+        {
+            List<string> ous = new List<string>();
+            using (DirectoryEntry root = new DirectoryEntry("GC://" + name))
+            {
+                DirectorySearcher searcher = new DirectorySearcher(root);
+                searcher.Filter = "(objectClass=user)";
+                searcher.SearchScope = SearchScope.Subtree;
+                //searcher.PropertiesToLoad.Add("userPrincipalName");
+
+                var result = searcher.FindAll();
+                foreach (SearchResult entry in result)
+                {
+                    DirectoryEntry de = entry.GetDirectoryEntry();
+                    if (de.Properties["userPrincipalName"].Value != null)
+                        ous.Add(de.Properties["userPrincipalName"].Value.ToString());
+                }
+
+                result.Dispose();
+                searcher.Dispose();
+            }
+            return ous;
+        }
+
         public static List<string> GetUsersFromAD()
         {
             List<string> retVal=new List<string>();
@@ -98,7 +123,8 @@ namespace Acceleratio.SPDG.Generator
 
                     foreach (UserPrincipal userPrincipal in results)
                     {
-                        retVal.Add(domainName + "\\" + userPrincipal.SamAccountName);                        
+                        if (userPrincipal.UserPrincipalName != null)
+                            retVal.Add(userPrincipal.UserPrincipalName);                 
                     }                    
                 }
             }
@@ -107,6 +133,33 @@ namespace Acceleratio.SPDG.Generator
                 Errors.Log(ex);
             }
             return retVal;
+        }
+
+        public static List<string> GetGroupsFromAD(string name)
+        {
+            List<string> ous = new List<string>();
+            using (DirectoryEntry root = new DirectoryEntry("GC://" + name))
+            {
+                DirectorySearcher searcher = new DirectorySearcher(root);
+                searcher.Filter = "(objectClass=group)";
+                //searcher.SearchScope = SearchScope.Subtree;
+
+                var result = searcher.FindAll();
+                foreach (SearchResult entry in result)
+                {
+                    DirectoryEntry de = entry.GetDirectoryEntry();
+                    if (de.Properties["objectsid"].Value != null)
+                    {
+                        var sid = new System.Security.Principal.SecurityIdentifier((byte[])de.Properties["objectsid"].Value, 0);
+                        ous.Add(sid.Value);
+                    }
+
+                }
+
+                result.Dispose();
+                searcher.Dispose();
+            }
+            return ous;
         }
 
         public static List<string> GetGroupsFromAD()
@@ -148,7 +201,7 @@ namespace Acceleratio.SPDG.Generator
         public static List<string> ListOU(string name)
         {
             List<string> ous = new List<string>();
-            using (DirectoryEntry root = new DirectoryEntry("LDAP://" + name))
+            using (DirectoryEntry root = new DirectoryEntry("GC://" + name))
             {
                 DirectorySearcher searcher = new DirectorySearcher(root);
                 searcher.Filter = "(&(objectClass=organizationalUnit))";

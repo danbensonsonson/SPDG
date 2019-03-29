@@ -7,9 +7,16 @@ namespace Acceleratio.SPDG.Generator
     {
         public static void Write(string message)
         {
-            using (StreamWriter writer = new StreamWriter( DataGenerator.SessionID + ".log", true))
+            try
             {
-                writer.WriteLine(DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToLongTimeString() + "\t" +  message);
+                using (StreamWriter writer = new StreamWriter(DataGenerator.SessionID + ".log", true))
+                {
+                    writer.WriteLine(DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToLongTimeString() + "\t" + message);
+                }
+            }
+            catch (Exception ex)
+            { 
+                // do nothing, jsut missing a message
             }
         }
     }

@@ -67,7 +67,8 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                                     
                                     List<ISPDGListItemInfo> batch=new List<ISPDGListItemInfo>();
                                     int itemCount = listInfo.isBigList ? WorkingDefinition.MaxNumberofItemsBigListToGenerate : WorkingDefinition.MaxNumberofItemsToGenerate;
-                                    itemCount = SampleData.GetRandomNumber(itemCount*3/4, itemCount);
+                                    //itemCount = SampleData.GetRandomNumber(itemCount*3/4, itemCount);
+                                    // TODO Looks like the item count for normal list itmes is somewhere between 3/4 and Max
                                     for (int i = 0; i < itemCount; i++ )
                                     {
                                         var itemInfo=new SPDGListItemInfo();
@@ -81,8 +82,13 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                                         }
                                         else
                                         {
+                                            // TODO: Add the 10% to the wizard as configurable
+                                            // if itemCount % 10 = 0, add attachment to list item.
+                                            if (i % 10 == 0)                                         
+                                                populateItemInfo(list, itemInfo, false, true);
+                                            else
+                                                populateItemInfo(list, itemInfo, false);                               
                                             
-                                            populateItemInfo(list, itemInfo, false);
                                         }
                                         batch.Add(itemInfo);
 
@@ -93,7 +99,7 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                                             batch.Clear();
                                         }
                                     }
-                                    if (batch.Count > 0)
+                                    if (batch.Count > 0) // Pick up anything at the end that was less than 400
                                     {
                                         list.AddItems(batch);
                                         Owner.IncrementCurrentTaskProgress(string.Format("Created {0} items for list {1}: ", itemCount, list.RootFolder.Url), batch.Count);
@@ -206,6 +212,19 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
 
 
         private static Dictionary<string,int> _titleUsage=new Dictionary<string, int>();
+        private void populateItemInfo(SPDGList list, ISPDGListItemInfo item, bool isDocLib, bool addAttachment)
+        {
+            if (addAttachment)
+            {
+                populateItemInfo(list, item, isDocLib);
+                fileTypeRotator();
+                var attachmentInfo = new SPDGListItemAttachmentInfo(Guid.NewGuid().ToString() + '.' + _currentFileType, getFileContent());
+                item.Attachment = attachmentInfo;
+            }
+            else
+                populateItemInfo(list, item, isDocLib);
+        }
+
         private void populateItemInfo(SPDGList list, ISPDGListItemInfo item, bool isDocLib )
         {
             List<string> userFields = new List<string>();
@@ -236,7 +255,7 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                 {
                     item[fieldName] = value;
                 }
-            }         
+            }    
         }
 
         private void populateTask(ISPDGListItemInfo item)

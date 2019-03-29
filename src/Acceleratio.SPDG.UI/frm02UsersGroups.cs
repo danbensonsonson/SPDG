@@ -58,7 +58,7 @@ namespace Acceleratio.SPDG.UI
 
             if (!WorkingDefinition.IsClientObjectModel)
             {
-                List<string> domains = AD.GetDomainList();
+                List<string> domains = AD.GetAvailableDomains();
 
                 foreach (string domain in domains)
                 {
@@ -67,17 +67,17 @@ namespace Acceleratio.SPDG.UI
                     item.Value = domain;
                     cboDomains.Items.Add(item);
                 }
-                cboDomains.Text = domains[0];
+                //cboDomains.Text = domains[0];
           
-                List<string> subdomains = AD.GetDomainList2();
+                //List<string> subdomains = AD.GetDomainList2();
 
-                foreach (string domain in subdomains)
-                {
-                    ComboboxItem item = new ComboboxItem();
-                    item.Text = domain;
-                    item.Value = domain;
-                    cboDomains.Items.Add(item);
-                }
+                //foreach (string domain in subdomains)
+                //{
+                //    ComboboxItem item = new ComboboxItem();
+                //    item.Text = domain;
+                //    item.Value = domain;
+                //    cboDomains.Items.Add(item);
+                //}
             }
             else
             {
@@ -180,7 +180,7 @@ namespace Acceleratio.SPDG.UI
             {
                 return;
             }
-
+            tbFqdn.Text = cboDomains.Text;
             fillOUs();
         }
 

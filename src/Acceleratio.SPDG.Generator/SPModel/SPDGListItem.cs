@@ -11,6 +11,7 @@ namespace Acceleratio.SPDG.Generator.SPModel
         public abstract int Id { get; }
         public abstract  string DisplayName { get; }
         public abstract void Update();
+        public abstract ISPDGListItemAttachmentInfo Attachment { get; set; }
 
 
     }

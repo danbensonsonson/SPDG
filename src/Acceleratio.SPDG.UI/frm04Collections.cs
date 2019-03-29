@@ -129,7 +129,8 @@ namespace Acceleratio.SPDG.UI
                 if (Common.WorkingDefinition.CreateMySites > 0)
                     chkCreateMySites.Checked = true;
                 // set the slider to only alllow a maximum of the number of users created
-                trackNumMySites.Maximum = Common.WorkingDefinition.NumberOfUsersToCreate;
+                if (Common.WorkingDefinition.NumberOfUsersToCreate > 0)
+                    trackNumMySites.Maximum = Common.WorkingDefinition.NumberOfUsersToCreate;
             }
             else
                 chkCreateMySites.Enabled = false; // Only implemented on the server side for now

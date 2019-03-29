@@ -17,7 +17,10 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
         {
             if (_allUsers == null)
             {
-                _allUsers = AD.GetUsersFromAD();
+                if (Owner.WorkingDomains.Count > 0)
+                    _allUsers = AD.GetUsersFromAD(Owner.WorkingDomains[0]);
+                else
+                    _allUsers = AD.GetUsersFromAD();
             }
             return _allUsers;
         }
@@ -26,7 +29,10 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
         {
             if (_allGroups == null)
             {
-                _allGroups = AD.GetGroupsFromAD();
+                if (Owner.WorkingDomains.Count > 0)
+                    _allGroups = AD.GetGroupsFromAD(Owner.WorkingDomains[0]);
+                else
+                    _allGroups = AD.GetGroupsFromAD();
             }
             return _allGroups;
         }

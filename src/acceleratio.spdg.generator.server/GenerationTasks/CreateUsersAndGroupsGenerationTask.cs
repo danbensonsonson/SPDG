@@ -48,6 +48,7 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
             // Support for multiple domains (of users/groups)
             foreach (ServerUsersGroupsDefinition sugd in ugDefinitions)
             {
+                Owner.WorkingDomains.Add(sugd.ADDomainName);
                 var users = new List<string>();
                 if (sugd.NumberOfUsersToCreate > 0)
                 {
@@ -87,7 +88,7 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
                 ou = null;
             }
             var createdPrincipals = new List<string>();
-            using (PrincipalContext ctx = new PrincipalContext(contextType, domain, ou))
+            using (PrincipalContext ctx = new PrincipalContext(contextType, domain, ou,"AD\\Administrator", "4SGNgNjhSk4XmubEAuvz9"))
             {
                 for (int i = 0; i < numOfUsers; i++)
                 {
@@ -97,16 +98,17 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
                         userPrincipal.Surname = SampleData.GetSampleValueRandom(SampleData.LastNames);
                         userPrincipal.GivenName = SampleData.GetSampleValueRandom(SampleData.FirstNames);
                         userPrincipal.SamAccountName = getSamAccountName(userPrincipal.GivenName.ToLower(), userPrincipal.Surname.ToLower());
-                        Owner.WorkingUsers.Add(domain + "\\" + userPrincipal.SamAccountName);
                         userPrincipal.Name = userPrincipal.GivenName + " " + userPrincipal.Surname;
                         userPrincipal.DisplayName = userPrincipal.GivenName + " " + userPrincipal.Surname;
                         userPrincipal.UserPrincipalName = userPrincipal.SamAccountName + "@" + WorkingDefinition.Fqdn;
+                        Owner.WorkingUsers.Add(userPrincipal.UserPrincipalName);
 
                         string pwdOfNewlyCreatedUser = "Acce1234!";
 
                         userPrincipal.SetPassword(pwdOfNewlyCreatedUser);
                         userPrincipal.Enabled = true;
                         userPrincipal.PasswordNeverExpires = true;
+                        Owner.IncrementCurrentTaskProgress(string.Format("Creating {0}/{1} users: {2}", i, numOfUsers, domain + "\\" + userPrincipal.SamAccountName));
                         userPrincipal.Save();
                         Owner.IncrementCurrentTaskProgress(string.Format("Created {0}/{1} users: {2}", i, numOfUsers, userPrincipal.SamAccountName));
                         createdPrincipals.Add(userPrincipal.Sid.Value);
@@ -132,7 +134,8 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
 
             prinicpals = principalList;
 
-            using (PrincipalContext ctx = new PrincipalContext(contextType, domain, ou))
+            //TODO is the U/P necessary?
+            using (PrincipalContext ctx = new PrincipalContext(contextType, domain, ou, "AD\\Administrator", "4SGNgNjhSk4XmubEAuvz9"))
             {
                 for (int i = 0; i < numOfGroups; i++)
                 {

@@ -8,6 +8,7 @@ namespace Acceleratio.SPDG.Generator.Server.SPModel
     public class SPDGServerListItem: SPDGListItem
     {
         private readonly SPListItem _item;
+        private ISPDGListItemAttachmentInfo _attachment;
 
         public SPDGServerListItem(SPListItem item)
         {
@@ -64,6 +65,12 @@ namespace Acceleratio.SPDG.Generator.Server.SPModel
         public override void ShareWithPeople(IEnumerable<string> emails, bool isEdit)
         {
             // nothing for on prem
+        }
+
+        public override ISPDGListItemAttachmentInfo Attachment
+        {
+            set { _attachment = value; }
+            get { return _attachment; }
         }
     }
 }

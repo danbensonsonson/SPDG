@@ -62,8 +62,8 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
                 // loop through users based on number of CreateMySites
                 List<string> users = Owner.WorkingUsers;
 
-                if (users.Count < WorkingDefinition.CreateMySites) 
-                    users = AD.GetUsersFromAD();
+                if (users.Count < WorkingDefinition.CreateMySites)
+                   users = AD.GetUsersFromAD();
 
                 for (int s = 0; s < users.Count; s++)
                 {
@@ -81,15 +81,25 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
         }
 
         private void CreateMySite(UserProfileManager upm, string sAccount)
-        {            
-            //create user profile is one doesn't already exist
-            if (!upm.UserExists(sAccount))
-                upm.CreateUserProfile(sAccount);
+        {
+            try { 
+                //create user profile is one doesn't already exist
+                if (!upm.UserExists(sAccount))
+                    upm.CreateUserProfile(sAccount);
 
-            //to set prop values on user profile
-            UserProfile u = upm.GetUserProfile(sAccount);
-            u.CreatePersonalSite();
-            Owner.IncrementCurrentTaskProgress("Created my site '" + u.PersonalSite.Url + "'");
+                //to set prop values on user profile
+                UserProfile u = upm.GetUserProfile(sAccount);
+                if (u.PersonalSite == null)
+                {
+                    u.CreatePersonalSite();
+                    Owner.IncrementCurrentTaskProgress("Created my site '" + u.PersonalSite.Url + "'");
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Write("Could not create my site for '" + sAccount + "'");
+                Errors.Log(ex);
+            }
         }
 
         private void createNewSiteCollections()

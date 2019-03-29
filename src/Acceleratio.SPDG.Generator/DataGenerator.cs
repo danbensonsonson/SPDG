@@ -37,6 +37,11 @@ namespace Acceleratio.SPDG.Generator
             get { return _workingUsers; }
         }
 
+        public List<string> WorkingDomains
+        {
+            get { return _workingDomains; }
+        }
+
         public void IncrementCurrentTaskProgress(string message, int incrementInProgress = 1)
         {
             updateProgressDetail(message, incrementInProgress);
@@ -67,6 +72,7 @@ namespace Acceleratio.SPDG.Generator
                
         protected List<SiteCollInfo> _workingSiteCollections = new List<SiteCollInfo>();
         protected List<string> _workingUsers = new List<string>();
+        protected List<string> _workingDomains = new List<string>();
 
         private int _overallProgressMaxSteps = 10;
         private int _overallCurrentStep = 0;

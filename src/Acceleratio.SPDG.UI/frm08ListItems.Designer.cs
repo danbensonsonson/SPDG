@@ -98,7 +98,7 @@
             // trackMaxNumberOfItems
             // 
             this.trackMaxNumberOfItems.Location = new System.Drawing.Point(257, 209);
-            this.trackMaxNumberOfItems.Maximum = 200;
+            this.trackMaxNumberOfItems.Maximum = 1000;
             this.trackMaxNumberOfItems.Name = "trackMaxNumberOfItems";
             this.trackMaxNumberOfItems.Size = new System.Drawing.Size(543, 45);
             this.trackMaxNumberOfItems.TabIndex = 20;
@@ -291,7 +291,7 @@
             // trackMaxNumberOrDocLibItems
             // 
             this.trackMaxNumberOrDocLibItems.Location = new System.Drawing.Point(3, 40);
-            this.trackMaxNumberOrDocLibItems.Maximum = 100;
+            this.trackMaxNumberOrDocLibItems.Maximum = 1000;
             this.trackMaxNumberOrDocLibItems.Name = "trackMaxNumberOrDocLibItems";
             this.trackMaxNumberOrDocLibItems.Size = new System.Drawing.Size(543, 45);
             this.trackMaxNumberOrDocLibItems.TabIndex = 34;

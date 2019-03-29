@@ -176,7 +176,7 @@
             this.trackNumberOfUsers.Maximum = 300000;
             this.trackNumberOfUsers.Name = "trackNumberOfUsers";
             this.trackNumberOfUsers.Size = new System.Drawing.Size(517, 45);
-            this.trackNumberOfUsers.SmallChange = 10;
+            this.trackNumberOfUsers.SmallChange = 5;
             this.trackNumberOfUsers.TabIndex = 3;
             this.trackNumberOfUsers.TickFrequency = 10;
             this.trackNumberOfUsers.ValueChanged += new System.EventHandler(this.trackNumberOfUsers_ValueChanged);

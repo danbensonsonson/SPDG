@@ -113,5 +113,7 @@ namespace Acceleratio.SPDG.Generator.Client.SPModel
         {
             _context.ExecuteQuery();
         }
+
+        public override ISPDGListItemAttachmentInfo Attachment { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
     }
 }

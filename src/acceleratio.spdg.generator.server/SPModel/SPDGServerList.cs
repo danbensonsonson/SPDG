@@ -84,6 +84,8 @@ namespace Acceleratio.SPDG.Generator.Server.SPModel
                 {
                     item[field] = itemInfo[field];
                 }
+                if (itemInfo.Attachment != null)
+                    item.Attachments.Add(itemInfo.Attachment.Name, itemInfo.Attachment.Content);
 
                 item.Update();
             }
