@@ -215,12 +215,12 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                 try
                 {
                     var user = web.EnsureUser(groupName);
-                    Log.Write("Ensured user:" + groupName + " for site: " + web.Url);
+                    Log.Write("Ensured group:" + groupName + " for site: " + web.Url);
                 }
                 catch (Exception ex)
                 {
                     Errors.Log(ex);
-                    Log.Write("Error adding user:" + groupName);
+                    Log.Write("Error adding group:" + groupName);
                 }
             }
 

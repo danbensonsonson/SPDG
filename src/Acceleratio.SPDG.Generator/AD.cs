@@ -151,7 +151,8 @@ namespace Acceleratio.SPDG.Generator
                     if (de.Properties["objectsid"].Value != null)
                     {
                         var sid = new System.Security.Principal.SecurityIdentifier((byte[])de.Properties["objectsid"].Value, 0);
-                        ous.Add(sid.Value);
+                        if (sid.Value.Length > 13) // hack because I was getting some short SIDs that couldn't be found. Ex.  S-1-5-32-561
+                            ous.Add(sid.Value);
                     }
 
                 }

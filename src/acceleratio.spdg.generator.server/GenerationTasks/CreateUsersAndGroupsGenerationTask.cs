@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.DirectoryServices.AccountManagement;
 using System.Linq;
 using System.Text;
@@ -88,7 +89,7 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
                 ou = null;
             }
             var createdPrincipals = new List<string>();
-            using (PrincipalContext ctx = new PrincipalContext(contextType, domain, ou,"AD\\Administrator", "4SGNgNjhSk4XmubEAuvz9"))
+            using (PrincipalContext ctx = new PrincipalContext(contextType, domain, ou, ConfigurationManager.AppSettings["adUser"], ConfigurationManager.AppSettings["adPassword"]))
             {
                 for (int i = 0; i < numOfUsers; i++)
                 {
@@ -134,8 +135,7 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
 
             prinicpals = principalList;
 
-            //TODO is the U/P necessary?
-            using (PrincipalContext ctx = new PrincipalContext(contextType, domain, ou, "AD\\Administrator", "4SGNgNjhSk4XmubEAuvz9"))
+            using (PrincipalContext ctx = new PrincipalContext(contextType, domain, ou, ConfigurationManager.AppSettings["adUser"], ConfigurationManager.AppSettings["adPassword"]))
             {
                 for (int i = 0; i < numOfGroups; i++)
                 {
