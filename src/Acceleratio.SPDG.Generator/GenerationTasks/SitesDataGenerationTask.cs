@@ -43,9 +43,11 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
 
             int value = rnd.Next(7) + 1;
 
-            int sitesToCreate = (int)(value / ((currentLevel+1) / (float)maxLevels));
+            //int sitesToCreate = (int)(value / ((currentLevel+1) / (float)maxLevels)); // TODO
+            int sitesToCreate = maxSitesToCreate;
 
-            Log.Write($"{parentWeb.Title} (int)({value}) / (({currentLevel + 1}) / (float){maxLevels})), sitesToCreate: {sitesToCreate}");
+            //Log.Write($"{parentWeb.Title} (int)({value}) / (({currentLevel + 1}) / (float){maxLevels})), sitesToCreate: {sitesToCreate}");
+            Log.Write($"{parentWeb.Title}, sitesToCreate: {sitesToCreate}");
 
             for (int i = 0; i < sitesToCreate; i++)
             {

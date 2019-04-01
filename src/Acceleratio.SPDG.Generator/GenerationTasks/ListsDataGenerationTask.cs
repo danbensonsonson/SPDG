@@ -37,7 +37,8 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                         using(var web = siteColl.OpenWeb(siteInfo.ID)) 
                         {
                             Random rnd = new Random();
-                            int listsToCreate = rnd.Next(WorkingDefinition.MaxNumberOfListsAndLibrariesPerSite+1);                            
+                            //int listsToCreate = rnd.Next(WorkingDefinition.MaxNumberOfListsAndLibrariesPerSite+1); //TODO find out what is wrong at 35 lists (quick launch?)
+                            int listsToCreate = WorkingDefinition.MaxNumberOfListsAndLibrariesPerSite;
                             int bigListsToCreate = WorkingDefinition.NumberOfBigListsPerSite;
                             Log.Write("Creating lists in site '" + web.Url + "'");
                             listsToCreate += bigListsToCreate;
@@ -61,7 +62,7 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                                     
                                     string listName = findAvailableListName(web);
                                     Guid listGuid = web.AddList(listName, string.Empty, (int)listTemplate);
-                                    Owner.IncrementCurrentTaskProgress("Created List '" + listName + "' in site '" + web.Url + "'");
+                                    Owner.IncrementCurrentTaskProgress("Created List '" + listName + "' in site '" + web.Url + "'" + " Type: " + listTemplate);
                                     var list = web.GetList(listGuid);                                    
                                     web.AddNavigationNode(list.Title, list.DefaultViewUrl, NavigationNodeLocation.QuickLaunchLists);
                                     ListInfo listInfo = new ListInfo();

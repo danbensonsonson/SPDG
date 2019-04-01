@@ -65,12 +65,18 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
                 if (users.Count < WorkingDefinition.CreateMySites)
                    users = AD.GetUsersFromAD();
 
+                bool createdMySite = false;
+                int createdMySites = 0;
                 for (int s = 0; s < users.Count; s++)
                 {
                     // Get the account name
-                    CreateMySite(upm, users[s]);
-                    Owner.IncrementCurrentTaskProgress(string.Format("Created {0}/{1} my sites.", s+1, WorkingDefinition.CreateMySites));
-                    if (s >= WorkingDefinition.CreateMySites)
+                    createdMySite = CreateMySite(upm, users[s]);  // TODO add a bool here to see if the site was created or not. Might have already existed or caught an exception
+                    if (createdMySite)
+                    {
+                        Owner.IncrementCurrentTaskProgress(string.Format("Created {0}/{1} my sites.", s + 1, WorkingDefinition.CreateMySites));
+                        createdMySites++;
+                    }
+                    if (createdMySites >= WorkingDefinition.CreateMySites)
                         break;
                 }
             }
@@ -80,7 +86,7 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
             }            
         }
 
-        private void CreateMySite(UserProfileManager upm, string sAccount)
+        private bool CreateMySite(UserProfileManager upm, string sAccount)
         {
             try { 
                 //create user profile is one doesn't already exist
@@ -93,12 +99,16 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
                 {
                     u.CreatePersonalSite();
                     Owner.IncrementCurrentTaskProgress("Created my site '" + u.PersonalSite.Url + "'");
+                    return true;
                 }
+                else
+                    return false; // My Site already existed
             }
             catch (Exception ex)
             {
                 Log.Write("Could not create my site for '" + sAccount + "'");
                 Errors.Log(ex);
+                return false;
             }
         }
 
