@@ -63,13 +63,13 @@ namespace Acceleratio.SPDG.UI
         {          
             definition.NumberOfSecurityGroupsToCreate = 0;
             definition.NumberOfUsersToCreate = 0;
-            definition.NumberOfSitesToCreate = 300;
+            definition.NumberOfSitesToCreate = 10;
             definition.MaxNumberOfColumnsPerList = 0;
             definition.MaxNumberOfContentTypesPerSiteCollection = 0;
             definition.MaxNumberOfFoldersToGenerate = 0;
-            definition.MaxNumberofItemsToGenerate = 25;
-            definition.MaxNumberOfLevelsForSites = 3;
-            definition.MaxNumberOfListsAndLibrariesPerSite = 10;
+            definition.MaxNumberofItemsToGenerate = 1000;
+            definition.MaxNumberOfLevelsForSites = 1;
+            definition.MaxNumberOfListsAndLibrariesPerSite = 90;
             definition.MaxNumberOfViewsPerList = 0;         
             definition.CreateNewSiteCollections = 1;
             definition.SiteTemplate = "Team Site";
@@ -78,12 +78,11 @@ namespace Acceleratio.SPDG.UI
             definition.LibTypeCalendar = true;
             definition.LibTypeTasks = true;
             definition.CreateSomeFoldersInDocumentLibraries = true;
-            definition.MaxNumberOfFoldersToGenerate = 10;
-            definition.MaxNumberOfNestedFolderLevelPerLibrary = 3;
+            definition.MaxNumberOfFoldersToGenerate = 1;
+            definition.MaxNumberOfNestedFolderLevelPerLibrary = 1;
             definition.CreateColumns = true;
-            definition.MaxNumberOfColumnsPerList = 3;
+            definition.MaxNumberOfColumnsPerList = 20;
             definition.PrefilListAndLibrariesWithItems = true;
-            definition.MaxNumberofItemsToGenerate = 30;
             definition.IncludeDocTypeDOCX = true;
             definition.IncludeDocTypePDF = true;
             definition.IncludeDocTypeImages = true;
@@ -92,15 +91,15 @@ namespace Acceleratio.SPDG.UI
             definition.MaxDocumentSizeMB = 1;
             definition.ContentTypesCanInheritFromOtherContentType = true;
             definition.CreateContentTypes = true;
-            definition.MaxNumberOfContentTypesPerSiteCollection = 10;
-            definition.PermissionsPercentOfSites = 60;
-            definition.PermissionsPercentOfLists = 30;
-            definition.PermissionsPerObject = 10;
-            definition.PermissionsPercentForUsers = 20;
-            definition.PermissionsPercentForSPGroups = 40;
-            definition.PermissionsPercentOfListItems = 5;
-            definition.MaxNumberofDocumentLibraryItemsToGenerate = 25;
-            definition.PermissionsPercentOfFolders = 25;
+            definition.MaxNumberOfContentTypesPerSiteCollection = 1;
+            definition.PermissionsPercentOfSites = 50;
+            definition.PermissionsPercentOfLists = 15;
+            definition.PermissionsPerObject = 15;
+            definition.PermissionsPercentForUsers = 50;
+            definition.PermissionsPercentForSPGroups = 3;
+            definition.PermissionsPercentOfListItems = 15;
+            definition.MaxNumberofDocumentLibraryItemsToGenerate = 1000;
+            definition.PermissionsPercentOfFolders = 15;
 
         }
     }

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Net.NetworkInformation;
 using Acceleratio.SPDG.Generator.GenerationTasks;
 using Acceleratio.SPDG.Generator.Structures;
 using Microsoft.SharePoint;
@@ -63,17 +65,22 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
                 List<string> users = Owner.WorkingUsers;
 
                 if (users.Count < WorkingDefinition.CreateMySites)
-                   users = AD.GetUsersFromAD();
+                {   // TODO - how to get a working domain without configuration?
+                    users = AD.GetUsersFromAD(IPGlobalProperties.GetIPGlobalProperties().DomainName); // Just grab a big chunk of users to work from. This call can take time. Use sparingly
+                    // Working users is no longer necessary. Save the list for farther down the line to avoid the above call
+                    Owner.WorkingUsers.AddRange(users);
+                }
 
                 bool createdMySite = false;
                 int createdMySites = 0;
-                for (int s = 0; s < users.Count; s++)
+                foreach (string user in users)
+                //for (int s = 0; s < users.Count; s++)
                 {
                     // Get the account name
-                    createdMySite = CreateMySite(upm, users[s]);  // TODO add a bool here to see if the site was created or not. Might have already existed or caught an exception
+                    createdMySite = CreateMySite(upm, user); 
                     if (createdMySite)
                     {
-                        Owner.IncrementCurrentTaskProgress(string.Format("Created {0}/{1} my sites.", s + 1, WorkingDefinition.CreateMySites));
+                        Owner.IncrementCurrentTaskProgress(string.Format("Created {0}/{1} my sites.", createdMySites + 1, WorkingDefinition.CreateMySites));
                         createdMySites++;
                     }
                     if (createdMySites >= WorkingDefinition.CreateMySites)

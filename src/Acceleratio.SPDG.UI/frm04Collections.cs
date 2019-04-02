@@ -223,7 +223,7 @@ namespace Acceleratio.SPDG.UI
 
         private void trackNumSiteColls_Scroll(object sender, EventArgs e)
         {
-
+            lblCreateSiteColls.Text = trackNumSiteColls.Value.ToString();
         }
 
         private void trackNumMySites_Scroll(object sender, EventArgs e)

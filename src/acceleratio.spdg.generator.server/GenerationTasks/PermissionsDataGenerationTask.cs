@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Net.NetworkInformation;
 using Acceleratio.SPDG.Generator.GenerationTasks;
 
 namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
@@ -20,7 +21,7 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
                 if (Owner.WorkingDomains.Count > 0)
                     _allUsers = AD.GetUsersFromAD(Owner.WorkingDomains[0]);
                 else
-                    _allUsers = AD.GetUsersFromAD();
+                    _allUsers = AD.GetUsersFromAD(IPGlobalProperties.GetIPGlobalProperties().DomainName);
             }
             return _allUsers;
         }
@@ -32,7 +33,7 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
                 if (Owner.WorkingDomains.Count > 0)
                     _allGroups = AD.GetGroupsFromAD(Owner.WorkingDomains[0]);
                 else
-                    _allGroups = AD.GetGroupsFromAD();
+                    _allGroups = AD.GetGroupsFromAD(IPGlobalProperties.GetIPGlobalProperties().DomainName);
             }
             return _allGroups;
         }

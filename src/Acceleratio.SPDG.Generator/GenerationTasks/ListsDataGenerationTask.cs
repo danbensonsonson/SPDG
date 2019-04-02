@@ -225,7 +225,7 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
 
             while (web.TryGetList(candidate) != null)
             {
-                candidate = SampleData.GetSampleValueRandom(SampleData.BusinessDocsTypes);
+                candidate = SampleData.GetSampleValueRandom(SampleData.BusinessDocsTypes); //TODO I think a site with more than 35 lists is getting stuck here.
             }
 
             return candidate;

@@ -83,6 +83,8 @@ namespace Acceleratio.SPDG.Generator
                 DirectorySearcher searcher = new DirectorySearcher(root);
                 searcher.Filter = "(objectClass=user)";
                 searcher.SearchScope = SearchScope.Subtree;
+                searcher.SizeLimit = 0;
+                searcher.PageSize = 500;
                 //searcher.PropertiesToLoad.Add("userPrincipalName");
 
                 var result = searcher.FindAll();
@@ -115,6 +117,13 @@ namespace Acceleratio.SPDG.Generator
                     searchPrinciple.Enabled = true;
 
                     System.DirectoryServices.AccountManagement.PrincipalSearcher search = new PrincipalSearcher();
+                    DirectorySearcher ds = search.GetUnderlyingSearcher() as DirectorySearcher;
+                    if (ds != null)
+                    {
+                        ds.PageSize = 500;
+                        ds.SizeLimit = 0;
+                    }                       
+
                     search.QueryFilter = searchPrinciple;
 
                     PrincipalSearchResult<Principal> results = search.FindAll();
@@ -142,6 +151,8 @@ namespace Acceleratio.SPDG.Generator
             {
                 DirectorySearcher searcher = new DirectorySearcher(root);
                 searcher.Filter = "(objectClass=group)";
+                searcher.SizeLimit = 0;
+                searcher.PageSize = 500;
                 //searcher.SearchScope = SearchScope.Subtree;
 
                 var result = searcher.FindAll();

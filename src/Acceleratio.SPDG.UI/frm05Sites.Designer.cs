@@ -76,9 +76,9 @@
             this.label2.ForeColor = System.Drawing.Color.DarkSlateGray;
             this.label2.Location = new System.Drawing.Point(16, 12);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(143, 15);
+            this.label2.Size = new System.Drawing.Size(242, 15);
             this.label2.TabIndex = 8;
-            this.label2.Text = "Number of Sites to Create";
+            this.label2.Text = "Number of Sites to Create Per Site Collection";
             // 
             // trackNumSitesToCreate
             // 
@@ -94,13 +94,14 @@
             // 
             // trackMaxNumberLevels
             // 
+            this.trackMaxNumberLevels.Enabled = false;
             this.trackMaxNumberLevels.LargeChange = 1;
             this.trackMaxNumberLevels.Location = new System.Drawing.Point(11, 131);
             this.trackMaxNumberLevels.Minimum = 1;
             this.trackMaxNumberLevels.Name = "trackMaxNumberLevels";
             this.trackMaxNumberLevels.Size = new System.Drawing.Size(543, 45);
             this.trackMaxNumberLevels.TabIndex = 14;
-            this.trackMaxNumberLevels.Value = 3;
+            this.trackMaxNumberLevels.Value = 1;
             this.trackMaxNumberLevels.ValueChanged += new System.EventHandler(this.trackMaxNumberLevels_ValueChanged);
             // 
             // label3
@@ -134,7 +135,7 @@
             this.lblNumberLevels.Name = "lblNumberLevels";
             this.lblNumberLevels.Size = new System.Drawing.Size(13, 15);
             this.lblNumberLevels.TabIndex = 16;
-            this.lblNumberLevels.Text = "3";
+            this.lblNumberLevels.Text = "1";
             // 
             // cboSiteTemplates
             // 
@@ -197,8 +198,6 @@
             this.ClientSize = new System.Drawing.Size(921, 644);
             this.Controls.Add(this.flowLayoutPanel1);
             this.Controls.Add(this.ucSteps1);
-            this.MaximumSize = new System.Drawing.Size(937, 683);
-            this.MinimumSize = new System.Drawing.Size(937, 683);
             this.Name = "frm05Sites";
             this.Text = "frm05Sites";
             this.Controls.SetChildIndex(this.ucSteps1, 0);

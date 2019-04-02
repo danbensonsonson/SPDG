@@ -156,14 +156,22 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                 url = SampleData.GetSampleValueRandom(SampleData.Documents) + "." + _currentFileType;
             }
 
-            var spFile = folder.AddFile(url, fileContent, true);
-            var fileItem = spFile.Item;
-            if (fileItem != null)
-            { 
-                populateItemInfo(docLib, fileItem, true);
-                fileItem.Update();                
+            try
+            {   // Log an exception here, do not increment counter 
+                var spFile = folder.AddFile(url, fileContent, true);
+                var fileItem = spFile.Item;
+            
+                if (fileItem != null)
+                {
+                    populateItemInfo(docLib, fileItem, true);
+                    fileItem.Update();
+                }
+                _docsAdded++;
             }
-            _docsAdded++;
+            catch (Exception ex)
+            {
+                Log.Write("Failed to add document: " + url + " Exception: " + ex.ToString());
+            }
                        
             foreach(var childFolder in folder.SubFolders)
             {

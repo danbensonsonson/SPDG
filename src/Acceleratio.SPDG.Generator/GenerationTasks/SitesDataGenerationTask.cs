@@ -34,8 +34,28 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
         }
 
         private int SiteCounter { get; set; }
+        private int TotalSites { get; set; }
         private List<SiteInfo> Sites { get; set; }
-       
+
+        public override void Execute()
+        {
+            TotalSites = WorkingDefinition.NumberOfSitesToCreate * Owner.WorkingSiteCollections.Count;
+            foreach (SiteCollInfo siteCollInfo in Owner.WorkingSiteCollections)
+            {
+                using (var siteColl = Owner.ObjectsFactory.GetSite(siteCollInfo.URL))
+                {   // each site collection
+
+                    InitWebTemplate(siteColl.RootWeb);
+
+                    this.Sites = new List<SiteInfo>();
+                    CreateSubsites(siteColl.RootWeb, 0, WorkingDefinition.MaxNumberOfLevelsForSites, WorkingDefinition.NumberOfSitesToCreate, "");
+
+                    siteCollInfo.Sites.AddRange(Sites);
+                }
+            }
+            Log.Write("Total Sites Created: " + SiteCounter);
+        }
+
         internal void CreateSubsites(SPDGWeb parentWeb, int currentLevel, int maxLevels, int maxSitesToCreate, string parentBaseName)
         {            
             Random rnd = new Random();
@@ -44,50 +64,34 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
             int value = rnd.Next(7) + 1;
 
             //int sitesToCreate = (int)(value / ((currentLevel+1) / (float)maxLevels)); // TODO
-            int sitesToCreate = maxSitesToCreate;
+            int sitesToCreate = maxSitesToCreate; // Per Site Collection
 
             //Log.Write($"{parentWeb.Title} (int)({value}) / (({currentLevel + 1}) / (float){maxLevels})), sitesToCreate: {sitesToCreate}");
             Log.Write($"{parentWeb.Title}, sitesToCreate: {sitesToCreate}");
 
-            for (int i = 0; i < sitesToCreate; i++)
+            for (int i = 0; i < sitesToCreate; i++) // create 5 sites
             {
-                if (SiteCounter < maxSitesToCreate)
+                if (SiteCounter < TotalSites) // The total sites to create (max sites * number of site collections
                 {
                     var childSubsite = CreateSubsite(parentWeb, parentBaseName, currentLevel, out baseName);
                     SiteCounter++;
-                    if (childSubsite != null)
-                    {
-                        SiteInfo siteInfo = new SiteInfo();
-                        siteInfo.URL = childSubsite.Url;
-                        Guid siteID = childSubsite.ID;
-                        siteInfo.ID = siteID;
-                        Sites.Add(siteInfo);
-                        if (currentLevel < maxLevels)
-                        {
-                            CreateSubsites(childSubsite, currentLevel + 1, maxLevels, maxSitesToCreate, baseName);
-                        }
-                    }
+                    //if (childSubsite != null)
+                    //{
+                    //    SiteInfo siteInfo = new SiteInfo();
+                    //    siteInfo.URL = childSubsite.Url;
+                    //    Guid siteID = childSubsite.ID;
+                    //    siteInfo.ID = siteID;
+                    //    Sites.Add(siteInfo);
+                    //    if (currentLevel < maxLevels) // on 1, 
+                    //    {
+                    //        CreateSubsites(childSubsite, currentLevel + 1, maxLevels, maxSitesToCreate, baseName);
+                    //        // Not implemented (site levels)
+                    //    }
+                    //}
                 }
             }
         }
         
-        public override void Execute()
-        {
-            foreach (SiteCollInfo siteCollInfo in Owner.WorkingSiteCollections)
-            {
-                using (var siteColl = Owner.ObjectsFactory.GetSite(siteCollInfo.URL))
-                {
-                    
-                    InitWebTemplate(siteColl.RootWeb);
-                    
-                    this.Sites = new List<SiteInfo>(); 
-                    CreateSubsites(siteColl.RootWeb, 0, WorkingDefinition.MaxNumberOfLevelsForSites, WorkingDefinition.NumberOfSitesToCreate, "");
-                   
-                    siteCollInfo.Sites.AddRange(Sites);
-                }
-            }
-        }
-      
         private SPDGWeb CreateSubsite(SPDGWeb parentWeb, string parentBaseName, int level, out string baseName)
         {
             string siteName, url;
