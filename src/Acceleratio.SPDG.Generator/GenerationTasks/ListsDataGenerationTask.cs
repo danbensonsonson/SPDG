@@ -37,7 +37,7 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                         using(var web = siteColl.OpenWeb(siteInfo.ID)) 
                         {
                             Random rnd = new Random();
-                            //int listsToCreate = rnd.Next(WorkingDefinition.MaxNumberOfListsAndLibrariesPerSite+1); //TODO find out what is wrong at 35 lists (quick launch?)
+                            //int listsToCreate = rnd.Next(WorkingDefinition.MaxNumberOfListsAndLibrariesPerSite+1);
                             int listsToCreate = WorkingDefinition.MaxNumberOfListsAndLibrariesPerSite;
                             int bigListsToCreate = WorkingDefinition.NumberOfBigListsPerSite;
                             Log.Write("Creating lists in site '" + web.Url + "'");
@@ -223,9 +223,16 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                 candidate += " Calendar";
             }
 
+            int i = 0;
             while (web.TryGetList(candidate) != null)
             {
                 candidate = SampleData.GetSampleValueRandom(SampleData.BusinessDocsTypes); //TODO I think a site with more than 35 lists is getting stuck here.
+                i++;
+                if (i > SampleData.BusinessDocsTypes.Count) // TODO add a number or something to keep moving
+                {
+                    candidate = candidate + " " + i;
+                    break;
+                }
             }
 
             return candidate;

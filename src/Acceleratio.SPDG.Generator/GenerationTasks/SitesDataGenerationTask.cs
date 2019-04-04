@@ -75,19 +75,19 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                 {
                     var childSubsite = CreateSubsite(parentWeb, parentBaseName, currentLevel, out baseName);
                     SiteCounter++;
-                    //if (childSubsite != null)
-                    //{
-                    //    SiteInfo siteInfo = new SiteInfo();
-                    //    siteInfo.URL = childSubsite.Url;
-                    //    Guid siteID = childSubsite.ID;
-                    //    siteInfo.ID = siteID;
-                    //    Sites.Add(siteInfo);
-                    //    if (currentLevel < maxLevels) // on 1, 
+                    if (childSubsite != null)
+                    {
+                        SiteInfo siteInfo = new SiteInfo();
+                        siteInfo.URL = childSubsite.Url;
+                        Guid siteID = childSubsite.ID;
+                        siteInfo.ID = siteID;
+                        Sites.Add(siteInfo);
+                    //    if (currentLevel < maxLevels) 
                     //    {
                     //        CreateSubsites(childSubsite, currentLevel + 1, maxLevels, maxSitesToCreate, baseName);
                     //        // Not implemented (site levels)
                     //    }
-                    //}
+                    }
                 }
             }
         }
