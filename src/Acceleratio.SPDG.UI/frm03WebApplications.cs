@@ -183,7 +183,7 @@ namespace Acceleratio.SPDG.UI
             {
                 WorkingDefinition.UseExistingWebApplication = string.Empty;
                 WorkingDefinition.UseExistingWebApplicationName = string.Empty;
-                WorkingDefinition.SiteCollection = string.Empty;
+                WorkingDefinition.SiteCollections.Clear();
                 WorkingDefinition.WebAppOwnerLogin = txtOwnerUserName.Text;
                 WorkingDefinition.WebAppOwnerPassword = txtOwnerPassword.Text;
                 WorkingDefinition.WebAppOwnerEmail = txtOwnerEmail.Text;

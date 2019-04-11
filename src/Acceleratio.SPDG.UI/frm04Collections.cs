@@ -48,7 +48,7 @@ namespace Acceleratio.SPDG.UI
             if (radioCreateNewSiteColl.Checked)
             {
                 trackNumSiteColls.Enabled = true;
-                cboSiteCollection.Enabled = false;
+                lbSiteCollection.Enabled = false;
 
                 label1.Enabled = true;
                 label3.Enabled = true;
@@ -58,7 +58,7 @@ namespace Acceleratio.SPDG.UI
             else
             {
                 trackNumSiteColls.Enabled = false;
-                cboSiteCollection.Enabled = true;
+                lbSiteCollection.Enabled = true;
 
                 label1.Enabled = false;
                 label3.Enabled = false;
@@ -79,6 +79,7 @@ namespace Acceleratio.SPDG.UI
              
         private void loadSiteCollections()
         {
+            // TODO, only do this if the use existing is checked. 
             var helper = SPDGDataHelper.Create(WorkingDefinition);
 
             ServerGeneratorDefinition serverDefinition = WorkingDefinition as ServerGeneratorDefinition;
@@ -97,10 +98,8 @@ namespace Acceleratio.SPDG.UI
             }
             foreach (var siteColl in siteCollections)
             {
-                ComboboxItem item = new ComboboxItem();
-                item.Text = siteColl;
-                item.Value = siteColl;
-                cboSiteCollection.Items.Add(item);
+                if (!siteColl.Contains("my/personal"))  // don't bother with the mysite collections              
+                    lbSiteCollection.Items.Add(siteColl);
             }
         }
 
@@ -152,16 +151,15 @@ namespace Acceleratio.SPDG.UI
             }
             radioUseExisting.Checked = Common.WorkingDefinition.UseExistingSiteCollection;
             radioCreateNewSiteColl.Checked = !Common.WorkingDefinition.UseExistingSiteCollection;
-            if (!string.IsNullOrEmpty(Common.WorkingDefinition.SiteCollection)) 
+            foreach (string sc in Common.WorkingDefinition.SiteCollections)
             {
-                cboSiteCollection.Text = Common.WorkingDefinition.SiteCollection;
+                // TODO make sure list box items are selection lbSiteCollection
             }
-
         }
 
         public override bool saveData()
         {
-            if (trackNumSiteColls.Value == 0 && cboSiteCollection.SelectedItem == null)
+            if (trackNumSiteColls.Value == 0 && lbSiteCollection.SelectedItems.Count <= 0)
             {
                 MessageBox.Show("Select number of new Site Collections or existing one!");
                 return false;
@@ -177,7 +175,7 @@ namespace Acceleratio.SPDG.UI
 
                 Common.WorkingDefinition.CreateNewSiteCollections = trackNumSiteColls.Value;
                 Common.WorkingDefinition.UseExistingSiteCollection = false;
-                Common.WorkingDefinition.SiteCollection = string.Empty;
+                //Common.WorkingDefinition.SiteCollections = new List<string>();
 
                 Common.WorkingDefinition.SiteCollOwnerLogin = txtOwnerUserName.Text.Trim();
                 Common.WorkingDefinition.SiteCollOwnerEmail = txtOwnerEmail.Text.Trim();
@@ -186,9 +184,10 @@ namespace Acceleratio.SPDG.UI
             {
                 Common.WorkingDefinition.CreateNewSiteCollections = 0;
                 Common.WorkingDefinition.UseExistingSiteCollection = true;
-                if (cboSiteCollection.SelectedItem != null)
+                if (lbSiteCollection.SelectedItems.Count > 0)
                 {
-                    Common.WorkingDefinition.SiteCollection = ((ComboboxItem)cboSiteCollection.SelectedItem).Value.ToString();
+                    foreach (string sc in lbSiteCollection.SelectedItems)
+                        Common.WorkingDefinition.SiteCollections.Add(sc);
                 }
             }
 

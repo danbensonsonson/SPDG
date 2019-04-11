@@ -19,6 +19,7 @@ namespace Acceleratio.SPDG.Generator
         private int _numberOfUsersToCreate;
         private int _numberOfSecurityGroupsToCreate;
         private int _maxNumberOfUsersInCreatedSecurityGroups;
+        private List<string> _siteCollections;
         [XmlIgnore]
         public abstract bool IsClientObjectModel { get; }
         public bool CredentialsOfCurrentUser { get; set; }
@@ -51,6 +52,7 @@ namespace Acceleratio.SPDG.Generator
             }
             set { _password = value; }
         }
+        public DataGeneratorMode Mode { get; set; }
         public string Domain { get; set; }
         public string SiteCollOwnerLogin { get; set; }
         public string SiteCollOwnerEmail { get; set; }
@@ -59,7 +61,6 @@ namespace Acceleratio.SPDG.Generator
         public int CreateNewSiteCollections { get; set; }
         public int CreateMySites { get; set; }
         public bool UseExistingSiteCollection { get; set; }
-        public string SiteCollection { get; set; }
         public bool UseOnlyExistingSites { get; set; }
         public int NumberOfSitesToCreate { get; set; }
         public int MaxNumberOfLevelsForSites { get; set; }
@@ -73,6 +74,16 @@ namespace Acceleratio.SPDG.Generator
         public int MaxNumberOfFoldersToGenerate { get; set; }
         public int MaxNumberOfNestedFolderLevelPerLibrary { get; set; }
         public bool CreateViews { get; set; }
+
+        public List<string> SiteCollections
+        {
+            get
+            {
+                if (_siteCollections == null)
+                    _siteCollections = new List<string>();
+                return _siteCollections;
+            }
+        }
 
         public int MaxNumberOfViewsPerList
         {

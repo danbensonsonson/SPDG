@@ -12,6 +12,11 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
         List<SPDGUser> _siteSpUsers = null;
         List<SPDGGroup> _siteSpGroups = null;
         List<SPDGUser> _siteAdGroupSpUsers = null;
+        SPDGSite _currentSiteCollection = null;
+
+        // AD
+        List<string> _adUsers = null;
+        List<string> _adGroups = null;
 
         List<SiteInfo> _allSitesToHaveUniquePermissions = new List<SiteInfo>();
         List<ListInfo> _allListsToHavehUniquePermissions = new List<ListInfo>();
@@ -65,6 +70,8 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
             }
 
             var allItemsCount = allLists.Sum(x => x.ItemCount);
+            if (WorkingDefinition.Mode == DataGeneratorMode.Incremental)
+                allItemsCount += 1; // during an incremental run, we don't know how many items we have
 
             _doSitePermissions = WorkingDefinition.PermissionsPercentOfSites > 0 && allSites.Count > 0;
             _doListPermissions = WorkingDefinition.PermissionsPercentOfLists > 0 && allLists.Count > 0;
@@ -78,6 +85,9 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
             {
                 return;
             }
+
+            _adUsers = GetAvailableUsersInDirectory();
+            _adGroups = GetAvailableGroupsInDirectory();
 
             _totalSteps =
                 //user ensure
@@ -122,9 +132,10 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                     _siteSpUsers = new List<SPDGUser>();
                     _siteAdGroupSpUsers = new List<SPDGUser>();
                     _siteSpGroups = new List<SPDGGroup>();
+                    _currentSiteCollection = siteColl;
 
                     Owner.IncrementCurrentTaskProgress("Ensuring users and groups on '" + siteCollInfo.URL + "'");
-                    EnsureUsersAndGroups(siteColl.RootWeb);
+                    //EnsureUsersAndGroups(siteColl.RootWeb); TODO perform this task on demand for a particular user or group
 
                     setSitePermissions(siteColl.RootWeb);
                     foreach (SiteInfo siteInfo in siteCollInfo.Sites)
@@ -183,11 +194,12 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
         private void EnsureUsersAndGroups(SPDGWeb web)
         {
             /// ENSURE AD USERS TO SHAREPOINT
-            var availableUsers = GetAvailableUsersInDirectory();
-            int numOfUsers = availableUsers.Count > 20 ? 20 : availableUsers.Count;
+            //var availableUsers = GetAvailableUsersInDirectory();
+            //int numOfUsers = availableUsers.Count > 20 ? 20 : availableUsers.Count;
+            int numOfUsers = _adUsers.Count;
             for (int i = 0; i < numOfUsers; i++)
             {
-                string userName = availableUsers[SampleData.GetRandomNumber(0, availableUsers.Count)];
+                string userName = _adUsers[SampleData.GetRandomNumber(0, _adUsers.Count)];
 
                 if (userName == string.Empty) continue;
 
@@ -204,11 +216,12 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
             }
 
             /// ENSURE AD GROUPS TO SHAREPOINT
-            var adGrups = GetAvailableGroupsInDirectory();
-            numOfUsers = adGrups.Count > 20 ? 20 : adGrups.Count;
+            //var adGrups = GetAvailableGroupsInDirectory();
+            //numOfUsers = adGrups.Count > 20 ? 20 : adGrups.Count;
+            numOfUsers = _adGroups.Count;
             for (int i = 0; i < numOfUsers; i++)
             {
-                string groupName = adGrups[SampleData.GetRandomNumber(0, adGrups.Count)];
+                string groupName = _adGroups[SampleData.GetRandomNumber(0, _adGroups.Count)];
 
                 if (groupName == string.Empty) continue;
 
@@ -414,7 +427,7 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
             }
             else
             {
-                principal = _siteAdGroupSpUsers[SampleData.GetRandomNumber(0, _siteAdGroupSpUsers.Count - 1)];
+                principal = getRandomSPGroup();
             }
 
             var roleAssignment = securableObject.GetRoleAssignmentByPrincipal(principal);
@@ -428,13 +441,48 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
             }
         }
 
-        private SPDGUser getRandomSPUser()
+        private SPDGGroup getRandomSPGroup()
         {
-            SPDGUser user;
-            do
+            SPDGGroup group;
+            string groupName = null;
+            try
             {
-                user = _siteSpUsers[SampleData.GetRandomNumber(0, _siteSpUsers.Count - 1)];
-            } while (user.IsGuestUser);
+                // TODO need to get the SPDGGroup from Ensure user
+                groupName = _adGroups[SampleData.GetRandomNumber(0, _adGroups.Count)];
+                var usergroup = _currentSiteCollection.RootWeb.EnsureUser(groupName); // Ensuring groups on demand rather than the whole list to a site colleciton
+                group = _currentSiteCollection.RootWeb.SiteGroups.ElementAt(0);
+                Log.Write("Ensured group:" + groupName + " for site: " + _currentSiteCollection.RootWeb.Url);
+            }
+            catch (Exception ex)
+            {
+                Errors.Log(ex);
+                Log.Write("Error adding group:" + groupName);
+                group = getRandomSPGroup(); // Not good using exception handling for this, could turn into an infinite recursive loop.
+            }
+
+            return group;
+        }
+
+        private SPDGUser getRandomSPUser()
+        {          
+            SPDGUser user;
+            string userName = null;
+            try
+            {                
+                do
+                {
+                    userName = _adUsers[SampleData.GetRandomNumber(0, _adUsers.Count)];
+                    user = _currentSiteCollection.RootWeb.EnsureUser(userName); // Ensuring users on demand rather than the whole list to a site colleciton
+                } while (user.IsGuestUser);
+
+                Log.Write("Ensured user:" + userName + " for site: " + _currentSiteCollection.RootWeb.Url);
+            }
+            catch (Exception ex)
+            {
+                Errors.Log(ex);
+                Log.Write("Error adding user:" + userName);
+                user = getRandomSPUser(); // Not good using exception handling for this, could turn into an infinite recursive loop.
+            }          
 
             return user;
         }

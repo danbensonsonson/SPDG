@@ -19,6 +19,8 @@ namespace Acceleratio.SPDG.Generator.Client.SPModel
 
         public override bool IsDocumentLibrary => _list.BaseTemplate == 101;
 
+        public override SPDGListTemplateType BaseTemplate => (SPDGListTemplateType)_list.BaseTemplate;
+
         public override SPDGFolder RootFolder
         {
             get

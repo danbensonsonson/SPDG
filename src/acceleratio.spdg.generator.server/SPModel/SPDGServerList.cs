@@ -128,5 +128,10 @@ namespace Acceleratio.SPDG.Generator.Server.SPModel
         }
 
         public override bool IsDocumentLibrary => _spList.BaseTemplate == SPListTemplateType.DocumentLibrary;
+
+        public override SPDGListTemplateType BaseTemplate
+        {
+            get { return (SPDGListTemplateType)_spList.BaseTemplate; }
+        }
     }
 }

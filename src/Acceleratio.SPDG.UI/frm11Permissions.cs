@@ -97,18 +97,18 @@ namespace Acceleratio.SPDG.UI
             {
                 trackPermissionsPerObject.Enabled = true;
                 txtPercentSites.Enabled = true;
-
-                if (Common.WorkingDefinition.MaxNumberOfListsAndLibrariesPerSite > 0)
+                
+                if (Common.WorkingDefinition.MaxNumberOfListsAndLibrariesPerSite >= 0)
                 {
                     txtPercentLists.Enabled = true;
                 }
 
-                if (Common.WorkingDefinition.MaxNumberOfFoldersToGenerate > 0)
+                if (Common.WorkingDefinition.MaxNumberOfFoldersToGenerate >= 0)
                 {
                     txtPercentLibFolders.Enabled = true;
                 }
 
-                if (Common.WorkingDefinition.MaxNumberofItemsToGenerate > 0)
+                if (Common.WorkingDefinition.MaxNumberofItemsToGenerate >= 0)
                 {
                     txtPercentListItems.Enabled = true;
                 }

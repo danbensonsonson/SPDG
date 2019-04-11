@@ -27,7 +27,11 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
         {
             int totalSteps = WorkingDefinition.NumberOfSitesToCreate *
                       WorkingDefinition.MaxNumberOfFoldersToGenerate;            
-            totalSteps = totalSteps * Owner.WorkingSiteCollections.Count;            
+            totalSteps = totalSteps * Owner.WorkingSiteCollections.Count;
+            if (WorkingDefinition.Mode == DataGeneratorMode.Incremental)
+            {
+                totalSteps += 1; // TODO hack to make sure it is active
+            }
             return totalSteps;
         }
 
@@ -45,6 +49,21 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                             {
                                 if (listInfo.isLib)
                                 {
+                                    // existing folders in libraries
+                                    if (WorkingDefinition.Mode == DataGeneratorMode.Incremental) 
+                                    {
+                                        Log.Write("Getting existing folders in libraries  '" + listInfo.Name + "' in site " + web.Url);
+                                        // Add existing list for this site for adding items
+                                        var list = web.GetList(listInfo.Name);
+                                        foreach (var existing in list.RootFolder.SubFolders)
+                                        {
+                                            FolderInfo folderInfo = new FolderInfo();
+                                            folderInfo.Name = existing.Name;
+                                            folderInfo.URL = existing.Url;
+                                            listInfo.Folders.Add(folderInfo);
+                                            Owner.IncrementCurrentTaskProgress("Getting folder '" + folderInfo.Name + "' in site '" + web.Url + "'" + " Url: " + folderInfo.URL);
+                                        }
+                                    }
                                     for (int counter = 1; counter <= WorkingDefinition.MaxNumberOfFoldersToGenerate; counter++)
                                     {
                                         try

@@ -25,6 +25,14 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
         {
             int totalSteps = WorkingDefinition.NumberOfSitesToCreate;
             totalSteps = totalSteps * Owner.WorkingSiteCollections.Count;
+            if (WorkingDefinition.Mode == DataGeneratorMode.Incremental)
+            {
+                foreach (SiteCollInfo siteCollInfo in Owner.WorkingSiteCollections)
+                {
+                    totalSteps += siteCollInfo.Sites.Count; // Also needs to iterate through each site as a step
+                }
+                    
+            }
             return totalSteps;
         }
 

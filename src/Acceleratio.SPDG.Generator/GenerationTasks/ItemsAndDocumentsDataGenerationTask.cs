@@ -29,11 +29,15 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                           (WorkingDefinition.MaxNumberofItemsToGenerate + WorkingDefinition.MaxNumberofDocumentLibraryItemsToGenerate)
                           + WorkingDefinition.NumberOfBigListsPerSite * WorkingDefinition.MaxNumberofItemsBigListToGenerate);
             totalSteps = totalSteps*Owner.WorkingSiteCollections.Count;
+            if (WorkingDefinition.Mode == DataGeneratorMode.Incremental)
+            {
+                totalSteps += 1; // TODO hack to make sure it is active
+            }
             return totalSteps;
         }
 
         public override void Execute()
-        {
+        {   
             foreach (SiteCollInfo siteCollInfo in Owner.WorkingSiteCollections)
             {
                 using (var siteColl = Owner.ObjectsFactory.GetSite(siteCollInfo.URL))
@@ -68,7 +72,6 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                                     List<ISPDGListItemInfo> batch=new List<ISPDGListItemInfo>();
                                     int itemCount = listInfo.isBigList ? WorkingDefinition.MaxNumberofItemsBigListToGenerate : WorkingDefinition.MaxNumberofItemsToGenerate;
                                     //itemCount = SampleData.GetRandomNumber(itemCount*3/4, itemCount);
-                                    // TODO Looks like the item count for normal list itmes is somewhere between 3/4 and Max
                                     for (int i = 0; i < itemCount; i++ )
                                     {
                                         var itemInfo=new SPDGListItemInfo();
@@ -82,7 +85,7 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                                         }
                                         else
                                         {
-                                            // TODO: Add the 10% to the wizard as configurable
+                                            // TODO: Add the 10% attachments to the wizard as configurable
                                             // if itemCount % 10 = 0, add attachment to list item.
                                             if (i % 10 == 0)                                         
                                                 populateItemInfo(list, itemInfo, false, true);

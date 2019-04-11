@@ -99,7 +99,8 @@ namespace Acceleratio.SPDG.UI
             if( chkPrefil.Checked )
             {
                 trackMaxNumberOfItems.Enabled = true;
-                if( Common.WorkingDefinition.LibTypeDocument )
+                trackMaxNumberOrDocLibItems.Enabled = true;
+                if ( Common.WorkingDefinition.LibTypeDocument )
                 {
                     chkDOCX.Enabled = true;
                     chkImages.Enabled = true;
@@ -111,6 +112,8 @@ namespace Acceleratio.SPDG.UI
             {
                 trackMaxNumberOfItems.Enabled = false;
                 trackMaxNumberOfItems.Value = 0;
+                trackMaxNumberOrDocLibItems.Enabled = false;
+                trackMaxNumberOrDocLibItems.Value = 0;
                 chkDOCX.Enabled = false;
                 chkImages.Enabled = false;
                 chkPDF.Enabled = false;
