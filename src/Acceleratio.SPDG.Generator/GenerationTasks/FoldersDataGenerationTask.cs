@@ -14,7 +14,7 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
 
         public override string Title
         {
-            get { return "Creating Folders"; }
+            get { return "Folders"; }
         }
 
         public override bool IsActive
@@ -57,6 +57,8 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                                         var list = web.GetList(listInfo.Name);
                                         foreach (var existing in list.RootFolder.SubFolders)
                                         {
+                                            if (existing.Name.Equals("Forms")) // Buil-in folder we don't create
+                                                continue;
                                             FolderInfo folderInfo = new FolderInfo();
                                             folderInfo.Name = existing.Name;
                                             folderInfo.URL = existing.Url;

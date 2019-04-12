@@ -11,6 +11,7 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
     {
         private int _docsAdded = 0;
         private string _currentFileType = null;
+        private int _totalItemsAdded = 0;
 
 
         public ItemsAndDocumentsDataGenerationTask(IDataGenerationTaskOwner owner) : base(owner)
@@ -19,7 +20,7 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
 
         public override string Title
         {
-            get { return "Creating Items and Documents"; }
+            get { return "Items and Documents"; }
         }
 
         public override int CalculateTotalSteps()
@@ -98,14 +99,16 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                                         if (batch.Count > 400)
                                         {
                                             list.AddItems(batch);
-                                            Owner.IncrementCurrentTaskProgress(string.Format("Created {0}/{1} items for list {2}: ", i + 1, itemCount, list.RootFolder.Url), batch.Count);                                            
-                                            batch.Clear();
+                                            Owner.IncrementCurrentTaskProgress(string.Format("Created {0}/{1} items for list {2}: ", i + 1, itemCount, list.RootFolder.Url), batch.Count);
+                                            _totalItemsAdded += batch.Count;
+                                            batch.Clear();                                            
                                         }
                                     }
                                     if (batch.Count > 0) // Pick up anything at the end that was less than 400
                                     {
                                         list.AddItems(batch);
                                         Owner.IncrementCurrentTaskProgress(string.Format("Created {0} items for list {1}: ", itemCount, list.RootFolder.Url), batch.Count);
+                                        _totalItemsAdded += batch.Count;
                                         batch.Clear();
                                     }
                                     listInfo.ItemCount = itemCount;
@@ -121,9 +124,12 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                                         addDocumentToFolder(list,list.RootFolder);
                                     }
                                     listInfo.ItemCount = _docsAdded;
+                                    _totalItemsAdded += _docsAdded;
                                 }
                             }
+                            Log.Write("Total Items: " + _totalItemsAdded); // After each list (more verbose)
                         }
+                        //Log.Write("Total Items: " + _totalItemsAdded); //After a Site (less verbose)
                     }
                 }
             }

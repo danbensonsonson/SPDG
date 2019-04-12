@@ -54,6 +54,7 @@ namespace Acceleratio.SPDG.UI
                 label3.Enabled = true;
                 txtOwnerEmail.Enabled = true;
                 txtOwnerUserName.Enabled = true;
+                WorkingDefinition.Mode = DataGeneratorMode.New;
             }
             else
             {
@@ -64,6 +65,7 @@ namespace Acceleratio.SPDG.UI
                 label3.Enabled = false;
                 txtOwnerEmail.Enabled = false;
                 txtOwnerUserName.Enabled = false;
+                WorkingDefinition.Mode = DataGeneratorMode.Incremental;
             }
         }
 

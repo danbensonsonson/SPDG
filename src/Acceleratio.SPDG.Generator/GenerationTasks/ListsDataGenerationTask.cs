@@ -15,7 +15,7 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
 
         public override string Title
         {
-            get { return "Creating Lists and Libraries"; }
+            get { return "Lists and Libraries"; }
         }      
 
         public override int CalculateTotalSteps()
