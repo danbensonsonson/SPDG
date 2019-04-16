@@ -152,6 +152,7 @@ namespace Acceleratio.SPDG.Generator
             if (!string.IsNullOrEmpty(detailStepDescription))
             {
                 Log.Write(detailStepDescription);
+                Console.WriteLine(detailStepDescription);
             }
             ProgressChanged(this, new ProgressChangedEventArgs(ProgressChangeType.Details, detailStepDescription, pct));
         }
@@ -177,6 +178,7 @@ namespace Acceleratio.SPDG.Generator
                     {
                         SiteCollInfo siteCollInfo = new SiteCollInfo();
                         siteCollInfo.URL = sc;
+                        Log.Write("Getting Site Collection: " + sc);
                         siteCollInfo.Sites = getSitesForSiteCollection(sc);
                         WorkingSiteCollections.Add(siteCollInfo);
                     }
@@ -225,6 +227,7 @@ namespace Acceleratio.SPDG.Generator
         {
             List<SiteInfo> sites = new List<SiteInfo>();
             sites.Add(new SiteInfo() { URL = parentWeb.Url, ID = parentWeb.ID });
+            Log.Write("Getting Site: " + parentWeb.Url);
 
             if (parentWeb.Webs.Count() == 0 || maxDepth == 0)
             {

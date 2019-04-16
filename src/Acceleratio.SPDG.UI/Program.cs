@@ -13,6 +13,7 @@ namespace Acceleratio.SPDG.UI
     static class Program
     {
 
+
         private static void Restart()
         {
             Process.Start(Application.ExecutablePath);
@@ -23,14 +24,36 @@ namespace Acceleratio.SPDG.UI
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
-        {            
-            ensureCorrectRuntime();
+        static void Main(string[] args)
+        {
+            //CLI Support
+            if (args.Length > 0)
+            {
+                if (args[0].Equals("/Help"))
+                    Console.WriteLine("Usage: SysKit.SPDG.exe /Config <fileName>");
+                // sending the enter key is not really needed, but otherwise the user thinks the app is still running by looking at the commandline. The enter key takes care of displaying the prompt again.
+                SendKeys.SendWait("{ENTER}");
+                //Application.Exit();
+                ensureCorrectRuntime();
+                if (args[0].Equals("/Config") && args.Length > 1)
+                {
+                    Common.DeserializeDefinition(args[1]);
+                    SampleData.PrepareSampleCollections();
+                    DataGenerator.SessionID = "Session " + DateTime.Now.ToString("yy-MM-dd") + " " + DateTime.Now.Hour.ToString() + "-" + DateTime.Now.Minute.ToString();
+                    var generator = DataGenerator.Create(Common.WorkingDefinition);
+                    generator.startDataGeneration();
 
-
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new frm01Connect(true));
+                }
+                else
+                    Console.WriteLine("Usage: SysKit.SPDG.exe /Config <fileName>");
+            }
+            else
+            {
+                ensureCorrectRuntime();
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                Application.Run(new frm01Connect(true));
+            }
                         
         }
 

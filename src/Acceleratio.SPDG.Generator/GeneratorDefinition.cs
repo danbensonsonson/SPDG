@@ -75,6 +75,7 @@ namespace Acceleratio.SPDG.Generator
         public int MaxNumberOfNestedFolderLevelPerLibrary { get; set; }
         public bool CreateViews { get; set; }
 
+        [XmlArrayItem("SiteCollection")]
         public List<string> SiteCollections
         {
             get

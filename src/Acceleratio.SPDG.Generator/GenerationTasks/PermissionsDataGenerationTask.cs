@@ -482,8 +482,9 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
             {
                 // TODO need to get the SPDGGroup from Ensure user
                 groupName = _adGroups[SampleData.GetRandomNumber(0, _adGroups.Count)];
+                Log.Write("Ensuring group:" + groupName + " for site: " + _currentSiteCollection.RootWeb.Url);
                 group = _currentSiteCollection.RootWeb.EnsureUser(groupName); // Ensuring groups on demand rather than the whole list to a site colleciton
-                //Log.Write("Ensured group:" + group.Name + " for site: " + _currentSiteCollection.RootWeb.Url);
+                Log.Write("Ensured group:" + group.Name + " for site: " + _currentSiteCollection.RootWeb.Url);
             }
             catch (Exception ex)
             {
@@ -502,11 +503,14 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
             {                
                 do
                 {
+                    Log.Write("Getting random user:" + userName + " for site: " + _currentSiteCollection.RootWeb.Url);
                     userName = _adUsers[SampleData.GetRandomNumber(0, _adUsers.Count)];
+                    Log.Write("Ensuring user:" + userName + " for site: " + _currentSiteCollection.RootWeb.Url);
                     user = _currentSiteCollection.RootWeb.EnsureUser(userName); // Ensuring users on demand rather than the whole list to a site colleciton
+                    Log.Write("Ensured user:" + userName + " for site: " + _currentSiteCollection.RootWeb.Url);
                 } while (user.IsGuestUser);
 
-                //Log.Write("Ensured user:" + userName + " for site: " + _currentSiteCollection.RootWeb.Url);
+                
             }
             catch (Exception ex)
             {
