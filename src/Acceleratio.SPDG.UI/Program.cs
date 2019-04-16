@@ -54,8 +54,8 @@ namespace Acceleratio.SPDG.UI
                 Application.SetCompatibleTextRenderingDefault(false);
                 Application.Run(new frm01Connect(true));
             }
-                        
-        }
+
+    }
 
         private static void ensureCorrectRuntime()
         {

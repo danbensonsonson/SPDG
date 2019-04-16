@@ -63,7 +63,7 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                                             folderInfo.Name = existing.Name;
                                             folderInfo.URL = existing.Url;
                                             listInfo.Folders.Add(folderInfo);
-                                            Owner.IncrementCurrentTaskProgress("Getting folder '" + folderInfo.Name + "' in site '" + web.Url + "'" + " Url: " + folderInfo.URL);
+                                            Owner.IncrementCurrentTaskProgress("Getting folder '" + folderInfo.Name + "' in site '" + web.Url + "'" + " List: " + listInfo.Name);
                                         }
                                     }
                                     for (int counter = 1; counter <= WorkingDefinition.MaxNumberOfFoldersToGenerate; counter++)

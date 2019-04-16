@@ -462,15 +462,19 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                         break;
                 }
             }
-
+            // TODO get rid of the excess logging
+            Log.Write("Start GetRoleAssignmentByPrincipal");
             var roleAssignment = securableObject.GetRoleAssignmentByPrincipal(principal);
-
+            Log.Write("End GetRoleAssignmentByPrincipal");
             if (roleAssignment == null || roleAssignment.RoleDefinitionBindings.All(x => x.IsGuestRole))
             {
                 var availableRoledefinitions = web.RoleDefinitions.Where(x => !x.IsGuestRole).ToList();
 
                 var selected = availableRoledefinitions[SampleData.GetRandomNumber(0, availableRoledefinitions.Count - 1)];
+                Log.Write("Start AddRoleAssignment");
+                // TODO This line is taking 3s
                 securableObject.AddRoleAssignment(principal, new List<SPDGRoleDefinition> { selected });
+                Log.Write("End AddRoleAssignment");
             }
         }
 
