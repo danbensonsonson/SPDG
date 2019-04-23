@@ -12,6 +12,7 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
         private int _docsAdded = 0;
         private string _currentFileType = null;
         private int _totalItemsAdded = 0;
+        private int _totalItemsDeleted = 0;
 
 
         public ItemsAndDocumentsDataGenerationTask(IDataGenerationTaskOwner owner) : base(owner)
@@ -27,7 +28,8 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
         {
             var totalSteps  = WorkingDefinition.NumberOfSitesToCreate *
                               (WorkingDefinition.MaxNumberOfListsAndLibrariesPerSite *
-                          (WorkingDefinition.MaxNumberofItemsToGenerate + WorkingDefinition.MaxNumberofDocumentLibraryItemsToGenerate)
+                          (WorkingDefinition.MaxNumberofItemsToGenerate + WorkingDefinition.MaxNumberofDocumentLibraryItemsToGenerate
+                          + WorkingDefinition.NumberofItemsToDelete + WorkingDefinition.NumberofDocumentLibraryItemsToDelete)
                           + WorkingDefinition.NumberOfBigListsPerSite * WorkingDefinition.MaxNumberofItemsBigListToGenerate);
             totalSteps = totalSteps*Owner.WorkingSiteCollections.Count;
             if (WorkingDefinition.Mode == DataGeneratorMode.Incremental)
@@ -56,6 +58,13 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                                 if (!listInfo.isLib)
                                 {
                                     var list = web.GetList(listInfo.Name);
+                                    // delete
+                                    if (WorkingDefinition.NumberofItemsToDelete > 0)
+                                    {
+                                        Owner.IncrementCurrentTaskProgress("Start Deleting items from list: " + listInfo.Name + " in site: " + web.Url, 0);
+                                        list.DeleteItems(WorkingDefinition.NumberofItemsToDelete);
+                                        _totalItemsDeleted += WorkingDefinition.NumberofItemsToDelete;
+                                    }
 
                                     if( listInfo.TemplateType == SPDGListTemplateType.Tasks )
                                     {
@@ -117,6 +126,13 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                                 {
                                     _docsAdded = 0;
                                     var list = web.GetList(listInfo.Name);
+                                    if (WorkingDefinition.NumberofDocumentLibraryItemsToDelete > 0)
+                                    {
+                                        Owner.IncrementCurrentTaskProgress("Start Deleting documents from library: " + listInfo.Name + " in site: " + web.Url, 0);
+                                        _totalItemsDeleted += list.DeleteItems(WorkingDefinition.NumberofDocumentLibraryItemsToDelete);
+                                        _totalItemsDeleted += WorkingDefinition.NumberofDocumentLibraryItemsToDelete;
+                                    }
+                                    
                                     Owner.IncrementCurrentTaskProgress("Start adding documents to library: " + listInfo.Name + " in site: " + web.Url,0);
                                                                        
                                     while (_docsAdded < WorkingDefinition.MaxNumberofDocumentLibraryItemsToGenerate)
@@ -127,9 +143,11 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                                     _totalItemsAdded += _docsAdded;
                                 }
                             }
-                            Log.Write("Total Items: " + _totalItemsAdded); // After each list (more verbose)
+                            //Log.Write("Total Items Deleted: " + _totalItemsDeleted);
+                            //Log.Write("Total Items Added: " + _totalItemsAdded); // After each list (more verbose)                            
                         }
-                        //Log.Write("Total Items: " + _totalItemsAdded); //After a Site (less verbose)
+                        Log.Write("Total Items Deleted: " + _totalItemsDeleted);
+                        Log.Write("Total Items: " + _totalItemsAdded); //After a Site (less verbose)
                     }
                 }
             }

@@ -55,10 +55,6 @@ namespace Acceleratio.SPDG.UI
             reader.Close();            
         }
 
-
-        
-
-
         private static void SetCommonDefaults(GeneratorDefinitionBase definition)
         {          
             definition.NumberOfSecurityGroupsToCreate = 0;
@@ -68,6 +64,9 @@ namespace Acceleratio.SPDG.UI
             definition.MaxNumberOfContentTypesPerSiteCollection = 0;
             definition.MaxNumberOfFoldersToGenerate = 0;
             definition.MaxNumberofItemsToGenerate = 1000;
+            definition.NumberofItemsToDelete = 0;
+            definition.MaxNumberofDocumentLibraryItemsToGenerate = 1000;
+            definition.NumberofDocumentLibraryItemsToDelete = 0;
             definition.MaxNumberOfLevelsForSites = 1;
             definition.MaxNumberOfListsAndLibrariesPerSite = 90;
             definition.MaxNumberOfViewsPerList = 0;         
@@ -98,7 +97,6 @@ namespace Acceleratio.SPDG.UI
             definition.PermissionsPercentForUsers = 50;
             definition.PermissionsPercentForSPGroups = 3;
             definition.PermissionsPercentOfListItems = 15;
-            definition.MaxNumberofDocumentLibraryItemsToGenerate = 1000;
             definition.PermissionsPercentOfFolders = 15;
 
         }

@@ -11,6 +11,7 @@ namespace Acceleratio.SPDG.Generator.SPModel
         public abstract  IEnumerable<SPDGField> Fields { get; } 
         public abstract void AddFields(IEnumerable<SPDGFieldInfo> fields, bool addToDefaultView);
         public abstract void AddItems(IEnumerable<ISPDGListItemInfo> items);
+        public abstract int DeleteItems(int numberOfItemsToDelete);
         public abstract  IEnumerable<SPDGListItem> Items { get; }
         public abstract bool IsDocumentLibrary { get; }
         public abstract SPDGListTemplateType BaseTemplate { get; }

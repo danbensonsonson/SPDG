@@ -304,11 +304,15 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
 
         private void setSitePermissions(SPDGWeb web)
         {
-            Owner.IncrementCurrentTaskProgress("Adding permissions to site " + web.Url + "'", 0);
-            if (!web.HasUniqueRoleAssignments)
+            if (web.HasUniqueRoleAssignments) // Already assigned unique permissions
             {
-                web.BreakRoleInheritance(false);
+                return; // TODO how to do this incrementallly
+                // delete some, continue to add others? If delete, delete some, then continue, else return
             }
+
+            Owner.IncrementCurrentTaskProgress("Adding permissions to site " + web.Url + "'", 0);
+            web.BreakRoleInheritance(false);
+
             for (int i = 0; i < _permissionsPerObject; i++)
             {
                 try
@@ -326,12 +330,13 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
 
         private void setListPermissions(SPDGWeb web, string listName)
         {
-            Owner.IncrementCurrentTaskProgress("Adding permissions to list " + web.Url + "/" + listName, 0);
             var list = web.GetList(listName);
-            if (!list.HasUniqueRoleAssignments)
+            if (list.HasUniqueRoleAssignments)
             {
-                list.BreakRoleInheritance(false);
+                return;
             }
+            Owner.IncrementCurrentTaskProgress("Adding permissions to list " + web.Url + "/" + listName, 0);
+            list.BreakRoleInheritance(false);            
 
             for (int i = 0; i < _permissionsPerObject; i++)
             {
@@ -346,11 +351,13 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
             SPDGFolder folder = web.GetFolder(folderURL);
             if (folder == null)
                 return;
-            Owner.IncrementCurrentTaskProgress("Adding permissions to folder: " + folderURL + " in site: " + web.Url, 0);
-            if (!folder.Item.HasUniqueRoleAssignments)
+            
+            if (folder.Item.HasUniqueRoleAssignments)
             {
-                folder.Item.BreakRoleInheritance(false);
+                return;
             }
+            Owner.IncrementCurrentTaskProgress("Adding permissions to folder: " + folderURL + " in site: " + web.Url, 0);
+            folder.Item.BreakRoleInheritance(false);
 
             for (int i = 0; i < _permissionsPerObject; i++)
             {
@@ -368,11 +375,12 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
             {
                 if (SampleData.GetRandomNumber(1, 100) < WorkingDefinition.PermissionsPercentOfListItems)
                 {
-                    Owner.IncrementCurrentTaskProgress("Adding permissions for item/document '" + item.DisplayName + "' in list '" + list.Title, 0);
-                    if (!item.HasUniqueRoleAssignments)
+                    if (item.HasUniqueRoleAssignments)
                     {
-                        item.BreakRoleInheritance(false);
+                        continue;
                     }
+                    Owner.IncrementCurrentTaskProgress("Adding permissions for item/document '" + item.DisplayName + "' in list '" + list.Title, 0);
+                    item.BreakRoleInheritance(false);
 
                     for (int i = 0; i < _permissionsPerObject; i++)
                     {
@@ -473,7 +481,7 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                 var selected = availableRoledefinitions[SampleData.GetRandomNumber(0, availableRoledefinitions.Count - 1)];
                 Log.Write("Start AddRoleAssignment");
                 // TODO This line is taking 3s
-                securableObject.AddRoleAssignment(principal, new List<SPDGRoleDefinition> { selected });
+                securableObject.AddRoleAssignment(principal, new List<SPDGRoleDefinition> { selected });                
                 Log.Write("End AddRoleAssignment");
             }
         }

@@ -25,7 +25,6 @@ namespace Acceleratio.SPDG.Generator.Server.SPModel
             get { return _spWeb.HasUniqueRoleAssignments; }
         }
 
-       
         public override void Dispose()
         {
             _spWeb.Dispose();

@@ -55,7 +55,9 @@ namespace Acceleratio.SPDG.UI
             grpDocumentLibrarySettings.Enabled = Common.WorkingDefinition.LibTypeDocument;
             chkPrefil.Checked = Common.WorkingDefinition.PrefilListAndLibrariesWithItems;
             NumberOfItemsToGenerate = Common.WorkingDefinition.MaxNumberofItemsToGenerate;
+            trackNumberOfItemsDelete.Value = Common.WorkingDefinition.NumberofItemsToDelete;
             DocLibItemsToGenerate = Common.WorkingDefinition.MaxNumberofDocumentLibraryItemsToGenerate;
+            rackMaxNumberOrDocLibItemsDelete.Value = Common.WorkingDefinition.NumberofDocumentLibraryItemsToDelete;
             chkDOCX.Checked = Common.WorkingDefinition.IncludeDocTypeDOCX;
             chkXLSX.Checked = Common.WorkingDefinition.IncludeDocTypeXLSX;
             chkPDF.Checked = Common.WorkingDefinition.IncludeDocTypePDF;
@@ -82,7 +84,9 @@ namespace Acceleratio.SPDG.UI
 
             Common.WorkingDefinition.PrefilListAndLibrariesWithItems = chkPrefil.Checked;
             Common.WorkingDefinition.MaxNumberofItemsToGenerate = NumberOfItemsToGenerate;
+            Common.WorkingDefinition.NumberofItemsToDelete = trackNumberOfItemsDelete.Value;
             Common.WorkingDefinition.MaxNumberofDocumentLibraryItemsToGenerate = DocLibItemsToGenerate;
+            Common.WorkingDefinition.NumberofDocumentLibraryItemsToDelete = rackMaxNumberOrDocLibItemsDelete.Value;
             Common.WorkingDefinition.MaxNumberofItemsBigListToGenerate = BigListItemsToGenerate;
 
             Common.WorkingDefinition.IncludeDocTypeDOCX = chkDOCX.Checked;
@@ -166,6 +170,16 @@ namespace Acceleratio.SPDG.UI
         private void trackBarBigListItemsCount_ValueChanged(object sender, EventArgs e)
         {
             lblBigListCount.Text = BigListItemsToGenerate.ToString();
+        }
+
+        private void rackMaxNumberOrDocLibItemsDelete_ValueChanged(object sender, EventArgs e)
+        {
+            lblNumDocLibItemsDelete.Text = rackMaxNumberOrDocLibItemsDelete.Value.ToString();
+        }
+
+        private void trackNumberOfItemsDelete_ValueChanged(object sender, EventArgs e)
+        {
+            lblNumItemsDelete.Text = trackNumberOfItemsDelete.Value.ToString();
         }
     }
 }

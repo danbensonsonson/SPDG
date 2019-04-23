@@ -91,6 +91,32 @@ namespace Acceleratio.SPDG.Generator.Server.SPModel
             }
         }
 
+        public override int DeleteItems(int numberOfItemsToDelete)
+        {
+            var items = _spList.Items;
+            int deletes = numberOfItemsToDelete;
+            int success = 0;
+
+            if (items.Count < numberOfItemsToDelete)
+                deletes = items.Count;
+            for (int i = 0; i < deletes; i++)
+            {
+                var item = items[i];
+                try
+                {
+                    Log.Write("Deleting item: " + item.Url); // Verbose
+                    item.Delete();
+                    success++;                    
+                }
+                catch (Exception ex)
+                {
+                    Log.Write("Failed to delete item: " + ex.Message);
+                }
+                
+            }
+            return success;
+        }
+
         public override SPDGRoleAssignment GetRoleAssignmentByPrincipal(SPDGPrincipal principal)
         {
             return ServerRoleAssignmentHelper.GetRoleAssignmentByPrincipal(_spList, principal);
@@ -107,7 +133,7 @@ namespace Acceleratio.SPDG.Generator.Server.SPModel
             _spList.BreakRoleInheritance(copyRoleAssignments);
         }
 
-        public override bool HasUniqueRoleAssignments { get; }
+        public override bool HasUniqueRoleAssignments => _spList.HasUniqueRoleAssignments;
 
         public override IEnumerable<SPDGListItem> Items
         {
