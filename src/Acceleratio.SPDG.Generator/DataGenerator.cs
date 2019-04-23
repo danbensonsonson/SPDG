@@ -226,7 +226,7 @@ namespace Acceleratio.SPDG.Generator
         private List<SiteInfo> getSubsites(SPDGWeb parentWeb, int maxDepth = 32)
         {
             List<SiteInfo> sites = new List<SiteInfo>();
-            sites.Add(new SiteInfo() { URL = parentWeb.Url, ID = parentWeb.ID });
+            sites.Add(new SiteInfo() { URL = parentWeb.Url, ID = parentWeb.ID, HasUniqueRoleAssignments = parentWeb.HasUniqueRoleAssignments });
             Log.Write("Getting Site: " + parentWeb.Url);
 
             if (parentWeb.Webs.Count() == 0 || maxDepth == 0)

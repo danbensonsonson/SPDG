@@ -62,6 +62,7 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                                             FolderInfo folderInfo = new FolderInfo();
                                             folderInfo.Name = existing.Name;
                                             folderInfo.URL = existing.Url;
+                                            folderInfo.HasUniqueRoleAssignments = existing.Item.HasUniqueRoleAssignments;
                                             listInfo.Folders.Add(folderInfo);
                                             Owner.IncrementCurrentTaskProgress("Getting folder '" + folderInfo.Name + "' in site '" + web.Url + "'" + " List: " + listInfo.Name);
                                         }
@@ -74,7 +75,7 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
 
                                             var list = web.GetList(listInfo.Name);
                                             string folderName = findAvailableFolderName(list);
-                                            var folder = list.RootFolder.AddFolder(folderName);
+                                            var folder = list.RootFolder.AddFolder(folderName);                                            
                                             folder.Update();
 
                                             FolderInfo folderInfo = new FolderInfo();

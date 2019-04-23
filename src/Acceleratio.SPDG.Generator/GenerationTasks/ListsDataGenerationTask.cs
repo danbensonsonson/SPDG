@@ -58,6 +58,7 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                                     listInfo.Name = existing.Title;
                                     listInfo.TemplateType = existing.BaseTemplate;
                                     listInfo.isLib = existing.IsDocumentLibrary;
+                                    listInfo.HasUniqueRoleAssignments = existing.HasUniqueRoleAssignments;
                                     if (existing.BaseTemplate == SPDGListTemplateType.GenericList || existing.BaseTemplate == SPDGListTemplateType.DocumentLibrary)
                                     {
                                         siteInfo.Lists.Add(listInfo);

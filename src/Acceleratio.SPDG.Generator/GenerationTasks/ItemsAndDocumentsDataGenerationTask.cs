@@ -58,13 +58,16 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                                 if (!listInfo.isLib)
                                 {
                                     var list = web.GetList(listInfo.Name);
+                                    int itemCount = listInfo.isBigList ? WorkingDefinition.MaxNumberofItemsBigListToGenerate : WorkingDefinition.MaxNumberofItemsToGenerate;
                                     // delete
                                     if (WorkingDefinition.NumberofItemsToDelete > 0)
                                     {
                                         Owner.IncrementCurrentTaskProgress("Start Deleting items from list: " + listInfo.Name + " in site: " + web.Url, 0);
-                                        list.DeleteItems(WorkingDefinition.NumberofItemsToDelete);
-                                        _totalItemsDeleted += WorkingDefinition.NumberofItemsToDelete;
+                                        _totalItemsDeleted += list.DeleteItems(WorkingDefinition.NumberofItemsToDelete);                                        
                                     }
+
+                                    if (itemCount < 1) // No items to add
+                                        continue;
 
                                     if( listInfo.TemplateType == SPDGListTemplateType.Tasks )
                                     {
@@ -79,8 +82,7 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                                         Owner.IncrementCurrentTaskProgress("Start adding items to list: " + listInfo.Name + " in site: " + web.Url,0);
                                     }
                                     
-                                    List<ISPDGListItemInfo> batch=new List<ISPDGListItemInfo>();
-                                    int itemCount = listInfo.isBigList ? WorkingDefinition.MaxNumberofItemsBigListToGenerate : WorkingDefinition.MaxNumberofItemsToGenerate;
+                                    List<ISPDGListItemInfo> batch=new List<ISPDGListItemInfo>();                                    
                                     //itemCount = SampleData.GetRandomNumber(itemCount*3/4, itemCount);
                                     for (int i = 0; i < itemCount; i++ )
                                     {
@@ -133,7 +135,8 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                                         _totalItemsDeleted += WorkingDefinition.NumberofDocumentLibraryItemsToDelete;
                                     }
                                     
-                                    Owner.IncrementCurrentTaskProgress("Start adding documents to library: " + listInfo.Name + " in site: " + web.Url,0);
+                                    if (WorkingDefinition.MaxNumberofDocumentLibraryItemsToGenerate > 0)
+                                        Owner.IncrementCurrentTaskProgress("Start adding documents to library: " + listInfo.Name + " in site: " + web.Url,0);
                                                                        
                                     while (_docsAdded < WorkingDefinition.MaxNumberofDocumentLibraryItemsToGenerate)
                                     {

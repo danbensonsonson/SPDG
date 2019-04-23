@@ -12,9 +12,7 @@ namespace Acceleratio.SPDG.Generator
         private int _maxNumberOfViewsPerList;
         private int _maxNumberOfColumnsPerList;
         private int _maxNumberofItemsToGenerate;
-        private int _numberOfItemsToDelete;
         private int _maxNumberofDocumentLibraryItemsToGenerate;
-        private int _numberOfDocumentLibraryItemsToDelete;
         private int _maxNumberofItemsBigListToGenerate;
         private int _maxNumberOfContentTypesPerSiteCollection;
         private int _numberSiteColumnsPerContentType;
@@ -140,11 +138,7 @@ namespace Acceleratio.SPDG.Generator
             set { _maxNumberofItemsToGenerate = value; }
         }
 
-        public int NumberofItemsToDelete
-        {
-            get { return _numberOfItemsToDelete; }
-            set { _numberOfItemsToDelete = value; }
-        }
+        public int NumberofItemsToDelete { get; set; }
 
         public int MaxNumberofDocumentLibraryItemsToGenerate
         {
@@ -162,11 +156,7 @@ namespace Acceleratio.SPDG.Generator
             set { _maxNumberofDocumentLibraryItemsToGenerate = value; }
         }
 
-        public int NumberofDocumentLibraryItemsToDelete
-        {
-            get { return _numberOfDocumentLibraryItemsToDelete; }
-            set { _numberOfDocumentLibraryItemsToDelete = value; }
-        }
+        public int NumberofDocumentLibraryItemsToDelete { get; set; }
 
         public int MaxNumberofItemsBigListToGenerate
         {

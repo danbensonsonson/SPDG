@@ -46,29 +46,9 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
             var allFolders = Owner.WorkingSiteCollections.SelectMany(x => x.Sites.SelectMany(y => y.Lists.SelectMany(z => z.Folders))).ToList();
             _permissionsPerObject = Owner.WorkingDefinition.PermissionsPerObject;
 
-            foreach (var site in allSites)
-            {
-                if (SampleData.GetRandomNumber(1, 100) <= WorkingDefinition.PermissionsPercentOfSites)
-                {
-                    _allSitesToHaveUniquePermissions.Add(site);
-                }
-            }
-
-            foreach (var list in allLists)
-            {
-                if (SampleData.GetRandomNumber(1, 100) <= WorkingDefinition.PermissionsPercentOfLists)
-                {
-                    _allListsToHavehUniquePermissions.Add(list);
-                }
-            }
-
-            foreach (var folder in allFolders)
-            {
-                if (SampleData.GetRandomNumber(1, 100) <= WorkingDefinition.PermissionsPercentOfLists)
-                {
-                    _allFoldersToHaveUniquePermissions.Add(folder);
-                }
-            }
+            SetSitesToHaveUniquePermissions(allSites);
+            SetListsToHaveUniquePermissions(allLists);
+            SetFoldersToHaveUniquePermissions(allFolders);
 
             var allItemsCount = allLists.Sum(x => x.ItemCount);
             if (WorkingDefinition.Mode == DataGeneratorMode.Incremental)
@@ -116,6 +96,76 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                 else
                     _totalSteps += allItemsCount + withUnique;
             }
+        }
+
+        private void SetFoldersToHaveUniquePermissions(List<FolderInfo> allFolders)
+        {
+            // Pre-process Folder for permissions
+            int numFoldersWithUniquePermissions = 0;
+            foreach (var folder in allFolders)
+            {
+                if (folder.HasUniqueRoleAssignments)
+                {
+                    _allFoldersToHaveUniquePermissions.Add(folder); // add to the folder to work on in case there are more permissions per object or something
+                    numFoldersWithUniquePermissions++;
+                }
+            }
+
+            // If we are not above the total percentage for folders, attempt to add more
+            float percentageOfFoldersWithPermissions = ((float)numFoldersWithUniquePermissions / (float)allFolders.Count) * 100;
+            if (percentageOfFoldersWithPermissions <= WorkingDefinition.PermissionsPercentOfFolders)
+            {
+                foreach (var folder in allFolders)
+                {
+                    if (folder.HasUniqueRoleAssignments) // only work on the folder without permissions already
+                        continue;
+                    if (SampleData.GetRandomNumber(1, 100) <= WorkingDefinition.PermissionsPercentOfFolders)
+                    {
+                        _allFoldersToHaveUniquePermissions.Add(folder);
+                        numFoldersWithUniquePermissions++;
+                        percentageOfFoldersWithPermissions = ((float)numFoldersWithUniquePermissions / (float)allFolders.Count) * 100;
+                        if (percentageOfFoldersWithPermissions <= WorkingDefinition.PermissionsPercentOfFolders)
+                            break;
+                    }
+                }
+            }
+            else
+                Log.Write("Folders already have " + percentageOfFoldersWithPermissions + " percent unique permissions");
+        }
+
+        private void SetListsToHaveUniquePermissions(List<ListInfo> allLists)
+        {
+            // Pre-process Lists for permissions
+            int numListsWithUniquePermissions = 0;
+            foreach (var list in allLists)
+            {
+                if (list.HasUniqueRoleAssignments)
+                {
+                    _allListsToHavehUniquePermissions.Add(list); // add to the list to work on in case there are more permissions per object or something
+                    numListsWithUniquePermissions++;
+                }
+            }
+
+            // If we are not above the total percentage for lists, attempt to add more
+            float percentageOfListsWithPermissions = ((float)numListsWithUniquePermissions / (float)allLists.Count) * 100;
+            if (percentageOfListsWithPermissions <= WorkingDefinition.PermissionsPercentOfLists)
+            {
+                foreach (var list in allLists)
+                {
+                    if (list.HasUniqueRoleAssignments) // only work on the lists without permissions already
+                        continue;
+                    if (SampleData.GetRandomNumber(1, 100) <= WorkingDefinition.PermissionsPercentOfLists)
+                    {
+                        _allListsToHavehUniquePermissions.Add(list);
+                        numListsWithUniquePermissions++;
+                        percentageOfListsWithPermissions = ((float)numListsWithUniquePermissions / (float)allLists.Count) * 100;
+                        if (percentageOfListsWithPermissions <= WorkingDefinition.PermissionsPercentOfLists)
+                            break;
+                    }
+                }
+            }
+            else
+                Log.Write("Lists already have " + percentageOfListsWithPermissions + " percent unique permissions");
         }
 
         public override int CalculateTotalSteps()
@@ -207,6 +257,40 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
         protected abstract List<string> GetAvailableUsersInDirectory();
         protected abstract List<string> GetAvailableGroupsInDirectory();
 
+        private void SetSitesToHaveUniquePermissions(List<SiteInfo> allSites)
+        {
+            // Pre-process sites for permissions
+            int numSitesWithUniquePermissions = 0;
+            foreach (var site in allSites)
+            {
+                if (site.HasUniqueRoleAssignments)
+                {
+                    _allSitesToHaveUniquePermissions.Add(site); // add to the list to work on in case there are more permissions per object or something
+                    numSitesWithUniquePermissions++;
+                }
+            }
+            // If we are not above the total percentage for sites, attempt to add more
+            float percentageOfSitesWithPermissions = ((float)numSitesWithUniquePermissions / (float)allSites.Count) * 100;
+            if (percentageOfSitesWithPermissions <= WorkingDefinition.PermissionsPercentOfSites)
+            {
+                foreach (var site in allSites)
+                {
+                    if (site.HasUniqueRoleAssignments) // only work on the sites without permissions already
+                        continue;
+
+                    if (SampleData.GetRandomNumber(1, 100) <= WorkingDefinition.PermissionsPercentOfSites)
+                    {
+                        _allSitesToHaveUniquePermissions.Add(site);
+                        numSitesWithUniquePermissions++;
+                        percentageOfSitesWithPermissions = ((float)numSitesWithUniquePermissions / (float)allSites.Count) * 100;
+                        if (percentageOfSitesWithPermissions <= WorkingDefinition.PermissionsPercentOfSites)
+                            break;
+                    }
+                }
+            }
+            else
+                Log.Write("Sites already have " + percentageOfSitesWithPermissions + " percent unique permissions");
+        }
 
         private void EnsureUsersAndGroups(SPDGWeb web)
         {
@@ -370,6 +454,8 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
         private void setItemPermissions(SPDGWeb web, string listName)
         {
             var list = web.GetList(listName);
+
+            // TODO: Double loop to see how many have unique permissions, or do that above?
            
             foreach (var item in list.Items)
             {

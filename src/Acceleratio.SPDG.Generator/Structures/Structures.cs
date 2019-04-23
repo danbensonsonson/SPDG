@@ -25,6 +25,7 @@ namespace Acceleratio.SPDG.Generator.Structures
         public List<ListInfo> Lists {get;set;}
         public string URL {get;set;}
         public Guid ID { get; set; }
+        public bool HasUniqueRoleAssignments { get; set; }
     }
 
     public class ListInfo
@@ -40,11 +41,13 @@ namespace Acceleratio.SPDG.Generator.Structures
         public  bool isBigList { get; set; }
         public SPDGListTemplateType TemplateType { get; set; }
         public int ItemCount { get; set; }
+        public bool HasUniqueRoleAssignments { get; set; }
     }
 
     public class FolderInfo
     {        
         public string Name {get;set;}
         public string URL { get; set; }
+        public bool HasUniqueRoleAssignments { get; set; }
     }
 }
