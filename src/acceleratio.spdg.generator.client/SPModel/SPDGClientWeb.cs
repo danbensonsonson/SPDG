@@ -128,6 +128,11 @@ namespace Acceleratio.SPDG.Generator.Client.SPModel
             get { return _web.HasUniqueRoleAssignments; }
         }
 
+        public override int NumUniqueRoleAssignments
+        {
+            get { return _web.RoleAssignments.Count; }
+        }
+
         public override SPDGRoleAssignment GetRoleAssignmentByPrincipal(SPDGPrincipal principal)
         {
             return ClientRoleAssignmentHelper.GetRoleAssignmentByPrincipal(_web, _context, principal);
@@ -136,6 +141,11 @@ namespace Acceleratio.SPDG.Generator.Client.SPModel
         public override void AddRoleAssignment(SPDGPrincipal principal, IEnumerable<SPDGRoleDefinition> roledefinitions)
         {
             ClientRoleAssignmentHelper.AddRoleAssignment(_web, _context, principal, roledefinitions);
+        }
+
+        public override void RemoveRoleAssignment()
+        {
+            throw new NotImplementedException();
         }
 
         public override void BreakRoleInheritance(bool copyRoleAssignments)

@@ -29,6 +29,13 @@ namespace Acceleratio.SPDG.Generator.Server
             securableObject.RoleAssignments.Add(roleAss);            
         }
 
+        public static void RemoveRoleAssignment(SPSecurableObject securableObject)
+        {
+            int count = securableObject.RoleAssignments.Count;
+            int index = SampleData.GetRandomNumber(0, count - 1);
+            securableObject.RoleAssignments.Remove(index);
+        }
+
         public static SPDGRoleAssignment GetRoleAssignmentByPrincipal(SPSecurableObject securableObject, SPDGPrincipal principal)
         {
             SPPrincipal spPrincipal;

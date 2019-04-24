@@ -58,6 +58,7 @@ namespace Acceleratio.SPDG.UI
             txtPercentDirectlyToUsers.Text = Common.WorkingDefinition.PermissionsPercentForUsers.ToString();
             txtPercentGroupCases.Text = Common.WorkingDefinition.PermissionsPercentForSPGroups.ToString();
             trackPermissionsPerObject.Value = Common.WorkingDefinition.PermissionsPerObject;
+            trackPermissionsDeletePerObject.Value = Common.WorkingDefinition.PermissionsPerObjectDelete;
         }
 
         public override bool saveData()
@@ -88,6 +89,7 @@ namespace Acceleratio.SPDG.UI
             Common.WorkingDefinition.PermissionsPercentForUsers = Convert.ToInt32(txtPercentDirectlyToUsers.Text);
             Common.WorkingDefinition.PermissionsPercentForSPGroups = Convert.ToInt32(txtPercentGroupCases.Text);
             Common.WorkingDefinition.PermissionsPerObject = trackPermissionsPerObject.Value;
+            Common.WorkingDefinition.PermissionsPerObjectDelete = trackPermissionsDeletePerObject.Value;
             return true;
         }
 
@@ -119,6 +121,7 @@ namespace Acceleratio.SPDG.UI
             else
             {
                 trackPermissionsPerObject.Enabled = false;
+                trackPermissionsDeletePerObject.Enabled = false;
                 txtPercentSites.Enabled = false;
                 txtPercentLists.Enabled = false;
                 txtPercentLibFolders.Enabled = false;
@@ -140,6 +143,11 @@ namespace Acceleratio.SPDG.UI
         private void trackPermissionsPerObject_ValueChanged(object sender, EventArgs e)
         {
             lblPermissionsPerObject.Text = trackPermissionsPerObject.Value.ToString();
+        }
+
+        private void trackPermissionsDeletePerObject_ValueChanged(object sender, EventArgs e)
+        {
+            lblPermissionsDeletePerObject.Text = trackPermissionsDeletePerObject.Value.ToString();
         }
     }
 }

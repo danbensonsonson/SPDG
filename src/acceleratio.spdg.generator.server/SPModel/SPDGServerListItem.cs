@@ -36,6 +36,16 @@ namespace Acceleratio.SPDG.Generator.Server.SPModel
             ServerRoleAssignmentHelper.AddRoleAssignment(_item, principal, roledefinitions);
         }
 
+        public override void RemoveRoleAssignment()
+        {
+            ServerRoleAssignmentHelper.RemoveRoleAssignment(_item);
+        }
+
+        public override int NumUniqueRoleAssignments
+        {
+            get { return _item.RoleAssignments.Count; }
+        }
+
         public override void BreakRoleInheritance(bool copyRoleAssignments)
         {
             _item.BreakRoleInheritance(copyRoleAssignments);

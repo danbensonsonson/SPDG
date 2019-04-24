@@ -52,6 +52,11 @@ namespace Acceleratio.SPDG.Generator.Client.SPModel
             ClientRoleAssignmentHelper.AddRoleAssignment(_item, _context, principal, roledefinitions);
         }
 
+        public override void RemoveRoleAssignment()
+        {
+            throw new NotImplementedException();
+        }
+
         public override void BreakRoleInheritance(bool copyRoleDefinitions)
         {
             _item.BreakRoleInheritance(copyRoleDefinitions, false);         
@@ -94,6 +99,11 @@ namespace Acceleratio.SPDG.Generator.Client.SPModel
         public override bool HasUniqueRoleAssignments
         {
             get { return _item.HasUniqueRoleAssignments; }
+        }
+
+        public override int NumUniqueRoleAssignments
+        {
+            get { return _item.RoleAssignments.Count; }
         }
 
         public override int Id
