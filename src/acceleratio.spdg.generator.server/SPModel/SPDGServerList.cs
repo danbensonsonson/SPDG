@@ -133,6 +133,11 @@ namespace Acceleratio.SPDG.Generator.Server.SPModel
             ServerRoleAssignmentHelper.RemoveRoleAssignment(_spList);
         }
 
+        public override void RemoveRoleAssignment(SPDGPrincipal principal)
+        {
+            ServerRoleAssignmentHelper.RemoveRoleAssignment(_spList, principal);
+        }
+
         public override int NumUniqueRoleAssignments
         {
             get { return _spList.RoleAssignments.Count; }

@@ -41,10 +41,12 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
             if (WorkingDefinition.CreateNewWebApplications > 0)
             {
                 createNewWebApplications();
+                GeneratorDefinitionBase.SerializeDefinition(DataGenerator.SessionID + ".xml", WorkingDefinition);
             }
             else if (WorkingDefinition.CreateNewSiteCollections > 0 || WorkingDefinition.CreateMySites > 0) //ok?
             {
                 createNewSiteCollections();
+                GeneratorDefinitionBase.SerializeDefinition(DataGenerator.SessionID + ".xml", WorkingDefinition);
             }
 
         }
@@ -161,6 +163,8 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
             siteCollInfo.URL = site.Url;
 
             Owner.WorkingSiteCollections.Add(siteCollInfo);
+            WorkingDefinition.SiteCollections.Add(siteCollInfo.URL); // Add to configuration for serialization
+            WorkingDefinition.UseExistingSiteCollection = true;
         }
 
         private void findAvailableSiteCollectionName(SPWebApplication webApp, out string siteName, out string url, out string baseName)
@@ -218,7 +222,8 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
                     newApplication.UseClaimsAuthentication = true;
                     newApplication.Update();
                     newApplication.Provision();
-
+                    WorkingDefinition.UseExistingWebApplication = newApplication.Id.ToString();
+                    WorkingDefinition.UseExistingWebApplicationName = webApplicationName;
 
                     for (int s = 0; s < WorkingDefinition.CreateNewSiteCollections; s++)
                     {

@@ -42,6 +42,7 @@ namespace Acceleratio.SPDG.UI
             btnOpenLog.Click += btnOpenLog_Click;
             progressOverall.Maximum = 100;
             progressDetails.Maximum = 100;
+            Common.SerializeDefinition(DataGenerator.SessionID + ".xml");
             startDataGeneration();
 
         }

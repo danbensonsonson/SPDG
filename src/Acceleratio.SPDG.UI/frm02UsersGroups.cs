@@ -164,13 +164,16 @@ namespace Acceleratio.SPDG.UI
                 trackNumberOfUsers.Value = 0;
                 trackNumberOfSecGroups.Value = 0;
                 trackMaxNumberOfUsersInSecurityGroups.Value = 0;
-                tbFqdn.Text = "";
+                if (cboDomains.Text != "")
+                    tbFqdn.Text = cboDomains.Text;
+                    
             }
             else
             {
                 groupBox1.Enabled = false;
                 WorkingDefinition.NumberOfUsersToCreate = 0;
                 WorkingDefinition.NumberOfSecurityGroupsToCreate = 0;
+                tbFqdn.Text = "";
             }
         }
 

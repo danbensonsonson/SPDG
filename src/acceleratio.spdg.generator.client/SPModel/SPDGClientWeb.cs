@@ -148,6 +148,11 @@ namespace Acceleratio.SPDG.Generator.Client.SPModel
             throw new NotImplementedException();
         }
 
+        public override void RemoveRoleAssignment(SPDGPrincipal principal)
+        {
+            throw new NotImplementedException();
+        }
+
         public override void BreakRoleInheritance(bool copyRoleAssignments)
         {
             if (_web.Id == _site.RootWeb.ID)

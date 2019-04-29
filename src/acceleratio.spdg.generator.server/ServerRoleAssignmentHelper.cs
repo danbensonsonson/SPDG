@@ -36,6 +36,27 @@ namespace Acceleratio.SPDG.Generator.Server
             securableObject.RoleAssignments.Remove(index);
         }
 
+        public static void RemoveRoleAssignment(SPSecurableObject securableObject, SPDGPrincipal principal)
+        {
+            SPPrincipal spPrincipal;
+            if (principal is SPDGServerUser)
+            {
+                spPrincipal = ((SPDGServerUser)principal).SPUser;
+            }
+            else
+            {
+                spPrincipal = ((SPDGServerGroup)principal).Group;
+            }
+            try
+            {
+                securableObject.RoleAssignments.Remove(spPrincipal);
+            }
+            catch (Exception ex)
+            {
+                Errors.Log(ex);
+            }
+        }
+
         public static SPDGRoleAssignment GetRoleAssignmentByPrincipal(SPSecurableObject securableObject, SPDGPrincipal principal)
         {
             SPPrincipal spPrincipal;

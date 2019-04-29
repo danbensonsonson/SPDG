@@ -350,11 +350,9 @@
             this.trackPermissionsDeletePerObject.LargeChange = 1;
             this.trackPermissionsDeletePerObject.Location = new System.Drawing.Point(278, 531);
             this.trackPermissionsDeletePerObject.Maximum = 30;
-            this.trackPermissionsDeletePerObject.Minimum = 1;
             this.trackPermissionsDeletePerObject.Name = "trackPermissionsDeletePerObject";
             this.trackPermissionsDeletePerObject.Size = new System.Drawing.Size(528, 45);
             this.trackPermissionsDeletePerObject.TabIndex = 38;
-            this.trackPermissionsDeletePerObject.Value = 1;
             this.trackPermissionsDeletePerObject.ValueChanged += new System.EventHandler(this.trackPermissionsDeletePerObject_ValueChanged);
             // 
             // lblPermissionsDeletePerObject
@@ -366,7 +364,7 @@
             this.lblPermissionsDeletePerObject.Name = "lblPermissionsDeletePerObject";
             this.lblPermissionsDeletePerObject.Size = new System.Drawing.Size(13, 15);
             this.lblPermissionsDeletePerObject.TabIndex = 39;
-            this.lblPermissionsDeletePerObject.Text = "1";
+            this.lblPermissionsDeletePerObject.Text = "0";
             // 
             // frm11Permissions
             // 

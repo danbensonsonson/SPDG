@@ -31,7 +31,6 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
         private int _stepCompleted = 0;
         public PermissionsDataGenerationTaskBase(IDataGenerationTaskOwner owner) : base(owner)
         {
-            Init();
         }
 
         public override string Title
@@ -100,6 +99,41 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
             }
         }
 
+        private void SetSitesToHaveUniquePermissions(List<SiteInfo> allSites)
+        {
+            // Pre-process sites for permissions
+            int numSitesWithUniquePermissions = 0;
+            foreach (var site in allSites)
+            {
+                if (site.HasUniqueRoleAssignments)
+                {
+                    _allSitesToHaveUniquePermissions.Add(site); // add to the list to work on in case there are more permissions per object or something
+                    numSitesWithUniquePermissions++;
+                }
+            }
+            // If we are not above the total percentage for sites, attempt to add more
+            float percentageOfSitesWithPermissions = ((float)numSitesWithUniquePermissions / (float)allSites.Count) * 100;
+            if (percentageOfSitesWithPermissions <= WorkingDefinition.PermissionsPercentOfSites)
+            {
+                foreach (var site in allSites)
+                {
+                    if (site.HasUniqueRoleAssignments) // only work on the sites without permissions already
+                        continue;
+
+                    if (SampleData.GetRandomNumber(1, 100) <= WorkingDefinition.PermissionsPercentOfSites)
+                    {
+                        _allSitesToHaveUniquePermissions.Add(site);
+                        numSitesWithUniquePermissions++;
+                        percentageOfSitesWithPermissions = ((float)numSitesWithUniquePermissions / (float)allSites.Count) * 100;
+                        if (percentageOfSitesWithPermissions <= WorkingDefinition.PermissionsPercentOfSites)
+                            break;
+                    }
+                }
+            }
+            else
+                Log.Write("Sites already have " + percentageOfSitesWithPermissions + " percent unique permissions");
+        }
+
         private void SetFoldersToHaveUniquePermissions(List<FolderInfo> allFolders)
         {
             // Pre-process Folder for permissions
@@ -160,6 +194,7 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                     {
                         _allListsToHavehUniquePermissions.Add(list);
                         numListsWithUniquePermissions++;
+                        // TODO this logic on the first pass might not work...
                         percentageOfListsWithPermissions = ((float)numListsWithUniquePermissions / (float)allLists.Count) * 100;
                         if (percentageOfListsWithPermissions <= WorkingDefinition.PermissionsPercentOfLists)
                             break;
@@ -258,41 +293,6 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
 
         protected abstract List<string> GetAvailableUsersInDirectory();
         protected abstract List<string> GetAvailableGroupsInDirectory();
-
-        private void SetSitesToHaveUniquePermissions(List<SiteInfo> allSites)
-        {
-            // Pre-process sites for permissions
-            int numSitesWithUniquePermissions = 0;
-            foreach (var site in allSites)
-            {
-                if (site.HasUniqueRoleAssignments)
-                {
-                    _allSitesToHaveUniquePermissions.Add(site); // add to the list to work on in case there are more permissions per object or something
-                    numSitesWithUniquePermissions++;
-                }
-            }
-            // If we are not above the total percentage for sites, attempt to add more
-            float percentageOfSitesWithPermissions = ((float)numSitesWithUniquePermissions / (float)allSites.Count) * 100;
-            if (percentageOfSitesWithPermissions <= WorkingDefinition.PermissionsPercentOfSites)
-            {
-                foreach (var site in allSites)
-                {
-                    if (site.HasUniqueRoleAssignments) // only work on the sites without permissions already
-                        continue;
-
-                    if (SampleData.GetRandomNumber(1, 100) <= WorkingDefinition.PermissionsPercentOfSites)
-                    {
-                        _allSitesToHaveUniquePermissions.Add(site);
-                        numSitesWithUniquePermissions++;
-                        percentageOfSitesWithPermissions = ((float)numSitesWithUniquePermissions / (float)allSites.Count) * 100;
-                        if (percentageOfSitesWithPermissions <= WorkingDefinition.PermissionsPercentOfSites)
-                            break;
-                    }
-                }
-            }
-            else
-                Log.Write("Sites already have " + percentageOfSitesWithPermissions + " percent unique permissions");
-        }
 
         private void EnsureUsersAndGroups(SPDGWeb web)
         {
@@ -395,7 +395,11 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
             // delete
             if (roleAssignments >= _permissionsPerObjectDelete && web.HasUniqueRoleAssignments)
             {
-                for (int i = 0; i < _permissionsPerObjectDelete; i++)
+                int permissionsToDelete = _permissionsPerObjectDelete;
+                if (roleAssignments > _permissionsPerObject)
+                    permissionsToDelete = roleAssignments - _permissionsPerObject; //bring the total permissions back in line with the configuration
+
+                for (int i = 0; i < permissionsToDelete; i++)
                 {
                     // delete permissions (removes a random permission
                     Owner.IncrementCurrentTaskProgress("Removing permission from site " + web.Url, 0);
@@ -415,11 +419,11 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                 web.BreakRoleInheritance(false);
 
                 for (int i = 0; i < _permissionsPerObject; i++)
-                {
-                
-                        setupNextRoleAssignment(web, web);
-                
-
+                {                
+                    setupNextRoleAssignment(web, web);
+                    roleAssignments++;
+                    if (roleAssignments++ >= _permissionsPerObject)
+                        break;
                 }
             }
             catch (Exception ex)
@@ -438,7 +442,11 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
             // delete
             if (roleAssignments >= _permissionsPerObjectDelete && list.HasUniqueRoleAssignments)
             {
-                for (int i = 0; i < _permissionsPerObjectDelete; i++)
+                int permissionsToDelete = _permissionsPerObjectDelete;
+                if (roleAssignments > _permissionsPerObject)
+                    permissionsToDelete = roleAssignments - _permissionsPerObject; //bring the total permissions back in line with the configuration
+
+                for (int i = 0; i < permissionsToDelete; i++)
                 {
                     // delete permissions
                     Owner.IncrementCurrentTaskProgress("Removing permission from list " + web.Url + "/" + listName, 0);
@@ -459,6 +467,9 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
             for (int i = 0; i < _permissionsPerObject; i++)
             {
                 setupNextRoleAssignment(web, list);
+                roleAssignments++;
+                if (roleAssignments++ >= _permissionsPerObject)
+                    break;
             }
 
             Owner.IncrementCurrentTaskProgress("Unique permissions added to list: " + listName + ", site: " + web.Url);
@@ -474,7 +485,11 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
             // delete
             if (roleAssignments >= _permissionsPerObjectDelete && folder.Item.HasUniqueRoleAssignments)
             {
-                for (int i = 0; i < _permissionsPerObjectDelete; i++)
+                int permissionsToDelete = _permissionsPerObjectDelete;
+                if (roleAssignments > _permissionsPerObject)
+                    permissionsToDelete = roleAssignments - _permissionsPerObject; //bring the total permissions back in line with the configuration
+
+                for (int i = 0; i < permissionsToDelete; i++)
                 {
                     // delete permissions
                     folder.Item.RemoveRoleAssignment();
@@ -495,6 +510,9 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
             for (int i = 0; i < _permissionsPerObject; i++)
             {
                 setupNextRoleAssignment(web, folder.Item);
+                roleAssignments++;
+                if (roleAssignments++ >= _permissionsPerObject)
+                    break;
             }
 
             Owner.IncrementCurrentTaskProgress("Unique permissions added to folder: " + folderURL + " in site: " + web.Url);
@@ -528,6 +546,7 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                 foreach (var item in itemsToHavehUniquePermissions)
                 {
                     int roleAssignments = item.NumUniqueRoleAssignments;
+                    Owner.IncrementCurrentTaskProgress("Working item/document '" + item.DisplayName + "' in list '" + list.Title + " has " + roleAssignments + " permissions", 0);
                     // delete
                     if (roleAssignments >= _permissionsPerObjectDelete)
                     {
@@ -539,7 +558,7 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                             roleAssignments--;
                         }
                     }
-                    // add                    
+                    // add      
                     if (roleAssignments >= _permissionsPerObject)
                     {
                         Log.Write("Existing item/document '" + item.DisplayName + "' in list '" + list.Title + " already has " + roleAssignments + " permissions");
@@ -550,6 +569,9 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                     for (int i = 0; i < _permissionsPerObject; i++)
                     {
                         setupNextRoleAssignment(web, item);
+                        roleAssignments++;
+                        if (roleAssignments >= _permissionsPerObject)
+                            break;                        
                     }
                     Owner.IncrementCurrentTaskProgress("Unique permissions added for existing item/document '" + item.DisplayName + "' in list '" + list.Title);
                     shareItem(list, item);
@@ -656,9 +678,9 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                 }
             }
             // TODO get rid of the excess logging
-            Log.Write("Start GetRoleAssignmentByPrincipal");
+            //Log.Write("Start GetRoleAssignmentByPrincipal");
             var roleAssignment = securableObject.GetRoleAssignmentByPrincipal(principal);
-            Log.Write("End GetRoleAssignmentByPrincipal");
+            //Log.Write("End GetRoleAssignmentByPrincipal");
             if (roleAssignment == null || roleAssignment.RoleDefinitionBindings.All(x => x.IsGuestRole))
             {
                 var availableRoledefinitions = web.RoleDefinitions.Where(x => !x.IsGuestRole).ToList();
@@ -666,7 +688,7 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                 var selected = availableRoledefinitions[SampleData.GetRandomNumber(0, availableRoledefinitions.Count - 1)];
                 Log.Write("Start AddRoleAssignment");
                 // TODO This line is taking 3s
-                securableObject.AddRoleAssignment(principal, new List<SPDGRoleDefinition> { selected });                
+                securableObject.AddRoleAssignment(principal, new List<SPDGRoleDefinition> { selected });
                 Log.Write("End AddRoleAssignment");
             }
         }

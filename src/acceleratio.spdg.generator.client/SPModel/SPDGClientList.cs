@@ -136,6 +136,11 @@ namespace Acceleratio.SPDG.Generator.Client.SPModel
             throw new NotImplementedException();
         }
 
+        public override void RemoveRoleAssignment(SPDGPrincipal principal)
+        {
+            throw new NotImplementedException();
+        }
+
         public override int NumUniqueRoleAssignments
         {
             get { return _list.RoleAssignments.Count;  }

@@ -92,13 +92,13 @@ namespace Acceleratio.SPDG.UI
             definition.CreateContentTypes = true;
             definition.MaxNumberOfContentTypesPerSiteCollection = 1;
             definition.PermissionsPercentOfSites = 50;
-            definition.PermissionsPercentOfLists = 15;
-            definition.PermissionsPerObject = 5;
+            definition.PermissionsPercentOfLists = 3;
+            definition.PermissionsPerObject = 3;
             definition.PermissionsPerObjectDelete = 0;
             definition.PermissionsPercentForUsers = 50;
             definition.PermissionsPercentForSPGroups = 3;
-            definition.PermissionsPercentOfListItems = 15;
-            definition.PermissionsPercentOfFolders = 15;
+            definition.PermissionsPercentOfListItems = 3;
+            definition.PermissionsPercentOfFolders = 3;
 
         }
     }

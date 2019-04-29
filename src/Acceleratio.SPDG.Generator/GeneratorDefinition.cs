@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
+using System.IO;
 
 namespace Acceleratio.SPDG.Generator
 {
@@ -276,7 +277,31 @@ namespace Acceleratio.SPDG.Generator
                 }
             }
             set { _maxNumberOfUsersInCreatedSecurityGroups = value; }
-        }       
+        }
 
+        
+
+        public static void SerializeDefinition(string path, GeneratorDefinitionBase gdb)
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(SerializeWrapper), new Type[] { typeof(ClientGeneratorDefinition), typeof(ServerGeneratorDefinition) });
+            using (TextWriter writer = new StreamWriter(path))
+            {
+                serializer.Serialize(writer, new SerializeWrapper(gdb));
+            }
+        }
+
+    }
+
+    public class SerializeWrapper
+    {
+        public SerializeWrapper()
+        {
+
+        }
+        public SerializeWrapper(GeneratorDefinitionBase gdb)
+        {
+            Definition = gdb;
+        }
+        public GeneratorDefinitionBase Definition { get; set; }
     }
 }
