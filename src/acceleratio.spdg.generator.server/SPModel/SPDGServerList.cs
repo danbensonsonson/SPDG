@@ -161,11 +161,27 @@ namespace Acceleratio.SPDG.Generator.Server.SPModel
             }
         }
 
+        public override int ItemCount
+        {
+            get { return _spList.ItemCount; }
+        }
+
         public override void AddView(string viewName, IEnumerable<string> viewFields, string strQuery, uint rowLimit, bool paged, bool makeDefault)
         {
             var strColl = new StringCollection();
             strColl.AddRange(viewFields.ToArray());
             SPView view = _spList.Views.Add(viewName, strColl, strQuery, rowLimit, paged, makeDefault);
+        }
+
+        public override IEnumerable<SPDGView> Views
+        {
+            get
+            {
+                foreach (SPView view in _spList.Views)
+                {
+                    yield return new SPDGView(view.Title);
+                }
+            }
         }
 
         public override bool IsDocumentLibrary => _spList.BaseTemplate == SPListTemplateType.DocumentLibrary;

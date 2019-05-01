@@ -275,6 +275,7 @@
             // chkAddDomain
             // 
             this.chkAddDomain.AutoSize = true;
+            this.chkAddDomain.Enabled = false;
             this.chkAddDomain.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.chkAddDomain.ForeColor = System.Drawing.Color.DarkSlateGray;
             this.chkAddDomain.Location = new System.Drawing.Point(271, 547);

@@ -171,7 +171,10 @@ namespace Acceleratio.SPDG.Generator.Client.SPModel
             }
         }
 
-
+        public override int ItemCount
+        {
+            get { return _list.ItemCount; }
+        }
 
         private List<SPDGListItem> loadListItems()
         {
@@ -209,6 +212,8 @@ namespace Acceleratio.SPDG.Generator.Client.SPModel
             _list.Views.Add(viewCreationInfo);
             _context.ExecuteQuery();            
         }
+
+        public override IEnumerable<SPDGView> Views => throw new NotImplementedException();
 
     }
 }

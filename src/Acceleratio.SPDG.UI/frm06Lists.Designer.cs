@@ -47,6 +47,8 @@
             this.trackBigListsCount = new System.Windows.Forms.TrackBar();
             this.label1 = new System.Windows.Forms.Label();
             this.lblBigLists = new System.Windows.Forms.Label();
+            this.lblTotalNumOfLists = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.trackMaxNumberListLibraries)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackMaxFoldersInLib)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackMaxNumberNestedFolders)).BeginInit();
@@ -278,11 +280,34 @@
             this.lblBigLists.TabIndex = 30;
             this.lblBigLists.Text = "0";
             // 
+            // lblTotalNumOfLists
+            // 
+            this.lblTotalNumOfLists.AutoSize = true;
+            this.lblTotalNumOfLists.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.lblTotalNumOfLists.ForeColor = System.Drawing.Color.DarkSlateGray;
+            this.lblTotalNumOfLists.Location = new System.Drawing.Point(811, 135);
+            this.lblTotalNumOfLists.Name = "lblTotalNumOfLists";
+            this.lblTotalNumOfLists.Size = new System.Drawing.Size(19, 15);
+            this.lblTotalNumOfLists.TabIndex = 31;
+            this.lblTotalNumOfLists.Text = "10";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.label7.Location = new System.Drawing.Point(678, 134);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(129, 15);
+            this.label7.TabIndex = 32;
+            this.label7.Text = "Total Lists and Libraries";
+            // 
             // frm06Lists
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(921, 644);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.lblTotalNumOfLists);
             this.Controls.Add(this.lblBigLists);
             this.Controls.Add(this.trackBigListsCount);
             this.Controls.Add(this.label1);
@@ -302,8 +327,6 @@
             this.Controls.Add(this.trackMaxNumberListLibraries);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.ucSteps1);
-            this.MaximumSize = new System.Drawing.Size(937, 683);
-            this.MinimumSize = new System.Drawing.Size(937, 683);
             this.Name = "frm06Lists";
             this.Text = "frm06Lists";
             this.Controls.SetChildIndex(this.lblTitle, 0);
@@ -331,6 +354,8 @@
             this.Controls.SetChildIndex(this.label1, 0);
             this.Controls.SetChildIndex(this.trackBigListsCount, 0);
             this.Controls.SetChildIndex(this.lblBigLists, 0);
+            this.Controls.SetChildIndex(this.lblTotalNumOfLists, 0);
+            this.Controls.SetChildIndex(this.label7, 0);
             ((System.ComponentModel.ISupportInitialize)(this.trackMaxNumberListLibraries)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackMaxFoldersInLib)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackMaxNumberNestedFolders)).EndInit();
@@ -361,5 +386,7 @@
         private System.Windows.Forms.TrackBar trackBigListsCount;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label lblBigLists;
+        private System.Windows.Forms.Label lblTotalNumOfLists;
+        private System.Windows.Forms.Label label7;
     }
 }

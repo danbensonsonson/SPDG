@@ -121,6 +121,9 @@ namespace Acceleratio.SPDG.UI
         private void trackNumSitesToCreate_ValueChanged(object sender, EventArgs e)
         {
             lblNumSites.Text = trackNumSitesToCreate.Value.ToString();
+            int scMultiplier = WorkingDefinition.CreateNewSiteCollections > 0 ? WorkingDefinition.CreateNewSiteCollections : WorkingDefinition.SiteCollections.Count;
+            lblTotalNumSites.Text = (trackNumSitesToCreate.Value * scMultiplier).ToString();
+
         }
 
         private void trackMaxNumberLevels_ValueChanged(object sender, EventArgs e)

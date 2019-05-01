@@ -83,10 +83,19 @@ namespace Acceleratio.SPDG.UI
             return true;
         }
 
+        private void SetEstimatedTotal()
+        {
+            int scMultiplier = WorkingDefinition.CreateNewSiteCollections > 0 ? WorkingDefinition.CreateNewSiteCollections : WorkingDefinition.SiteCollections.Count;
+            lblTotalNumOfLists.Text = ((trackMaxNumberListLibraries.Value + trackBigListsCount.Value) * WorkingDefinition.NumberOfSitesToCreate * scMultiplier).ToString();
+
+        }
+
         private void trackMaxNumberListLibraries_ValueChanged(object sender, EventArgs e)
         {
             lblNumOfLists.Text = trackMaxNumberListLibraries.Value.ToString();
-            if( trackMaxNumberListLibraries.Value > 0)
+            SetEstimatedTotal();
+
+            if ( trackMaxNumberListLibraries.Value > 0)
             {
                 chkCalendar.Enabled = true;
                 chkDocLib.Enabled = true;
@@ -147,6 +156,7 @@ namespace Acceleratio.SPDG.UI
         private void trackBigListsCount_ValueChanged(object sender, EventArgs e)
         {
             lblBigLists.Text = trackBigListsCount.Value.ToString();
+            SetEstimatedTotal();
         }
     }
 }

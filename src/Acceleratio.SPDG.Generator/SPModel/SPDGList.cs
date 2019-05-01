@@ -13,10 +13,12 @@ namespace Acceleratio.SPDG.Generator.SPModel
         public abstract void AddItems(IEnumerable<ISPDGListItemInfo> items);
         public abstract int DeleteItems(int numberOfItemsToDelete);
         public abstract  IEnumerable<SPDGListItem> Items { get; }
+        public abstract int ItemCount { get; }
         public abstract bool IsDocumentLibrary { get; }
         public abstract SPDGListTemplateType BaseTemplate { get; }
 
         public abstract void AddView(string viewName, IEnumerable<string> viewFields, string strQuery, uint rowLimit, bool paged, bool makeDefault);
+        public abstract IEnumerable<SPDGView> Views { get; }
 
     }
 }

@@ -50,14 +50,20 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                         using (var web = siteColl.OpenWeb(siteInfo.ID))
                         {
                             var available = siteInfo.Lists;
-                            //shuffle because of big lists
+                            //shuffle because of big lists               
                             available.Shuffle();
                             foreach (ListInfo listInfo in available)
                             {
                                 _titleUsage.Clear();
+                                // Resume: Item get correct item count.
+                                var list = web.GetList(listInfo.Name); 
+                                int currentItems = 0;
+                                if (WorkingDefinition.Mode != DataGeneratorMode.Incremental)
+                                   currentItems = list.ItemCount; // TODO: Is this going to crumble in a big list?
+
                                 if (!listInfo.isLib)
                                 {
-                                    var list = web.GetList(listInfo.Name);
+                                    //var list = web.GetList(listInfo.Name);
                                     int itemCount = listInfo.isBigList ? WorkingDefinition.MaxNumberofItemsBigListToGenerate : WorkingDefinition.MaxNumberofItemsToGenerate;
                                     // delete
                                     if (WorkingDefinition.NumberofItemsToDelete > 0)
@@ -65,6 +71,9 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                                         Owner.IncrementCurrentTaskProgress("Start Deleting items from list: " + listInfo.Name + " in site: " + web.Url, 0);
                                         _totalItemsDeleted += list.DeleteItems(WorkingDefinition.NumberofItemsToDelete);                                        
                                     }
+
+                                    if (WorkingDefinition.Mode != DataGeneratorMode.Incremental)
+                                        itemCount = itemCount - currentItems + _totalItemsDeleted; // This shouldn't happen. Doing deletes on a new/resume run doesn't make sense.
 
                                     if (itemCount < 1) // No items to add
                                         continue;
@@ -82,7 +91,7 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                                         Owner.IncrementCurrentTaskProgress("Start adding items to list: " + listInfo.Name + " in site: " + web.Url,0);
                                     }
                                     
-                                    List<ISPDGListItemInfo> batch=new List<ISPDGListItemInfo>();                                    
+                                    List<ISPDGListItemInfo> batch = new List<ISPDGListItemInfo>();                                    
                                     //itemCount = SampleData.GetRandomNumber(itemCount*3/4, itemCount);
                                     for (int i = 0; i < itemCount; i++ )
                                     {
@@ -127,18 +136,23 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                                 else
                                 {
                                     _docsAdded = 0;
-                                    var list = web.GetList(listInfo.Name);
+                                    //var list = web.GetList(listInfo.Name);
+                                    int docCount = WorkingDefinition.MaxNumberofDocumentLibraryItemsToGenerate;
+                                    
                                     if (WorkingDefinition.NumberofDocumentLibraryItemsToDelete > 0)
                                     {
                                         Owner.IncrementCurrentTaskProgress("Start Deleting documents from library: " + listInfo.Name + " in site: " + web.Url, 0);
                                         _totalItemsDeleted += list.DeleteItems(WorkingDefinition.NumberofDocumentLibraryItemsToDelete);
-                                        _totalItemsDeleted += WorkingDefinition.NumberofDocumentLibraryItemsToDelete;
+                                        //_totalItemsDeleted += WorkingDefinition.NumberofDocumentLibraryItemsToDelete;
                                     }
-                                    
-                                    if (WorkingDefinition.MaxNumberofDocumentLibraryItemsToGenerate > 0)
+
+                                    if (WorkingDefinition.Mode != DataGeneratorMode.Incremental)
+                                        docCount = docCount - (currentItems + _totalItemsDeleted);
+
+                                    if (docCount > 0)
                                         Owner.IncrementCurrentTaskProgress("Start adding documents to library: " + listInfo.Name + " in site: " + web.Url,0);
-                                                                       
-                                    while (_docsAdded < WorkingDefinition.MaxNumberofDocumentLibraryItemsToGenerate)
+                                    
+                                    while (_docsAdded < docCount)
                                     {
                                         addDocumentToFolder(list,list.RootFolder);
                                     }
@@ -149,8 +163,10 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                             //Log.Write("Total Items Deleted: " + _totalItemsDeleted);
                             //Log.Write("Total Items Added: " + _totalItemsAdded); // After each list (more verbose)                            
                         }
-                        Log.Write("Total Items Deleted: " + _totalItemsDeleted);
-                        Log.Write("Total Items: " + _totalItemsAdded); //After a Site (less verbose)
+                        if (_totalItemsDeleted > 0)
+                            Log.Write("Total Items Deleted: " + _totalItemsDeleted);
+                        if (_totalItemsAdded > 0)
+                            Log.Write("Total Items: " + _totalItemsAdded); //After a Site (less verbose)
                     }
                 }
             }

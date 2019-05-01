@@ -59,15 +59,15 @@ namespace Acceleratio.SPDG.UI
             }
             else
             {
+                if (!siteCollectionsLoaded)
+                    loadSiteCollections();
                 trackNumSiteColls.Enabled = false;
                 lbSiteCollection.Enabled = true;
-
                 label1.Enabled = false;
                 label3.Enabled = false;
                 txtOwnerEmail.Enabled = false;
                 txtOwnerUserName.Enabled = false;
-                if (!siteCollectionsLoaded)
-                    loadSiteCollections();
+                
                 WorkingDefinition.Mode = DataGeneratorMode.Incremental;
             }
         }
@@ -188,6 +188,11 @@ namespace Acceleratio.SPDG.UI
             }
             else
             {
+                if (lbSiteCollection.SelectedItems.Count < 1)
+                {
+                    MessageBox.Show("Please select at least one site collection");
+                    return false;
+                }
                 Common.WorkingDefinition.CreateNewSiteCollections = 0;
                 Common.WorkingDefinition.UseExistingSiteCollection = true;
                 if (lbSiteCollection.SelectedItems.Count > 0)

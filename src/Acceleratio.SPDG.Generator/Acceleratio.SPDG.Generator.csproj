@@ -76,6 +76,7 @@
     <Compile Include="ProgressChangeType.cs" />
     <Compile Include="ServerGeneratorDefinition.cs" />
     <Compile Include="SPDGDataHelper.cs" />
+    <Compile Include="SPModel\SPDGView.cs" />
     <Compile Include="SPModel\SPDGWebApplication.cs" />
     <Compile Include="SPModel\ISPDGListItemInfo.cs" />
     <Compile Include="SPModel\SPDGField.cs" />

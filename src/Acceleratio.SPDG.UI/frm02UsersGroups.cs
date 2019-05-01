@@ -160,6 +160,7 @@ namespace Acceleratio.SPDG.UI
             if( chkGenerateUsers.Checked)
             {
                 groupBox1.Enabled = true;
+                chkAddDomain.Enabled = true;
                 // Added the following statements to support adding another domain. Zero out on the next screen
                 trackNumberOfUsers.Value = 0;
                 trackNumberOfSecGroups.Value = 0;
@@ -171,6 +172,7 @@ namespace Acceleratio.SPDG.UI
             else
             {
                 groupBox1.Enabled = false;
+                chkAddDomain.Enabled = false;
                 WorkingDefinition.NumberOfUsersToCreate = 0;
                 WorkingDefinition.NumberOfSecurityGroupsToCreate = 0;
                 tbFqdn.Text = "";

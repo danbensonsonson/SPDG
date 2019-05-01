@@ -40,6 +40,8 @@
             this.panelSiteOptions = new System.Windows.Forms.Panel();
             this.chkUseOnlyExistingSites = new System.Windows.Forms.CheckBox();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.lblTotalNumSites = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.trackNumSitesToCreate)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackMaxNumberLevels)).BeginInit();
             this.panelSiteOptions.SuspendLayout();
@@ -191,11 +193,35 @@
             this.flowLayoutPanel1.Size = new System.Drawing.Size(633, 383);
             this.flowLayoutPanel1.TabIndex = 20;
             // 
+            // lblTotalNumSites
+            // 
+            this.lblTotalNumSites.AutoSize = true;
+            this.lblTotalNumSites.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.lblTotalNumSites.ForeColor = System.Drawing.Color.DarkSlateGray;
+            this.lblTotalNumSites.Location = new System.Drawing.Point(838, 135);
+            this.lblTotalNumSites.Name = "lblTotalNumSites";
+            this.lblTotalNumSites.Size = new System.Drawing.Size(19, 15);
+            this.lblTotalNumSites.TabIndex = 21;
+            this.lblTotalNumSites.Text = "50";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.label5.ForeColor = System.Drawing.Color.DarkSlateGray;
+            this.label5.Location = new System.Drawing.Point(699, 135);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(134, 15);
+            this.label5.TabIndex = 22;
+            this.label5.Text = "Total Sites to be Created";
+            // 
             // frm05Sites
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(921, 644);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.lblTotalNumSites);
             this.Controls.Add(this.flowLayoutPanel1);
             this.Controls.Add(this.ucSteps1);
             this.Name = "frm05Sites";
@@ -208,6 +234,8 @@
             this.Controls.SetChildIndex(this.btnNext, 0);
             this.Controls.SetChildIndex(this.btnHelp, 0);
             this.Controls.SetChildIndex(this.btnClose, 0);
+            this.Controls.SetChildIndex(this.lblTotalNumSites, 0);
+            this.Controls.SetChildIndex(this.label5, 0);
             ((System.ComponentModel.ISupportInitialize)(this.trackNumSitesToCreate)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackMaxNumberLevels)).EndInit();
             this.panelSiteOptions.ResumeLayout(false);
@@ -233,5 +261,7 @@
         private System.Windows.Forms.Panel panelSiteOptions;
         private System.Windows.Forms.CheckBox chkUseOnlyExistingSites;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
+        private System.Windows.Forms.Label lblTotalNumSites;
+        private System.Windows.Forms.Label label5;
     }
 }

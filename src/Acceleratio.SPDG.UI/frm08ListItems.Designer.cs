@@ -57,6 +57,8 @@
             this.label3 = new System.Windows.Forms.Label();
             this.trackNumberOfItemsDelete = new System.Windows.Forms.TrackBar();
             this.lblNumItemsDelete = new System.Windows.Forms.Label();
+            this.lblTotalEstimate = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.trackMaxNumberOfItems)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackMinDocSize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackMaxDocSize)).BeginInit();
@@ -223,7 +225,7 @@
             this.lblNumItems.AutoSize = true;
             this.lblNumItems.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.lblNumItems.ForeColor = System.Drawing.Color.DarkSlateGray;
-            this.lblNumItems.Location = new System.Drawing.Point(808, 188);
+            this.lblNumItems.Location = new System.Drawing.Point(808, 182);
             this.lblNumItems.Name = "lblNumItems";
             this.lblNumItems.Size = new System.Drawing.Size(19, 15);
             this.lblNumItems.TabIndex = 30;
@@ -415,11 +417,35 @@
             this.lblNumItemsDelete.TabIndex = 43;
             this.lblNumItemsDelete.Text = "0";
             // 
+            // lblTotalEstimate
+            // 
+            this.lblTotalEstimate.AutoSize = true;
+            this.lblTotalEstimate.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.lblTotalEstimate.ForeColor = System.Drawing.Color.DarkSlateGray;
+            this.lblTotalEstimate.Location = new System.Drawing.Point(809, 136);
+            this.lblTotalEstimate.Name = "lblTotalEstimate";
+            this.lblTotalEstimate.Size = new System.Drawing.Size(19, 15);
+            this.lblTotalEstimate.TabIndex = 44;
+            this.lblTotalEstimate.Text = "25";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.label10.ForeColor = System.Drawing.Color.DarkSlateGray;
+            this.label10.Location = new System.Drawing.Point(707, 136);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(91, 15);
+            this.label10.TabIndex = 45;
+            this.label10.Text = "Estimated Items";
+            // 
             // frm08ListItems
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(921, 644);
+            this.Controls.Add(this.label10);
+            this.Controls.Add(this.lblTotalEstimate);
             this.Controls.Add(this.lblNumItemsDelete);
             this.Controls.Add(this.trackNumberOfItemsDelete);
             this.Controls.Add(this.label3);
@@ -452,6 +478,8 @@
             this.Controls.SetChildIndex(this.label3, 0);
             this.Controls.SetChildIndex(this.trackNumberOfItemsDelete, 0);
             this.Controls.SetChildIndex(this.lblNumItemsDelete, 0);
+            this.Controls.SetChildIndex(this.lblTotalEstimate, 0);
+            this.Controls.SetChildIndex(this.label10, 0);
             ((System.ComponentModel.ISupportInitialize)(this.trackMaxNumberOfItems)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackMinDocSize)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackMaxDocSize)).EndInit();
@@ -497,5 +525,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TrackBar trackNumberOfItemsDelete;
         private System.Windows.Forms.Label lblNumItemsDelete;
+        private System.Windows.Forms.Label lblTotalEstimate;
+        private System.Windows.Forms.Label label10;
     }
 }

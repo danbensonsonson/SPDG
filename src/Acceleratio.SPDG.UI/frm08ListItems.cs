@@ -147,9 +147,20 @@ namespace Acceleratio.SPDG.UI
             set { trackBarBigListItemsCount.Value = (int)Math.Sqrt(value); }
         }
 
+        private void SetEstimatedTotal()
+        {
+            int scMultiplier = WorkingDefinition.CreateNewSiteCollections > 0 ? WorkingDefinition.CreateNewSiteCollections : WorkingDefinition.SiteCollections.Count;
+            int estTotal = (WorkingDefinition.MaxNumberOfListsAndLibrariesPerSite * WorkingDefinition.NumberOfSitesToCreate
+                * scMultiplier) * (NumberOfItemsToGenerate + DocLibItemsToGenerate) / 2;
+            estTotal += (WorkingDefinition.NumberOfBigListsPerSite * WorkingDefinition.NumberOfSitesToCreate
+                * scMultiplier) * (WorkingDefinition.NumberOfBigListsPerSite * BigListItemsToGenerate);
+            lblTotalEstimate.Text = FormatNumber(estTotal);
+        }
+
         private void trackMaxNumberOfItems_ValueChanged(object sender, EventArgs e)
         {
             lblNumItems.Text = NumberOfItemsToGenerate.ToString();
+            SetEstimatedTotal();
         }
 
         private void trackMinDocSize_ValueChanged(object sender, EventArgs e)
@@ -165,11 +176,13 @@ namespace Acceleratio.SPDG.UI
         private void trackMaxNumberOrDocLibItems_ValueChanged(object sender, EventArgs e)
         {
             lblNumDocLibItems.Text = DocLibItemsToGenerate.ToString();
+            SetEstimatedTotal();
         }
 
         private void trackBarBigListItemsCount_ValueChanged(object sender, EventArgs e)
         {
             lblBigListCount.Text = BigListItemsToGenerate.ToString();
+            SetEstimatedTotal();
         }
 
         private void rackMaxNumberOrDocLibItemsDelete_ValueChanged(object sender, EventArgs e)
@@ -180,6 +193,18 @@ namespace Acceleratio.SPDG.UI
         private void trackNumberOfItemsDelete_ValueChanged(object sender, EventArgs e)
         {
             lblNumItemsDelete.Text = trackNumberOfItemsDelete.Value.ToString();
+        }
+
+        private string FormatNumber(double number)
+        {
+            if (number >= 1000000000000)
+                return (number / 1000000000000).ToString() + "T";
+            else if (number >= 1000000000)
+                return (number / 1000000000).ToString() + " B";
+            else if (number >= 1000000)
+                return (number / 1000000).ToString() + "M";
+
+            return number.ToString();
         }
     }
 }

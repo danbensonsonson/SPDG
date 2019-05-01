@@ -64,17 +64,24 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                                 var list = web.GetList(listInfo.Name);
 
                                 Owner.IncrementCurrentTaskProgress("Creating columns in List '" + list.RootFolder.Url + "'", 0);
-                               
-                                var newFields = _availableFieldInfos.Take(WorkingDefinition.MaxNumberOfColumnsPerList).ToList();
+
+                                // Resume: broke somewhere adding fields
+                                int fieldsToAdd = WorkingDefinition.MaxNumberOfColumnsPerList;
+                                if (WorkingDefinition.Mode != DataGeneratorMode.Incremental)
+                                    fieldsToAdd = WorkingDefinition.MaxNumberOfColumnsPerList - list.Fields.Count();
+                                var newFields = _availableFieldInfos.Take(fieldsToAdd).ToList();
                                 list.AddFields(newFields, true);
 
                                 Owner.IncrementCurrentTaskProgress("Columns created in List '" + list.RootFolder.Url + "'", newFields.Count);
 
                                 Owner.IncrementCurrentTaskProgress("Creating views in list  '" + list.RootFolder.Url + "'", 0);
-                                
-                               
+
+                                int viewsToAdd = WorkingDefinition.MaxNumberOfViewsPerList;
+                                // Resume: Adjust number of fields
+                                if (WorkingDefinition.Mode != DataGeneratorMode.Incremental)
+                                    viewsToAdd = WorkingDefinition.MaxNumberOfViewsPerList - list.Views.Count();
                                 var listFields = list.Fields.ToList();
-                                for (int c = 0; c < WorkingDefinition.MaxNumberOfViewsPerList; c++)
+                                for (int c = 0; c < viewsToAdd; c++)
                                 {                                
                                     var viewFields = new List<string>();
                                     newFields.Shuffle();

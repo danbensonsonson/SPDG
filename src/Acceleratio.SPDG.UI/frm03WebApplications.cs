@@ -119,6 +119,7 @@ namespace Acceleratio.SPDG.UI
             if(radioCreateNewWebApp.Checked )
             {
                 trackCreateNewWebApplication.Enabled = true;
+                trackCreateNewWebApplication.Value = 1; //Temporary simplification of the process (1 web app per run)
                 cboUseExistingWebApp.Enabled = false;
 
                 label1.Enabled = true;

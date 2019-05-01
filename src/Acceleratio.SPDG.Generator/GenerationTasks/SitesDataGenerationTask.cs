@@ -25,13 +25,13 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
         {
             int totalSteps = WorkingDefinition.NumberOfSitesToCreate;
             totalSteps = totalSteps * Owner.WorkingSiteCollections.Count;
+            // Resume: the difference
+            int existingSites = Owner.WorkingSiteCollections.Sum(x => x.Sites.Count);
+            totalSteps = totalSteps - existingSites;
+
             if (WorkingDefinition.Mode == DataGeneratorMode.Incremental)
             {
-                foreach (SiteCollInfo siteCollInfo in Owner.WorkingSiteCollections)
-                {
-                    totalSteps += siteCollInfo.Sites.Count; // Also needs to iterate through each site as a step
-                }
-                    
+               totalSteps += existingSites; // Also needs to iterate through each site as a step                   
             }
             return totalSteps;
         }
@@ -48,6 +48,9 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
         public override void Execute()
         {
             TotalSites = WorkingDefinition.NumberOfSitesToCreate * Owner.WorkingSiteCollections.Count;
+            // Resume: Consider any sites already created
+            if (WorkingDefinition.Mode != DataGeneratorMode.Incremental)
+                TotalSites = TotalSites - Owner.WorkingSiteCollections.Sum(x => x.Sites.Count); 
             foreach (SiteCollInfo siteCollInfo in Owner.WorkingSiteCollections)
             {
                 using (var siteColl = Owner.ObjectsFactory.GetSite(siteCollInfo.URL))
@@ -56,7 +59,10 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                     InitWebTemplate(siteColl.RootWeb);
 
                     this.Sites = new List<SiteInfo>();
-                    CreateSubsites(siteColl.RootWeb, 0, WorkingDefinition.MaxNumberOfLevelsForSites, WorkingDefinition.NumberOfSitesToCreate, "");
+                    // Resume: are there enough sites for this SC - we already have the sites from DataGenerator Start
+                    int numSitestoCreate = WorkingDefinition.NumberOfSitesToCreate - siteCollInfo.Sites.Count;
+                    if (numSitestoCreate > 0)
+                        CreateSubsites(siteColl.RootWeb, 0, WorkingDefinition.MaxNumberOfLevelsForSites, numSitestoCreate, "");
 
                     siteCollInfo.Sites.AddRange(Sites);
                 }

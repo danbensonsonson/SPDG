@@ -43,6 +43,7 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
                 createNewWebApplications();
                 GeneratorDefinitionBase.SerializeDefinition(DataGenerator.SessionID + ".xml", WorkingDefinition);
             }
+            // use existing web app
             else if (WorkingDefinition.CreateNewSiteCollections > 0 || WorkingDefinition.CreateMySites > 0) //ok?
             {
                 createNewSiteCollections();
@@ -128,7 +129,9 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
                 SPWebService spWebService = SPWebService.ContentService;
                 SPWebApplication webApp = spWebService.WebApplications.First(a => a.Id == new Guid(WorkingDefinition.UseExistingWebApplication));
 
-                for (int s = 0; s < WorkingDefinition.CreateNewSiteCollections; s++)
+                // Reusme: number
+                int numSiteCollections = WorkingDefinition.CreateNewSiteCollections - Owner.WorkingSiteCollections.Count;
+                for (int s = 0; s < numSiteCollections; s++)
                 {
                     CreateSiteCollection(webApp);
                 }
@@ -225,7 +228,9 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
                     WorkingDefinition.UseExistingWebApplication = newApplication.Id.ToString();
                     WorkingDefinition.UseExistingWebApplicationName = webApplicationName;
 
-                    for (int s = 0; s < WorkingDefinition.CreateNewSiteCollections; s++)
+                    // Resume: calculate the number of site collections left
+                    int numSiteCollections = WorkingDefinition.CreateNewSiteCollections - Owner.WorkingSiteCollections.Count;
+                    for (int s = 0; s < numSiteCollections; s++)
                     {
                         CreateSiteCollection(newApplication);
                     }

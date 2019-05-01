@@ -47,27 +47,28 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                             
                             listsToCreate += bigListsToCreate;
                             int bigListsCreated = 0;
-                            // TODO If mode = incremental Logic to detrmine whether or not to populate this list.
-                            if (WorkingDefinition.Mode == DataGeneratorMode.Incremental) // mode = incremental
+                            
+                            Log.Write("Getting existing lists in site  '" + web.Url + "'");
+                            // Add existing list for this site for adding items
+                            foreach (var existing in web.Lists)
                             {
-                                Log.Write("Getting existing lists in site  '" + web.Url + "'");
-                                // Add existing list for this site for adding items
-                                foreach (var existing in web.Lists)
+                                ListInfo listInfo = new ListInfo();
+                                listInfo.Name = existing.Title;
+                                listInfo.TemplateType = existing.BaseTemplate;
+                                listInfo.isLib = existing.IsDocumentLibrary;
+                                listInfo.HasUniqueRoleAssignments = existing.HasUniqueRoleAssignments;
+                                if (existing.BaseTemplate == SPDGListTemplateType.GenericList || existing.BaseTemplate == SPDGListTemplateType.DocumentLibrary)
                                 {
-                                    ListInfo listInfo = new ListInfo();
-                                    listInfo.Name = existing.Title;
-                                    listInfo.TemplateType = existing.BaseTemplate;
-                                    listInfo.isLib = existing.IsDocumentLibrary;
-                                    listInfo.HasUniqueRoleAssignments = existing.HasUniqueRoleAssignments;
-                                    if (existing.BaseTemplate == SPDGListTemplateType.GenericList || existing.BaseTemplate == SPDGListTemplateType.DocumentLibrary)
-                                    {
-                                        siteInfo.Lists.Add(listInfo);
-                                        Owner.IncrementCurrentTaskProgress("Getting list '" + listInfo.Name + "' in site '" + web.Url + "'" + " Type: " + listInfo.TemplateType);
-                                    }
-                                }                                
-                            }
+                                    siteInfo.Lists.Add(listInfo);
+                                    Owner.IncrementCurrentTaskProgress("Getting list '" + listInfo.Name + "' in site '" + web.Url + "'" + " Type: " + listInfo.TemplateType);
+                                }
+                            }                                
                             Log.Write("Creating lists in site '" + web.Url + "'");
-                            // TODO If resume, change listsToCreate - lists created
+                            // Resume: if it's not incremental, only create the amount of lists that haven't already been created
+                            // Incremental: create the amount of lists asked for, regardless of what's there
+                            if (WorkingDefinition.Mode != DataGeneratorMode.Incremental)
+                                listsToCreate = listsToCreate - siteInfo.Lists.Count;
+
                             for ( int s = 0; s < listsToCreate; s++ )
                             {
                                 try

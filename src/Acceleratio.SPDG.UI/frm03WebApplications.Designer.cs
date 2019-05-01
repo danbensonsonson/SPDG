@@ -75,10 +75,10 @@
             this.radioCreateNewWebApp.ForeColor = System.Drawing.Color.DarkSlateGray;
             this.radioCreateNewWebApp.Location = new System.Drawing.Point(265, 155);
             this.radioCreateNewWebApp.Name = "radioCreateNewWebApp";
-            this.radioCreateNewWebApp.Size = new System.Drawing.Size(180, 19);
+            this.radioCreateNewWebApp.Size = new System.Drawing.Size(175, 19);
             this.radioCreateNewWebApp.TabIndex = 8;
             this.radioCreateNewWebApp.TabStop = true;
-            this.radioCreateNewWebApp.Text = "Create new Web Applications";
+            this.radioCreateNewWebApp.Text = "Create new Web Application";
             this.radioCreateNewWebApp.UseVisualStyleBackColor = true;
             this.radioCreateNewWebApp.CheckedChanged += new System.EventHandler(this.radioCreateNewWebApp_CheckedChanged);
             // 
@@ -112,6 +112,7 @@
             this.trackCreateNewWebApplication.Name = "trackCreateNewWebApplication";
             this.trackCreateNewWebApplication.Size = new System.Drawing.Size(546, 45);
             this.trackCreateNewWebApplication.TabIndex = 10;
+            this.trackCreateNewWebApplication.Visible = false;
             this.trackCreateNewWebApplication.ValueChanged += new System.EventHandler(this.trackCreateNewWebApplication_ValueChanged);
             // 
             // lblCreateNewApps
@@ -124,6 +125,7 @@
             this.lblCreateNewApps.Size = new System.Drawing.Size(13, 15);
             this.lblCreateNewApps.TabIndex = 12;
             this.lblCreateNewApps.Text = "0";
+            this.lblCreateNewApps.Visible = false;
             // 
             // label1
             // 
@@ -221,8 +223,6 @@
             this.Controls.Add(this.radioUseExistingWebApp);
             this.Controls.Add(this.radioCreateNewWebApp);
             this.Controls.Add(this.ucSteps1);
-            this.MaximumSize = new System.Drawing.Size(937, 683);
-            this.MinimumSize = new System.Drawing.Size(937, 683);
             this.Name = "frm03WebApplications";
             this.Text = "frm03WebApplications";
             this.Load += new System.EventHandler(this.frm03WebApplications_Load);
