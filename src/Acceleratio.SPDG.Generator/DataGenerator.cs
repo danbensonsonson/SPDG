@@ -170,11 +170,12 @@ namespace Acceleratio.SPDG.Generator
                 Log.Write("*** SHAREPOINT DATA GENERATION SESSION STARTS ***");
 
                 //if we are using and existing site collection and not creating any new ones, Incremental
-                if (WorkingDefinition.SiteCollections.Count > 0 && WorkingDefinition.CreateNewSiteCollections < 1)
-                {
-                    // For now, set mode to incremental
-                    WorkingDefinition.Mode = DataGeneratorMode.Incremental;
-                }
+                // Update: The configuration determines the mode. It changes shortly after a run starts automatically
+                //if (WorkingDefinition.SiteCollections.Count > 0 && WorkingDefinition.CreateNewSiteCollections < 1)
+                //{
+                //    // For now, set mode to incremental
+                //    WorkingDefinition.Mode = DataGeneratorMode.Incremental;
+                //}
 
                 foreach (string sc in WorkingDefinition.SiteCollections)
                 {
@@ -184,7 +185,7 @@ namespace Acceleratio.SPDG.Generator
                     siteCollInfo.Sites = getSitesForSiteCollection(sc);
                     WorkingSiteCollections.Add(siteCollInfo);
                 }
-                
+
                 _overallProgressMaxSteps = _tasks.Count();
                 foreach (var task in _tasks)
                 {

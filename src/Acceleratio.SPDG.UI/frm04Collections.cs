@@ -15,6 +15,7 @@ namespace Acceleratio.SPDG.UI
     public partial class frm04Collections : frmWizardMaster
     {
         public bool siteCollectionsLoaded = false;
+        private bool mySitesCreated = false;
         public frm04Collections()
         {
             InitializeComponent();
@@ -66,8 +67,7 @@ namespace Acceleratio.SPDG.UI
                 label1.Enabled = false;
                 label3.Enabled = false;
                 txtOwnerEmail.Enabled = false;
-                txtOwnerUserName.Enabled = false;
-                
+                txtOwnerUserName.Enabled = false;                
                 WorkingDefinition.Mode = DataGeneratorMode.Incremental;
             }
         }
@@ -105,6 +105,8 @@ namespace Acceleratio.SPDG.UI
             {
                 if (!siteColl.Contains("my/personal"))  // don't bother with the mysite collections              
                     lbSiteCollection.Items.Add(siteColl);
+                else
+                    mySitesCreated = true;
             }
             siteCollectionsLoaded = true;
         }
@@ -185,6 +187,7 @@ namespace Acceleratio.SPDG.UI
 
                 Common.WorkingDefinition.SiteCollOwnerLogin = txtOwnerUserName.Text.Trim();
                 Common.WorkingDefinition.SiteCollOwnerEmail = txtOwnerEmail.Text.Trim();
+                WorkingDefinition.Mode = DataGeneratorMode.New;
             }
             else
             {
@@ -200,6 +203,7 @@ namespace Acceleratio.SPDG.UI
                     foreach (string sc in lbSiteCollection.SelectedItems)
                         Common.WorkingDefinition.SiteCollections.Add(sc);
                 }
+                WorkingDefinition.Mode = DataGeneratorMode.Incremental;
             }
 
             if (chkCreateMySites.Checked)

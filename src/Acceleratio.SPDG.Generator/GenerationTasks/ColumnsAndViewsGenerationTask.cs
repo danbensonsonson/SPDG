@@ -67,7 +67,7 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
 
                                 // Resume: broke somewhere adding fields
                                 int fieldsToAdd = WorkingDefinition.MaxNumberOfColumnsPerList;
-                                if (WorkingDefinition.Mode != DataGeneratorMode.Incremental)
+                                if (WorkingDefinition.Mode == DataGeneratorMode.Resume)
                                     fieldsToAdd = WorkingDefinition.MaxNumberOfColumnsPerList - list.Fields.Count();
                                 var newFields = _availableFieldInfos.Take(fieldsToAdd).ToList();
                                 list.AddFields(newFields, true);
@@ -78,7 +78,7 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
 
                                 int viewsToAdd = WorkingDefinition.MaxNumberOfViewsPerList;
                                 // Resume: Adjust number of fields
-                                if (WorkingDefinition.Mode != DataGeneratorMode.Incremental)
+                                if (WorkingDefinition.Mode == DataGeneratorMode.Resume)
                                     viewsToAdd = WorkingDefinition.MaxNumberOfViewsPerList - list.Views.Count();
                                 var listFields = list.Fields.ToList();
                                 for (int c = 0; c < viewsToAdd; c++)

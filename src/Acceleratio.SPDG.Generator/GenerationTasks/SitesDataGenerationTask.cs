@@ -29,7 +29,7 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
             int existingSites = Owner.WorkingSiteCollections.Sum(x => x.Sites.Count);
             totalSteps = totalSteps - existingSites;
 
-            if (WorkingDefinition.Mode == DataGeneratorMode.Incremental)
+            if (WorkingDefinition.Mode == DataGeneratorMode.Incremental || WorkingDefinition.Mode == DataGeneratorMode.Resume)
             {
                totalSteps += existingSites; // Also needs to iterate through each site as a step                   
             }
@@ -49,7 +49,7 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
         {
             TotalSites = WorkingDefinition.NumberOfSitesToCreate * Owner.WorkingSiteCollections.Count;
             // Resume: Consider any sites already created
-            if (WorkingDefinition.Mode != DataGeneratorMode.Incremental)
+            if (WorkingDefinition.Mode == DataGeneratorMode.Resume)
                 TotalSites = TotalSites - Owner.WorkingSiteCollections.Sum(x => x.Sites.Count); 
             foreach (SiteCollInfo siteCollInfo in Owner.WorkingSiteCollections)
             {
@@ -59,8 +59,11 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                     InitWebTemplate(siteColl.RootWeb);
 
                     this.Sites = new List<SiteInfo>();
+                    // New or incremental
+                    int numSitestoCreate = WorkingDefinition.NumberOfSitesToCreate;
                     // Resume: are there enough sites for this SC - we already have the sites from DataGenerator Start
-                    int numSitestoCreate = WorkingDefinition.NumberOfSitesToCreate - siteCollInfo.Sites.Count;
+                    if (WorkingDefinition.Mode == DataGeneratorMode.Resume)
+                        numSitestoCreate = WorkingDefinition.NumberOfSitesToCreate - siteCollInfo.Sites.Count;
                     if (numSitestoCreate > 0)
                         CreateSubsites(siteColl.RootWeb, 0, WorkingDefinition.MaxNumberOfLevelsForSites, numSitestoCreate, "");
 
@@ -96,11 +99,11 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                         Guid siteID = childSubsite.ID;
                         siteInfo.ID = siteID;
                         Sites.Add(siteInfo);
-                    //    if (currentLevel < maxLevels) 
-                    //    {
-                    //        CreateSubsites(childSubsite, currentLevel + 1, maxLevels, maxSitesToCreate, baseName);
-                    //        // Not implemented (site levels)
-                    //    }
+                        //if (currentLevel < maxLevels)
+                        //{
+                        //    CreateSubsites(childSubsite, currentLevel + 1, maxLevels, maxSitesToCreate, baseName);
+                        //    // Not implemented (site levels)
+                        //}
                     }
                 }
             }

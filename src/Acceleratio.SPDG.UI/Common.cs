@@ -74,8 +74,8 @@ namespace Acceleratio.SPDG.UI
             definition.SiteTemplate = "Team Site";
             definition.LibTypeList = true;
             definition.LibTypeDocument = true;
-            definition.LibTypeCalendar = true;
-            definition.LibTypeTasks = true;
+            definition.LibTypeCalendar = false;
+            definition.LibTypeTasks = false;
             definition.CreateSomeFoldersInDocumentLibraries = true;
             definition.MaxNumberOfFoldersToGenerate = 1;
             definition.MaxNumberOfNestedFolderLevelPerLibrary = 1;

@@ -68,7 +68,10 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                 return;
             }
 
-            _adUsers = GetAvailableUsersInDirectory();
+            if (Owner.WorkingUsers.Count > 0) // This only happens if mysites are created, but saves some time
+                _adUsers = Owner.WorkingUsers;
+            else
+                _adUsers = GetAvailableUsersInDirectory();
             _adGroups = GetAvailableGroupsInDirectory();
 
             _totalSteps =

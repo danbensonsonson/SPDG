@@ -41,21 +41,35 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
             if (WorkingDefinition.CreateNewWebApplications > 0)
             {
                 createNewWebApplications();
-                GeneratorDefinitionBase.SerializeDefinition(DataGenerator.SessionID + ".xml", WorkingDefinition);
             }
             // use existing web app
             else if (WorkingDefinition.CreateNewSiteCollections > 0 || WorkingDefinition.CreateMySites > 0) //ok?
             {
                 createNewSiteCollections();
-                GeneratorDefinitionBase.SerializeDefinition(DataGenerator.SessionID + ".xml", WorkingDefinition);
             }
-
         }
 
         private void CreateMySites(SPWebApplication webApp)
         {
-            if (WorkingDefinition.CreateMySites <= 0)
+            int mySitesToCreate = WorkingDefinition.CreateMySites;
+            if (mySitesToCreate <= 0)
                 return;
+
+            Owner.IncrementCurrentTaskProgress("Creating My Sites for  '" + webApp.Name);
+            // Resume MySites
+            if (WorkingDefinition.Mode == DataGeneratorMode.Resume)
+            {
+                // Resume: Load mysites
+                var helper = SPDGDataHelper.Create(WorkingDefinition);
+                IEnumerable<string> siteCollections = helper.GetAllSiteCollections(new Guid(WorkingDefinition.UseExistingWebApplication));
+                int existingMySites = 0;
+                foreach (var siteColl in siteCollections)
+                {
+                    if (siteColl.Contains("my/personal"))  // don't bother with the mysite collections              
+                        existingMySites++;
+                }
+                mySitesToCreate = mySitesToCreate - existingMySites;
+            }
 
             try {
                 //get current service context
@@ -68,26 +82,33 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
                 List<string> users = Owner.WorkingUsers;
 
                 if (users.Count < WorkingDefinition.CreateMySites)
-                {   // TODO - how to get a working domain without configuration?
+                {   
                     users = AD.GetUsersFromAD(IPGlobalProperties.GetIPGlobalProperties().DomainName); // Just grab a big chunk of users to work from. This call can take time. Use sparingly
                     // Working users is no longer necessary. Save the list for farther down the line to avoid the above call
-                    Owner.WorkingUsers.AddRange(users);
+                    Owner.WorkingUsers.AddRange(users); // TODO, this list can be used in the permissions step to save 5 minutes
                 }
 
                 bool createdMySite = false;
                 int createdMySites = 0;
-                foreach (string user in users)
-                //for (int s = 0; s < users.Count; s++)
+                int maxAttempts = mySitesToCreate * 2;
+                int numAttempts = 0;
+                while (createdMySites < mySitesToCreate)
                 {
-                    // Get the account name
-                    createdMySite = CreateMySite(upm, user); 
+                    numAttempts++;
+                    // Get an account name
+                    string user = users[SampleData.GetRandomNumber(0, users.Count)];
+                    createdMySite = CreateMySite(upm, user);                    
                     if (createdMySite)
                     {
-                        Owner.IncrementCurrentTaskProgress(string.Format("Created {0}/{1} my sites.", createdMySites + 1, WorkingDefinition.CreateMySites));
+                        Owner.IncrementCurrentTaskProgress(string.Format("Created {0}/{1} my sites.", createdMySites + 1, mySitesToCreate));
                         createdMySites++;
                     }
-                    if (createdMySites >= WorkingDefinition.CreateMySites)
+
+                    if (numAttempts >= maxAttempts) // Just a little insurance to make sure we don't get stuck in this loop indefinitely
+                    {
+                        Log.Write(string.Format("Reached maximum attempts at creating my sites of {0}.", maxAttempts));
                         break;
+                    }
                 }
             }
             catch (Exception ex)
@@ -168,6 +189,8 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
             Owner.WorkingSiteCollections.Add(siteCollInfo);
             WorkingDefinition.SiteCollections.Add(siteCollInfo.URL); // Add to configuration for serialization
             WorkingDefinition.UseExistingSiteCollection = true;
+            WorkingDefinition.Mode = DataGeneratorMode.Resume;
+            GeneratorDefinitionBase.SerializeDefinition(DataGenerator.SessionID + ".xml", WorkingDefinition);
         }
 
         private void findAvailableSiteCollectionName(SPWebApplication webApp, out string siteName, out string url, out string baseName)
@@ -227,6 +250,8 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
                     newApplication.Provision();
                     WorkingDefinition.UseExistingWebApplication = newApplication.Id.ToString();
                     WorkingDefinition.UseExistingWebApplicationName = webApplicationName;
+                    WorkingDefinition.Mode = DataGeneratorMode.Resume;
+                    GeneratorDefinitionBase.SerializeDefinition(DataGenerator.SessionID + ".xml", WorkingDefinition);
 
                     // Resume: calculate the number of site collections left
                     int numSiteCollections = WorkingDefinition.CreateNewSiteCollections - Owner.WorkingSiteCollections.Count;

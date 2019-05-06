@@ -179,6 +179,7 @@ namespace Acceleratio.SPDG.UI
                 WorkingDefinition.CreateNewWebApplications = 0;
                 WorkingDefinition.UseExistingWebApplication = ((ComboboxItem)cboUseExistingWebApp.SelectedItem).Value.ToString();
                 WorkingDefinition.UseExistingWebApplicationName = ((ComboboxItem)cboUseExistingWebApp.SelectedItem).Text.ToString();
+                WorkingDefinition.Mode = DataGeneratorMode.Incremental;
             }
             else
             {
@@ -189,6 +190,7 @@ namespace Acceleratio.SPDG.UI
                 WorkingDefinition.WebAppOwnerPassword = txtOwnerPassword.Text;
                 WorkingDefinition.WebAppOwnerEmail = txtOwnerEmail.Text;
                 WorkingDefinition.DatabaseServer = txtSQLServer.Text;
+                WorkingDefinition.Mode = DataGeneratorMode.New;
             }
 
             return true;

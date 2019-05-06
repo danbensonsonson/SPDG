@@ -28,7 +28,7 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
             int totalSteps = WorkingDefinition.NumberOfSitesToCreate *
                       WorkingDefinition.MaxNumberOfFoldersToGenerate;            
             totalSteps = totalSteps * Owner.WorkingSiteCollections.Count;
-            if (WorkingDefinition.Mode == DataGeneratorMode.Incremental)
+            if (WorkingDefinition.Mode == DataGeneratorMode.Resume)
             {
                 totalSteps += 1; // TODO hack to make sure it is active
             }
@@ -50,30 +50,32 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                                 if (listInfo.isLib)
                                 {
                                     // existing folders in libraries
-                                    if (WorkingDefinition.Mode == DataGeneratorMode.Incremental) 
+                                    int foldersToCreate = WorkingDefinition.MaxNumberOfFoldersToGenerate;
+                                    Log.Write("Getting existing folders in libraries  '" + listInfo.Name + "' in site " + web.Url);
+                                    // Add existing list for this site for adding items
+                                    var list = web.GetList(listInfo.Name);
+                                    foreach (var existing in list.RootFolder.SubFolders)
                                     {
-                                        Log.Write("Getting existing folders in libraries  '" + listInfo.Name + "' in site " + web.Url);
-                                        // Add existing list for this site for adding items
-                                        var list = web.GetList(listInfo.Name);
-                                        foreach (var existing in list.RootFolder.SubFolders)
-                                        {
-                                            if (existing.Name.Equals("Forms")) // Buil-in folder we don't create
-                                                continue;
-                                            FolderInfo folderInfo = new FolderInfo();
-                                            folderInfo.Name = existing.Name;
-                                            folderInfo.URL = existing.Url;
-                                            folderInfo.HasUniqueRoleAssignments = existing.Item.HasUniqueRoleAssignments;
-                                            listInfo.Folders.Add(folderInfo);
-                                            Owner.IncrementCurrentTaskProgress("Getting folder '" + folderInfo.Name + "' in site '" + web.Url + "'" + " List: " + listInfo.Name);
-                                        }
+                                        if (existing.Name.Equals("Forms")) // Buil-in folder we don't create
+                                            continue;
+                                        FolderInfo folderInfo = new FolderInfo();
+                                        folderInfo.Name = existing.Name;
+                                        folderInfo.URL = existing.Url;
+                                        folderInfo.HasUniqueRoleAssignments = existing.Item.HasUniqueRoleAssignments;
+                                        listInfo.Folders.Add(folderInfo);
+                                        Owner.IncrementCurrentTaskProgress("Getting folder '" + folderInfo.Name + "' in site '" + web.Url + "'" + " List: " + listInfo.Name);
                                     }
-                                    for (int counter = 1; counter <= WorkingDefinition.MaxNumberOfFoldersToGenerate; counter++)
+
+                                    if (WorkingDefinition.Mode == DataGeneratorMode.Resume) // equals resume
+                                        foldersToCreate = foldersToCreate - listInfo.Folders.Count;
+
+                                    for (int counter = 1; counter <= foldersToCreate; counter++)
                                     {
                                         try
                                         {
                                             Log.Write("Creating folders in '" + web.Url + "/" + listInfo.Name);
 
-                                            var list = web.GetList(listInfo.Name);
+                                            //var list = web.GetList(listInfo.Name);
                                             string folderName = findAvailableFolderName(list);
                                             var folder = list.RootFolder.AddFolder(folderName);                                            
                                             folder.Update();

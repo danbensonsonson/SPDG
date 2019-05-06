@@ -32,7 +32,7 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                           + WorkingDefinition.NumberofItemsToDelete + WorkingDefinition.NumberofDocumentLibraryItemsToDelete)
                           + WorkingDefinition.NumberOfBigListsPerSite * WorkingDefinition.MaxNumberofItemsBigListToGenerate);
             totalSteps = totalSteps*Owner.WorkingSiteCollections.Count;
-            if (WorkingDefinition.Mode == DataGeneratorMode.Incremental)
+            if (WorkingDefinition.Mode == DataGeneratorMode.Incremental || WorkingDefinition.Mode == DataGeneratorMode.Resume)
             {
                 totalSteps += 1; // TODO hack to make sure it is active
             }
@@ -58,8 +58,8 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                                 // Resume: Item get correct item count.
                                 var list = web.GetList(listInfo.Name); 
                                 int currentItems = 0;
-                                if (WorkingDefinition.Mode != DataGeneratorMode.Incremental)
-                                   currentItems = list.ItemCount; // TODO: Is this going to crumble in a big list?
+                                if (WorkingDefinition.Mode == DataGeneratorMode.Resume)
+                                   currentItems = list.ItemCount - listInfo.Folders.Count; // Don't want to include the folders in the item count. 
 
                                 if (!listInfo.isLib)
                                 {
@@ -72,7 +72,7 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                                         _totalItemsDeleted += list.DeleteItems(WorkingDefinition.NumberofItemsToDelete);                                        
                                     }
 
-                                    if (WorkingDefinition.Mode != DataGeneratorMode.Incremental)
+                                    if (WorkingDefinition.Mode == DataGeneratorMode.Resume)
                                         itemCount = itemCount - currentItems + _totalItemsDeleted; // This shouldn't happen. Doing deletes on a new/resume run doesn't make sense.
 
                                     if (itemCount < 1) // No items to add
@@ -146,7 +146,7 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                                         //_totalItemsDeleted += WorkingDefinition.NumberofDocumentLibraryItemsToDelete;
                                     }
 
-                                    if (WorkingDefinition.Mode != DataGeneratorMode.Incremental)
+                                    if (WorkingDefinition.Mode == DataGeneratorMode.Resume)
                                         docCount = docCount - (currentItems + _totalItemsDeleted);
 
                                     if (docCount > 0)

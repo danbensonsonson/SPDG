@@ -8,6 +8,7 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
     {
         SPDGListTemplateType _lastTemplateType = SPDGListTemplateType.NoListTemplate;
         string _lastListPrefix = "List";
+        const string OOB_Lists_Libraries = "Documents,MicroFeed,Form Templates,Site Pages,Site Assets,Style Library";
 
         public ListsDataGenerationTask(IDataGenerationTaskOwner owner) : base(owner)
         {
@@ -20,7 +21,7 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
 
         public override int CalculateTotalSteps()
         {
-            int totalSteps = WorkingDefinition.MaxNumberOfListsAndLibrariesPerSite * WorkingDefinition.NumberOfSitesToCreate;
+            int totalSteps = (WorkingDefinition.MaxNumberOfListsAndLibrariesPerSite + WorkingDefinition.NumberOfBigListsPerSite) * WorkingDefinition.NumberOfSitesToCreate;
             totalSteps = totalSteps * Owner.WorkingSiteCollections.Count;
             if (WorkingDefinition.Mode == DataGeneratorMode.Incremental)
             {
@@ -52,13 +53,17 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                             // Add existing list for this site for adding items
                             foreach (var existing in web.Lists)
                             {
-                                ListInfo listInfo = new ListInfo();
-                                listInfo.Name = existing.Title;
-                                listInfo.TemplateType = existing.BaseTemplate;
-                                listInfo.isLib = existing.IsDocumentLibrary;
-                                listInfo.HasUniqueRoleAssignments = existing.HasUniqueRoleAssignments;
+                                if (OOB_Lists_Libraries.Contains(existing.Title))
+                                    continue;
                                 if (existing.BaseTemplate == SPDGListTemplateType.GenericList || existing.BaseTemplate == SPDGListTemplateType.DocumentLibrary)
                                 {
+                                    ListInfo listInfo = new ListInfo();
+                                    listInfo.Name = existing.Title;
+                                    listInfo.TemplateType = existing.BaseTemplate;
+                                    listInfo.isLib = existing.IsDocumentLibrary;
+                                    listInfo.HasUniqueRoleAssignments = existing.HasUniqueRoleAssignments;
+                                
+                                    // filter out OOB lists OOB_Lists_Libraries
                                     siteInfo.Lists.Add(listInfo);
                                     Owner.IncrementCurrentTaskProgress("Getting list '" + listInfo.Name + "' in site '" + web.Url + "'" + " Type: " + listInfo.TemplateType);
                                 }
@@ -66,7 +71,7 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                             Log.Write("Creating lists in site '" + web.Url + "'");
                             // Resume: if it's not incremental, only create the amount of lists that haven't already been created
                             // Incremental: create the amount of lists asked for, regardless of what's there
-                            if (WorkingDefinition.Mode != DataGeneratorMode.Incremental)
+                            if (WorkingDefinition.Mode == DataGeneratorMode.Resume)
                                 listsToCreate = listsToCreate - siteInfo.Lists.Count;
 
                             for ( int s = 0; s < listsToCreate; s++ )
