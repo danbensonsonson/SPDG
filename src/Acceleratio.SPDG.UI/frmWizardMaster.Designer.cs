@@ -46,6 +46,7 @@
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -146,7 +147,8 @@
             this.loadDefinitionToolStripMenuItem,
             this.saveDefinitionToolStripMenuItem,
             this.toolStripSeparator1,
-            this.exitToolStripMenuItem});
+            this.exitToolStripMenuItem,
+            this.helpToolStripMenuItem});
             this.fileToolStripMenuItem.ForeColor = System.Drawing.Color.DarkSlateGray;
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
@@ -157,7 +159,7 @@
             // 
             this.newDefinitionToolStripMenuItem.ForeColor = System.Drawing.Color.DarkSlateGray;
             this.newDefinitionToolStripMenuItem.Name = "newDefinitionToolStripMenuItem";
-            this.newDefinitionToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
+            this.newDefinitionToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.newDefinitionToolStripMenuItem.Text = "New Definition";
             this.newDefinitionToolStripMenuItem.Click += new System.EventHandler(this.newDefinitionToolStripMenuItem_Click);
             // 
@@ -165,7 +167,7 @@
             // 
             this.loadDefinitionToolStripMenuItem.ForeColor = System.Drawing.Color.DarkSlateGray;
             this.loadDefinitionToolStripMenuItem.Name = "loadDefinitionToolStripMenuItem";
-            this.loadDefinitionToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
+            this.loadDefinitionToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.loadDefinitionToolStripMenuItem.Text = "Load Definition";
             this.loadDefinitionToolStripMenuItem.Click += new System.EventHandler(this.loadDefinitionToolStripMenuItem_Click);
             // 
@@ -173,20 +175,20 @@
             // 
             this.saveDefinitionToolStripMenuItem.ForeColor = System.Drawing.Color.DarkSlateGray;
             this.saveDefinitionToolStripMenuItem.Name = "saveDefinitionToolStripMenuItem";
-            this.saveDefinitionToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
+            this.saveDefinitionToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.saveDefinitionToolStripMenuItem.Text = "Save Definition";
             this.saveDefinitionToolStripMenuItem.Click += new System.EventHandler(this.saveDefinitionToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(152, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.ForeColor = System.Drawing.Color.DarkSlateGray;
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             // 
             // openFileDialog1
@@ -216,6 +218,13 @@
             this.pictureBox1.Size = new System.Drawing.Size(921, 93);
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
+            // 
+            // helpToolStripMenuItem
+            // 
+            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.helpToolStripMenuItem.Text = "Help";
+            this.helpToolStripMenuItem.Click += new System.EventHandler(this.helpToolStripMenuItem_Click);
             // 
             // frmWizardMaster
             // 
@@ -271,5 +280,6 @@
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.ToolStripMenuItem newDefinitionToolStripMenuItem;
         private System.Windows.Forms.PictureBox pictureBox2;
+        private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
     }
 }

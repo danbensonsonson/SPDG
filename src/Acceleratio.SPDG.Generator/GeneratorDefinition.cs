@@ -57,12 +57,22 @@ namespace Acceleratio.SPDG.Generator
         public string Domain { get; set; }
         public string SiteCollOwnerLogin { get; set; }
         public string SiteCollOwnerEmail { get; set; }
-        public string SiteTemplate { get; set; }
-        
+                
         public int CreateNewSiteCollections { get; set; }
-        public int CreateMySites { get; set; }
         public bool UseExistingSiteCollection { get; set; }
+        [XmlArrayItem("SiteCollection")]
+        public List<string> SiteCollections
+        {
+            get
+            {
+                if (_siteCollections == null)
+                    _siteCollections = new List<string>();
+                return _siteCollections;
+            }
+        }
+        public int CreateMySites { get; set; }
         public bool UseOnlyExistingSites { get; set; }
+        public string SiteTemplate { get; set; }
         public int NumberOfSitesToCreate { get; set; }
         public int MaxNumberOfLevelsForSites { get; set; }
         public int MaxNumberOfListsAndLibrariesPerSite { get; set; }
@@ -75,17 +85,6 @@ namespace Acceleratio.SPDG.Generator
         public int MaxNumberOfFoldersToGenerate { get; set; }
         public int MaxNumberOfNestedFolderLevelPerLibrary { get; set; }
         public bool CreateViews { get; set; }
-
-        [XmlArrayItem("SiteCollection")]
-        public List<string> SiteCollections
-        {
-            get
-            {
-                if (_siteCollections == null)
-                    _siteCollections = new List<string>();
-                return _siteCollections;
-            }
-        }
 
         public int MaxNumberOfViewsPerList
         {
@@ -280,11 +279,13 @@ namespace Acceleratio.SPDG.Generator
         }
 
         
-
+        private const string configDir = "config\\";
         public static void SerializeDefinition(string path, GeneratorDefinitionBase gdb)
         {
+            if (!Directory.Exists(configDir))
+                Directory.CreateDirectory(configDir);
             XmlSerializer serializer = new XmlSerializer(typeof(SerializeWrapper), new Type[] { typeof(ClientGeneratorDefinition), typeof(ServerGeneratorDefinition) });
-            using (TextWriter writer = new StreamWriter(path))
+            using (TextWriter writer = new StreamWriter(configDir + path))
             {
                 serializer.Serialize(writer, new SerializeWrapper(gdb));
             }

@@ -68,11 +68,15 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                 return;
             }
 
-            if (Owner.WorkingUsers.Count > 0) // This only happens if mysites are created, but saves some time
+            if (Owner.WorkingUsers.Count > 0 && WorkingDefinition.Mode != DataGeneratorMode.Incremental) // This happens if users/groups OR mysites are created, but saves some time
                 _adUsers = Owner.WorkingUsers;
             else
                 _adUsers = GetAvailableUsersInDirectory();
-            _adGroups = GetAvailableGroupsInDirectory();
+
+            if (Owner.WorkingGroups.Count > 0 && WorkingDefinition.Mode != DataGeneratorMode.Incremental)
+                _adGroups = Owner.WorkingGroups;
+            else
+                _adGroups = GetAvailableGroupsInDirectory();
 
             _totalSteps =
                 //user ensure

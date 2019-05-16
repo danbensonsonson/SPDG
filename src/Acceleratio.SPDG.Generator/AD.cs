@@ -75,10 +75,36 @@ namespace Acceleratio.SPDG.Generator
             return domainList;
         }
 
-        public static List<string> GetUsersFromAD(string name)
+        public static List<string> GetAllUsersFromAD(string name)
         {
             List<string> ous = new List<string>();
             using (DirectoryEntry root = new DirectoryEntry("GC://" + name))
+            {
+                DirectorySearcher searcher = new DirectorySearcher(root);
+                searcher.Filter = "(objectClass=user)";
+                searcher.SearchScope = SearchScope.Subtree;
+                searcher.SizeLimit = 0;
+                searcher.PageSize = 500;
+                //searcher.PropertiesToLoad.Add("userPrincipalName");
+
+                var result = searcher.FindAll();
+                foreach (SearchResult entry in result)
+                {
+                    DirectoryEntry de = entry.GetDirectoryEntry();
+                    if (de.Properties["userPrincipalName"].Value != null)
+                        ous.Add(de.Properties["userPrincipalName"].Value.ToString());
+                }
+
+                result.Dispose();
+                searcher.Dispose();
+            }
+            return ous;
+        }
+
+        public static List<string> GetUsersFromAD(string name)
+        {
+            List<string> ous = new List<string>();
+            using (DirectoryEntry root = new DirectoryEntry("LDAP://" + name))
             {
                 DirectorySearcher searcher = new DirectorySearcher(root);
                 searcher.Filter = "(objectClass=user)";
@@ -144,10 +170,50 @@ namespace Acceleratio.SPDG.Generator
             return retVal;
         }
 
-        public static List<string> GetGroupsFromAD(string name)
+        /// <summary>
+        /// Gets all groups from all domains from the Global Catalog for the given domain
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static List<string> GetAllGroupsFromAD(string name)
         {
             List<string> ous = new List<string>();
             using (DirectoryEntry root = new DirectoryEntry("GC://" + name))
+            {
+                DirectorySearcher searcher = new DirectorySearcher(root);
+                searcher.Filter = "(objectClass=group)";
+                searcher.SizeLimit = 0;
+                searcher.PageSize = 500;
+                //searcher.SearchScope = SearchScope.Subtree;
+
+                var result = searcher.FindAll();
+                foreach (SearchResult entry in result)
+                {
+                    DirectoryEntry de = entry.GetDirectoryEntry();
+                    if (de.Properties["objectsid"].Value != null)
+                    {
+                        var sid = new System.Security.Principal.SecurityIdentifier((byte[])de.Properties["objectsid"].Value, 0);
+                        if (sid.Value.Length > 13) // hack because I was getting some short SIDs that couldn't be found. Ex.  S-1-5-32-561
+                            ous.Add(sid.Value);
+                    }
+
+                }
+
+                result.Dispose();
+                searcher.Dispose();
+            }
+            return ous;
+        }
+
+        /// <summary>
+        /// Gets the groups specifically/only from the given domain
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static List<string> GetGroupsFromAD(string name)
+        {
+            List<string> ous = new List<string>();
+            using (DirectoryEntry root = new DirectoryEntry("LDAP://" + name))
             {
                 DirectorySearcher searcher = new DirectorySearcher(root);
                 searcher.Filter = "(objectClass=group)";

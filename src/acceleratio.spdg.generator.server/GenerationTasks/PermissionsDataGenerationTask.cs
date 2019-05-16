@@ -19,9 +19,9 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
             if (_allUsers == null)
             {
                 if (Owner.WorkingDomains.Count > 0)
-                    _allUsers = AD.GetUsersFromAD(Owner.WorkingDomains[0]);
+                    _allUsers = AD.GetAllUsersFromAD(Owner.WorkingDomains[0]);
                 else
-                    _allUsers = AD.GetUsersFromAD(IPGlobalProperties.GetIPGlobalProperties().DomainName);
+                    _allUsers = AD.GetAllUsersFromAD(IPGlobalProperties.GetIPGlobalProperties().DomainName);
             }
             return _allUsers;
         }
@@ -31,9 +31,9 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
             if (_allGroups == null)
             {
                 if (Owner.WorkingDomains.Count > 0)
-                    _allGroups = AD.GetGroupsFromAD(Owner.WorkingDomains[0]);
+                    _allGroups = AD.GetAllGroupsFromAD(Owner.WorkingDomains[0]);
                 else
-                    _allGroups = AD.GetGroupsFromAD(IPGlobalProperties.GetIPGlobalProperties().DomainName);
+                    _allGroups = AD.GetAllGroupsFromAD(IPGlobalProperties.GetIPGlobalProperties().DomainName);
             }
             return _allGroups;
         }

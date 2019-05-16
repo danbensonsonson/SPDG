@@ -51,7 +51,7 @@ namespace Acceleratio.SPDG.UI
 
         void btnOpenLog_Click(object sender, EventArgs e)
         {
-            Process.Start("notepad.exe", DataGenerator.SessionID + ".log");
+            Process.Start("notepad.exe", "Log\\" + DataGenerator.SessionID + ".log");
         }
 
         private void startDataGeneration()

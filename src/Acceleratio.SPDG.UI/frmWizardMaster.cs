@@ -124,5 +124,10 @@ namespace Acceleratio.SPDG.UI
                 Application.Exit();
             }
         }
+
+        private void helpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("notepad.exe", "help.txt");
+        }
     }
 }

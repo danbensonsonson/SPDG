@@ -38,7 +38,7 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
         
         public override void Execute()
         {
-            if (WorkingDefinition.CreateNewWebApplications > 0)
+            if (WorkingDefinition.CreateNewWebApplications > 0 && string.IsNullOrEmpty(WorkingDefinition.UseExistingWebApplication))
             {
                 createNewWebApplications();
             }
@@ -78,14 +78,10 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
 
                 //initialize user profile config manager object
                 UserProfileManager upm = new UserProfileManager(serviceContext);
-                // loop through users based on number of CreateMySites
-                List<string> users = Owner.WorkingUsers;
 
-                if (users.Count < WorkingDefinition.CreateMySites)
-                {   
-                    users = AD.GetUsersFromAD(IPGlobalProperties.GetIPGlobalProperties().DomainName); // Just grab a big chunk of users to work from. This call can take time. Use sparingly
-                    // Working users is no longer necessary. Save the list for farther down the line to avoid the above call
-                    Owner.WorkingUsers.AddRange(users); // TODO, this list can be used in the permissions step to save 5 minutes
+                if (Owner.WorkingUsers.Count < WorkingDefinition.CreateMySites)
+                {
+                    Owner.WorkingUsers.AddRange(AD.GetAllUsersFromAD(IPGlobalProperties.GetIPGlobalProperties().DomainName)); // Just grab a big chunk of users to work from. This call can take time. Use sparingly
                 }
 
                 bool createdMySite = false;
@@ -96,7 +92,7 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
                 {
                     numAttempts++;
                     // Get an account name
-                    string user = users[SampleData.GetRandomNumber(0, users.Count)];
+                    string user = Owner.WorkingUsers[SampleData.GetRandomNumber(0, Owner.WorkingUsers.Count)];
                     createdMySite = CreateMySite(upm, user);                    
                     if (createdMySite)
                     {
@@ -212,7 +208,7 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
         private void createNewWebApplications()
         {
             try
-            {
+            {   
                 int currentPort = 80;
                 var webAppNames = SampleData.GetRandomNonRepeatingValues(SampleData.WebApplications, WorkingDefinition.CreateNewWebApplications);
                 for (int a = 0; a < WorkingDefinition.CreateNewWebApplications; a++)

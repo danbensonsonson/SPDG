@@ -43,7 +43,12 @@
             this.txtTenantName = new System.Windows.Forms.TextBox();
             this.lblTenantName = new System.Windows.Forms.Label();
             this.texboxToolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.radioNew = new System.Windows.Forms.RadioButton();
+            this.radioIncremental = new System.Windows.Forms.RadioButton();
             this.panel1.SuspendLayout();
+            this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnBack
@@ -74,7 +79,7 @@
             this.radioConnectSPOnline.AutoSize = true;
             this.radioConnectSPOnline.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.radioConnectSPOnline.ForeColor = System.Drawing.Color.DarkSlateGray;
-            this.radioConnectSPOnline.Location = new System.Drawing.Point(268, 166);
+            this.radioConnectSPOnline.Location = new System.Drawing.Point(268, 242);
             this.radioConnectSPOnline.Name = "radioConnectSPOnline";
             this.radioConnectSPOnline.Size = new System.Drawing.Size(182, 19);
             this.radioConnectSPOnline.TabIndex = 12;
@@ -85,14 +90,12 @@
             // radioConnectSPOnPremise
             // 
             this.radioConnectSPOnPremise.AutoSize = true;
-            this.radioConnectSPOnPremise.Checked = true;
             this.radioConnectSPOnPremise.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.radioConnectSPOnPremise.ForeColor = System.Drawing.Color.DarkSlateGray;
-            this.radioConnectSPOnPremise.Location = new System.Drawing.Point(268, 189);
+            this.radioConnectSPOnPremise.Location = new System.Drawing.Point(268, 265);
             this.radioConnectSPOnPremise.Name = "radioConnectSPOnPremise";
             this.radioConnectSPOnPremise.Size = new System.Drawing.Size(210, 19);
             this.radioConnectSPOnPremise.TabIndex = 13;
-            this.radioConnectSPOnPremise.TabStop = true;
             this.radioConnectSPOnPremise.Text = "Connect to SharePoint On-Premise";
             this.radioConnectSPOnPremise.UseVisualStyleBackColor = true;
             this.radioConnectSPOnPremise.CheckedChanged += new System.EventHandler(this.uiEventHandler);
@@ -101,7 +104,7 @@
             // 
             this.panel1.Controls.Add(this.radioCustomCredentials);
             this.panel1.Controls.Add(this.radioCurrentCredentials);
-            this.panel1.Location = new System.Drawing.Point(268, 240);
+            this.panel1.Location = new System.Drawing.Point(268, 335);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(368, 49);
             this.panel1.TabIndex = 14;
@@ -139,7 +142,7 @@
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.label3.ForeColor = System.Drawing.Color.DarkSlateGray;
-            this.label3.Location = new System.Drawing.Point(290, 301);
+            this.label3.Location = new System.Drawing.Point(290, 396);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(105, 15);
             this.label3.TabIndex = 15;
@@ -148,7 +151,7 @@
             // txtUserName
             // 
             this.txtUserName.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.txtUserName.Location = new System.Drawing.Point(474, 329);
+            this.txtUserName.Location = new System.Drawing.Point(474, 424);
             this.txtUserName.Name = "txtUserName";
             this.txtUserName.Size = new System.Drawing.Size(383, 23);
             this.txtUserName.TabIndex = 17;
@@ -160,7 +163,7 @@
             this.lblUserName.AutoSize = true;
             this.lblUserName.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.lblUserName.ForeColor = System.Drawing.Color.DarkSlateGray;
-            this.lblUserName.Location = new System.Drawing.Point(290, 332);
+            this.lblUserName.Location = new System.Drawing.Point(290, 427);
             this.lblUserName.Name = "lblUserName";
             this.lblUserName.Size = new System.Drawing.Size(63, 15);
             this.lblUserName.TabIndex = 16;
@@ -169,7 +172,7 @@
             // txtPassword
             // 
             this.txtPassword.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.txtPassword.Location = new System.Drawing.Point(474, 355);
+            this.txtPassword.Location = new System.Drawing.Point(474, 450);
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.PasswordChar = '*';
             this.txtPassword.Size = new System.Drawing.Size(383, 23);
@@ -180,7 +183,7 @@
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.label6.ForeColor = System.Drawing.Color.DarkSlateGray;
-            this.label6.Location = new System.Drawing.Point(290, 358);
+            this.label6.Location = new System.Drawing.Point(290, 453);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(60, 15);
             this.label6.TabIndex = 18;
@@ -188,7 +191,7 @@
             // 
             // txtTenantName
             // 
-            this.txtTenantName.Location = new System.Drawing.Point(474, 381);
+            this.txtTenantName.Location = new System.Drawing.Point(474, 476);
             this.txtTenantName.Name = "txtTenantName";
             this.txtTenantName.Size = new System.Drawing.Size(383, 20);
             this.txtTenantName.TabIndex = 21;
@@ -200,7 +203,7 @@
             this.lblTenantName.AutoSize = true;
             this.lblTenantName.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.lblTenantName.ForeColor = System.Drawing.Color.DarkSlateGray;
-            this.lblTenantName.Location = new System.Drawing.Point(290, 383);
+            this.lblTenantName.Location = new System.Drawing.Point(290, 478);
             this.lblTenantName.Name = "lblTenantName";
             this.lblTenantName.Size = new System.Drawing.Size(81, 15);
             this.lblTenantName.TabIndex = 20;
@@ -211,11 +214,59 @@
             this.texboxToolTip.ShowAlways = true;
             this.texboxToolTip.ToolTipTitle = "Help";
             // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.label1);
+            this.panel2.Controls.Add(this.radioNew);
+            this.panel2.Controls.Add(this.radioIncremental);
+            this.panel2.Location = new System.Drawing.Point(268, 172);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(368, 49);
+            this.panel2.TabIndex = 15;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.ForeColor = System.Drawing.Color.DarkSlateGray;
+            this.label1.Location = new System.Drawing.Point(3, 18);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(42, 15);
+            this.label1.TabIndex = 27;
+            this.label1.Text = "Mode:";
+            this.texboxToolTip.SetToolTip(this.label1, "New for creation of new web apps or sites collections. Incremental to add to exis" +
+        "ting");
+            // 
+            // radioNew
+            // 
+            this.radioNew.AutoSize = true;
+            this.radioNew.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.radioNew.ForeColor = System.Drawing.Color.DarkSlateGray;
+            this.radioNew.Location = new System.Drawing.Point(51, 16);
+            this.radioNew.Name = "radioNew";
+            this.radioNew.Size = new System.Drawing.Size(49, 19);
+            this.radioNew.TabIndex = 26;
+            this.radioNew.Text = "New";
+            this.radioNew.UseVisualStyleBackColor = true;
+            // 
+            // radioIncremental
+            // 
+            this.radioIncremental.AutoSize = true;
+            this.radioIncremental.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.radioIncremental.ForeColor = System.Drawing.Color.DarkSlateGray;
+            this.radioIncremental.Location = new System.Drawing.Point(106, 16);
+            this.radioIncremental.Name = "radioIncremental";
+            this.radioIncremental.Size = new System.Drawing.Size(88, 19);
+            this.radioIncremental.TabIndex = 25;
+            this.radioIncremental.Text = "Incremental";
+            this.radioIncremental.UseVisualStyleBackColor = true;
+            // 
             // frm01Connect
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(921, 644);
+            this.Controls.Add(this.panel2);
             this.Controls.Add(this.txtTenantName);
             this.Controls.Add(this.lblTenantName);
             this.Controls.Add(this.txtPassword);
@@ -247,8 +298,11 @@
             this.Controls.SetChildIndex(this.txtPassword, 0);
             this.Controls.SetChildIndex(this.lblTenantName, 0);
             this.Controls.SetChildIndex(this.txtTenantName, 0);
+            this.Controls.SetChildIndex(this.panel2, 0);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -270,5 +324,9 @@
         private System.Windows.Forms.TextBox txtTenantName;
         private System.Windows.Forms.Label lblTenantName;
         private System.Windows.Forms.ToolTip texboxToolTip;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.RadioButton radioNew;
+        private System.Windows.Forms.RadioButton radioIncremental;
     }
 }

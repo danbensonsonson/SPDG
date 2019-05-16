@@ -572,6 +572,8 @@ namespace Acceleratio.SPDG.UI
                 }
             }
 
+            radioNew.Checked = WorkingDefinition.Mode == DataGeneratorMode.New ? true : false;
+
             setUIState();
 
         }   
@@ -602,6 +604,9 @@ namespace Acceleratio.SPDG.UI
                 {
                     this.Cursor = Cursors.Default;
                 }
+
+                WorkingDefinition.Mode = radioIncremental.Checked ? DataGeneratorMode.Incremental : DataGeneratorMode.New;
+
                 return true;
             }
             catch(Exception ex)
@@ -636,6 +641,7 @@ namespace Acceleratio.SPDG.UI
                     Common.InitClientDefinition();
                 }
             }
+            //SetMode();
             setUIState();
         }
 
@@ -651,8 +657,10 @@ namespace Acceleratio.SPDG.UI
             if (isSPOnline)
             {
                 radioCustomCredentials.Checked = true;
-                
+
             }
+
+
             radioCurrentCredentials.Enabled = !isSPOnline;
             var customCredentials = radioCustomCredentials.Checked;
 
@@ -681,6 +689,24 @@ namespace Acceleratio.SPDG.UI
         private void txtTenantName_Leave(object sender, EventArgs e)
         {
             texboxToolTip.Hide(txtTenantName);
+        }
+
+        private void radioNew_CheckedChanged(object sender, EventArgs e)
+        {
+            SetMode();
+        }
+
+        private void radioIncremental_CheckedChanged(object sender, EventArgs e)
+        {
+            SetMode();
+        }
+
+        private void SetMode()
+        {
+            if (radioNew.Checked == false)
+                radioIncremental.Checked = true;
+            else
+                radioNew.Checked = true;
         }
     }
 }

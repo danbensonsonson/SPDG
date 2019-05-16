@@ -8,7 +8,7 @@ namespace Acceleratio.SPDG.UI
     {
         
 
-        
+        private bool _webAppsLoaded = false; 
 
         public frm03WebApplications()
         {
@@ -45,6 +45,8 @@ namespace Acceleratio.SPDG.UI
 
         private void loadWebApplications()
         {
+            if (_webAppsLoaded == true)
+                return;
             try
             {
                 var helper = SPDGDataHelper.Create(WorkingDefinition);                
@@ -61,7 +63,7 @@ namespace Acceleratio.SPDG.UI
             {
                 Errors.Log(ex);
             }
-
+            _webAppsLoaded = true;
         }
 
 
@@ -71,6 +73,19 @@ namespace Acceleratio.SPDG.UI
             if ( !string.IsNullOrEmpty( WorkingDefinition.UseExistingWebApplication) )
             {
                 cboUseExistingWebApp.Text = WorkingDefinition.UseExistingWebApplicationName;
+                radioUseExistingWebApp.Checked = true;
+                trackCreateNewWebApplication.Enabled = false;
+
+                cboUseExistingWebApp.Enabled = true;
+
+                label1.Enabled = false;
+                label2.Enabled = false;
+                label3.Enabled = false;
+                label4.Enabled = false;
+                txtOwnerUserName.Enabled = false;
+                txtOwnerPassword.Enabled = false;
+                txtOwnerEmail.Enabled = false;
+                txtSQLServer.Enabled = false;
             }
 
             if( WorkingDefinition.CreateNewWebApplications > 0 )
@@ -93,25 +108,7 @@ namespace Acceleratio.SPDG.UI
                 txtOwnerPassword.Text = WorkingDefinition.WebAppOwnerPassword;
                 txtOwnerEmail.Text =  WorkingDefinition.WebAppOwnerEmail;
                 txtSQLServer.Text = WorkingDefinition.DatabaseServer;
-            }
-            else
-            {
-                radioUseExistingWebApp.Checked = true;
-                trackCreateNewWebApplication.Enabled = false;
-                
-                cboUseExistingWebApp.Enabled = true;
-
-                label1.Enabled = false;
-                label2.Enabled = false;
-                label3.Enabled = false;
-                label4.Enabled = false;
-                txtOwnerUserName.Enabled = false;
-                txtOwnerPassword.Enabled = false;
-                txtOwnerEmail.Enabled = false;
-                txtSQLServer.Enabled = false;
-
-            }
-            
+            }            
         }
 
         private void toggleRadio()
@@ -145,6 +142,7 @@ namespace Acceleratio.SPDG.UI
                 txtOwnerPassword.Enabled = false;
                 txtOwnerEmail.Enabled = false;
                 txtSQLServer.Enabled = false;
+                loadWebApplications();
             }
 
 
@@ -153,10 +151,9 @@ namespace Acceleratio.SPDG.UI
 
         public override bool saveData()
         {
-            if (radioCreateNewWebApp.Checked && trackCreateNewWebApplication.Value == 0)
+            if (radioCreateNewWebApp.Checked)
             {
-                MessageBox.Show("Select at least one web application to create, if 'Create new web application' is selected.");
-                return false;
+                trackCreateNewWebApplication.Value = 1; // Hard coded to 1 for now
             }
 
             if (radioCreateNewWebApp.Checked && (txtOwnerUserName.Text == string.Empty || txtOwnerPassword.Text == string.Empty || txtOwnerEmail.Text == string.Empty || txtSQLServer.Text == string.Empty))
@@ -179,7 +176,7 @@ namespace Acceleratio.SPDG.UI
                 WorkingDefinition.CreateNewWebApplications = 0;
                 WorkingDefinition.UseExistingWebApplication = ((ComboboxItem)cboUseExistingWebApp.SelectedItem).Value.ToString();
                 WorkingDefinition.UseExistingWebApplicationName = ((ComboboxItem)cboUseExistingWebApp.SelectedItem).Text.ToString();
-                WorkingDefinition.Mode = DataGeneratorMode.Incremental;
+                //WorkingDefinition.Mode = DataGeneratorMode.Incremental;
             }
             else
             {
@@ -200,7 +197,7 @@ namespace Acceleratio.SPDG.UI
         {
             toggleRadio();
         }
-
+        // use existing
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
         {
             toggleRadio();
@@ -216,8 +213,15 @@ namespace Acceleratio.SPDG.UI
             this.Show();
             this.Enabled = false;
             this.Cursor = Cursors.WaitCursor;
-            Application.DoEvents();            
-            loadWebApplications();            
+            Application.DoEvents();
+            if (WorkingDefinition.Mode == DataGeneratorMode.Incremental)
+            {
+                radioUseExistingWebApp.Checked = true;
+                radioCreateNewWebApp.Enabled = false;
+            }
+            else
+                radioCreateNewWebApp.Checked = true;
+
             loadData();
             this.Enabled = true;
             this.Cursor = Cursors.Default;

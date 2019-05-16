@@ -68,7 +68,7 @@ namespace Acceleratio.SPDG.UI
                 label3.Enabled = false;
                 txtOwnerEmail.Enabled = false;
                 txtOwnerUserName.Enabled = false;                
-                WorkingDefinition.Mode = DataGeneratorMode.Incremental;
+                //WorkingDefinition.Mode = DataGeneratorMode.Incremental;
             }
         }
 
@@ -114,7 +114,7 @@ namespace Acceleratio.SPDG.UI
         public override void loadData()
         {
             ServerGeneratorDefinition serverDefinition = WorkingDefinition as ServerGeneratorDefinition;
-
+            
             if (serverDefinition != null)
             {
                 if (serverDefinition.CreateNewWebApplications > 0)
@@ -203,7 +203,7 @@ namespace Acceleratio.SPDG.UI
                     foreach (string sc in lbSiteCollection.SelectedItems)
                         Common.WorkingDefinition.SiteCollections.Add(sc);
                 }
-                WorkingDefinition.Mode = DataGeneratorMode.Incremental;
+                //WorkingDefinition.Mode = DataGeneratorMode.Incremental;
             }
 
             if (chkCreateMySites.Checked)
@@ -223,6 +223,11 @@ namespace Acceleratio.SPDG.UI
             this.Enabled = false;
             this.Cursor = Cursors.WaitCursor;
             Application.DoEvents();
+            if (WorkingDefinition.Mode == DataGeneratorMode.Incremental)
+            {
+                radioCreateNewSiteColl.Enabled = false;
+                radioUseExisting.Checked = true;
+            }
             loadData();           
             // Moved load site collections from here to on demand radio                      
          
