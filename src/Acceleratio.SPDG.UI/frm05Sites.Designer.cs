@@ -38,14 +38,18 @@
             this.cboSiteTemplates = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.panelSiteOptions = new System.Windows.Forms.Panel();
+            this.label4 = new System.Windows.Forms.Label();
             this.chkUseOnlyExistingSites = new System.Windows.Forms.CheckBox();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.lblTotalNumSites = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
+            this.trackNumSitesToDelete = new System.Windows.Forms.TrackBar();
+            this.lblNumSitesDelete = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.trackNumSitesToCreate)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackMaxNumberLevels)).BeginInit();
             this.panelSiteOptions.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackNumSitesToDelete)).BeginInit();
             this.SuspendLayout();
             // 
             // btnBack
@@ -98,7 +102,7 @@
             // 
             this.trackMaxNumberLevels.Enabled = false;
             this.trackMaxNumberLevels.LargeChange = 1;
-            this.trackMaxNumberLevels.Location = new System.Drawing.Point(11, 131);
+            this.trackMaxNumberLevels.Location = new System.Drawing.Point(11, 178);
             this.trackMaxNumberLevels.Minimum = 1;
             this.trackMaxNumberLevels.Name = "trackMaxNumberLevels";
             this.trackMaxNumberLevels.Size = new System.Drawing.Size(543, 45);
@@ -111,7 +115,7 @@
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.label3.ForeColor = System.Drawing.Color.DarkSlateGray;
-            this.label3.Location = new System.Drawing.Point(16, 113);
+            this.label3.Location = new System.Drawing.Point(16, 160);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(170, 15);
             this.label3.TabIndex = 13;
@@ -133,7 +137,7 @@
             this.lblNumberLevels.AutoSize = true;
             this.lblNumberLevels.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.lblNumberLevels.ForeColor = System.Drawing.Color.DarkSlateGray;
-            this.lblNumberLevels.Location = new System.Drawing.Point(570, 134);
+            this.lblNumberLevels.Location = new System.Drawing.Point(570, 181);
             this.lblNumberLevels.Name = "lblNumberLevels";
             this.lblNumberLevels.Size = new System.Drawing.Size(13, 15);
             this.lblNumberLevels.TabIndex = 16;
@@ -142,7 +146,7 @@
             // cboSiteTemplates
             // 
             this.cboSiteTemplates.FormattingEnabled = true;
-            this.cboSiteTemplates.Location = new System.Drawing.Point(19, 228);
+            this.cboSiteTemplates.Location = new System.Drawing.Point(19, 275);
             this.cboSiteTemplates.Name = "cboSiteTemplates";
             this.cboSiteTemplates.Size = new System.Drawing.Size(526, 21);
             this.cboSiteTemplates.TabIndex = 17;
@@ -152,7 +156,7 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.label1.ForeColor = System.Drawing.Color.DarkSlateGray;
-            this.label1.Location = new System.Drawing.Point(16, 204);
+            this.label1.Location = new System.Drawing.Point(16, 251);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(100, 15);
             this.label1.TabIndex = 18;
@@ -160,6 +164,9 @@
             // 
             // panelSiteOptions
             // 
+            this.panelSiteOptions.Controls.Add(this.lblNumSitesDelete);
+            this.panelSiteOptions.Controls.Add(this.trackNumSitesToDelete);
+            this.panelSiteOptions.Controls.Add(this.label4);
             this.panelSiteOptions.Controls.Add(this.label2);
             this.panelSiteOptions.Controls.Add(this.label1);
             this.panelSiteOptions.Controls.Add(this.trackNumSitesToCreate);
@@ -172,6 +179,17 @@
             this.panelSiteOptions.Name = "panelSiteOptions";
             this.panelSiteOptions.Size = new System.Drawing.Size(620, 321);
             this.panelSiteOptions.TabIndex = 19;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.label4.ForeColor = System.Drawing.Color.DarkSlateGray;
+            this.label4.Location = new System.Drawing.Point(16, 82);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(241, 15);
+            this.label4.TabIndex = 19;
+            this.label4.Text = "Number of Sites to Delete Per Site Collection";
             // 
             // chkUseOnlyExistingSites
             // 
@@ -215,6 +233,27 @@
             this.label5.TabIndex = 22;
             this.label5.Text = "Total Sites to be Created";
             // 
+            // trackNumSitesToDelete
+            // 
+            this.trackNumSitesToDelete.LargeChange = 50;
+            this.trackNumSitesToDelete.Location = new System.Drawing.Point(13, 100);
+            this.trackNumSitesToDelete.Maximum = 500;
+            this.trackNumSitesToDelete.Name = "trackNumSitesToDelete";
+            this.trackNumSitesToDelete.Size = new System.Drawing.Size(543, 45);
+            this.trackNumSitesToDelete.TabIndex = 20;
+            this.trackNumSitesToDelete.ValueChanged += new System.EventHandler(this.trackNumSitesToDelete_ValueChanged);
+            // 
+            // lblNumSitesDelete
+            // 
+            this.lblNumSitesDelete.AutoSize = true;
+            this.lblNumSitesDelete.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.lblNumSitesDelete.ForeColor = System.Drawing.Color.DarkSlateGray;
+            this.lblNumSitesDelete.Location = new System.Drawing.Point(573, 106);
+            this.lblNumSitesDelete.Name = "lblNumSitesDelete";
+            this.lblNumSitesDelete.Size = new System.Drawing.Size(13, 15);
+            this.lblNumSitesDelete.TabIndex = 21;
+            this.lblNumSitesDelete.Text = "0";
+            // 
             // frm05Sites
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -242,6 +281,7 @@
             this.panelSiteOptions.PerformLayout();
             this.flowLayoutPanel1.ResumeLayout(false);
             this.flowLayoutPanel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackNumSitesToDelete)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -263,5 +303,8 @@
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.Label lblTotalNumSites;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label lblNumSitesDelete;
+        private System.Windows.Forms.TrackBar trackNumSitesToDelete;
     }
 }

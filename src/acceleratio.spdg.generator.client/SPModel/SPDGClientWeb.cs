@@ -182,6 +182,12 @@ namespace Acceleratio.SPDG.Generator.Client.SPModel
             //no dispose            
         }
 
+        public override void Delete()
+        {
+            _web.DeleteObject(); // TODO not sure if this works
+            _context.ExecuteQuery();
+        }
+
         public override SPDGWeb AddWeb(string url, string siteName, string description, uint lcid, string templateName, bool useUniquePermissions, bool convertIfThere)
         {
             WebCreationInformation creation = new WebCreationInformation();

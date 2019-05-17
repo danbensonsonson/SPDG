@@ -95,6 +95,7 @@ namespace Acceleratio.SPDG.UI
         public override void loadData()
         {
             trackNumSitesToCreate.Value = Common.WorkingDefinition.NumberOfSitesToCreate;
+            trackNumSitesToDelete.Value = Common.WorkingDefinition.NumberOfSitesToDelete;
             trackMaxNumberLevels.Value = Common.WorkingDefinition.MaxNumberOfLevelsForSites;
             chkUseOnlyExistingSites.Checked = Common.WorkingDefinition.UseOnlyExistingSites;
 
@@ -107,6 +108,7 @@ namespace Acceleratio.SPDG.UI
         public override bool saveData()
         {
             Common.WorkingDefinition.NumberOfSitesToCreate = trackNumSitesToCreate.Value;
+            Common.WorkingDefinition.NumberOfSitesToDelete = trackNumSitesToDelete.Value;
             Common.WorkingDefinition.MaxNumberOfLevelsForSites = trackMaxNumberLevels.Value;
             Common.WorkingDefinition.UseOnlyExistingSites = UseOnlyExistingSites;
 
@@ -134,6 +136,11 @@ namespace Acceleratio.SPDG.UI
         private void chkUseOnlyExistingSites_CheckedChanged(object sender, EventArgs e)
         {
             determineOptionsStatus();
+        }
+
+        private void trackNumSitesToDelete_ValueChanged(object sender, EventArgs e)
+        {
+            lblNumSitesDelete.Text = trackNumSitesToDelete.Value.ToString();
         }
     }
 }

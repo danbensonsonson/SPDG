@@ -9,6 +9,8 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
     public class SitesDataGenerationTask : DataGenerationTaskBase
     {
         string _templateName = "STS#0";
+        private int _totalSitesAdded = 0;
+        private int _totalSitesDeleted = 0;
 
         public override string Title
         {
@@ -57,6 +59,13 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                 {   // each site collection
 
                     InitWebTemplate(siteColl.RootWeb);
+                    // Delete existing sites
+                    if (WorkingDefinition.NumberOfSitesToDelete > 0)
+                    {
+                        Owner.IncrementCurrentTaskProgress("Start Deleting Sites from: " + siteCollInfo.URL, 0);
+                        int numSitesToDelete = siteCollInfo.Sites.Count > WorkingDefinition.NumberOfSitesToDelete ? WorkingDefinition.NumberOfSitesToDelete : siteCollInfo.Sites.Count;
+                        DeleteSubsites(siteColl.RootWeb, siteCollInfo, numSitesToDelete);                        
+                    }
 
                     this.Sites = new List<SiteInfo>();
                     // New or incremental
@@ -71,6 +80,29 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                 }
             }
             Log.Write("Total Sites Created: " + SiteCounter);
+        }
+
+        internal void DeleteSubsites(SPDGWeb parentWeb, SiteCollInfo siteCollInfo, int numSitesToDelete)
+        {
+            if (numSitesToDelete <= 0)
+                return;
+            int sitesDeleted = 0;
+            foreach (SPDGWeb web in parentWeb.Webs)
+            {
+                if (sitesDeleted >= numSitesToDelete)
+                    break;
+                // delete the actual Web
+                string url = web.Url;
+                web.Delete();
+                Owner.IncrementCurrentTaskProgress("Site Deleted: " + url, 0);
+                web.Dispose();
+                // Remove from the List of Sites
+                var remove = siteCollInfo.Sites.FirstOrDefault(x => x.URL == url);
+                siteCollInfo.Sites.Remove(remove);
+                sitesDeleted++;
+                
+            }
+           
         }
 
         internal void CreateSubsites(SPDGWeb parentWeb, int currentLevel, int maxLevels, int maxSitesToCreate, string parentBaseName)

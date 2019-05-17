@@ -30,6 +30,11 @@ namespace Acceleratio.SPDG.Generator.Server.SPModel
             _spWeb.Dispose();
         }
 
+        public override void Delete()
+        {
+            _spWeb.Delete();
+        }
+
         public override SPDGWeb AddWeb(string url, string siteName, string description, uint lcid, string templateName, bool useUniquePermissions, bool convertIfThere)
         {
             var spWeb=_spWeb.Webs.Add(url, siteName, description, lcid, templateName, useUniquePermissions, convertIfThere);

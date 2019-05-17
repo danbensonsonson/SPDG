@@ -10,6 +10,7 @@ namespace Acceleratio.SPDG.Generator.SPModel
         public abstract IEnumerable<SPDGWeb> Webs { get; }
         public abstract string Url { get; }
         public abstract void Dispose();
+        public abstract void Delete();
         public abstract SPDGWeb AddWeb(string url, string siteName, string description, uint lcid, string templateName, bool useUniquePermissions, bool convertIfThere);
         public abstract SPDGWeb ParentWeb { get; }
         public abstract void AddNavigationNode(string title, string url, NavigationNodeLocation location);
