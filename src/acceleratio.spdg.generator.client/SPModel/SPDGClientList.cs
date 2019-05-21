@@ -121,6 +121,12 @@ namespace Acceleratio.SPDG.Generator.Client.SPModel
             throw new NotImplementedException();
         }
 
+        public override void Delete()
+        {
+            _list.DeleteObject(); // TODO not sure if this works
+            _context.ExecuteQuery();
+        }
+
         public override SPDGRoleAssignment GetRoleAssignmentByPrincipal(SPDGPrincipal principal)
         {
             return ClientRoleAssignmentHelper.GetRoleAssignmentByPrincipal(_list, _context, principal);

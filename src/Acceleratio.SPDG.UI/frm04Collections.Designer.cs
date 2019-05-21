@@ -64,6 +64,7 @@
             // radioCreateNewSiteColl
             // 
             this.radioCreateNewSiteColl.AutoSize = true;
+            this.radioCreateNewSiteColl.Checked = true;
             this.radioCreateNewSiteColl.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.radioCreateNewSiteColl.ForeColor = System.Drawing.Color.DarkSlateGray;
             this.radioCreateNewSiteColl.Location = new System.Drawing.Point(265, 155);
@@ -84,7 +85,6 @@
             this.radioUseExisting.Name = "radioUseExisting";
             this.radioUseExisting.Size = new System.Drawing.Size(171, 19);
             this.radioUseExisting.TabIndex = 8;
-            this.radioUseExisting.TabStop = true;
             this.radioUseExisting.Text = "Use Existing Site Collections";
             this.radioUseExisting.UseVisualStyleBackColor = true;
             this.radioUseExisting.CheckedChanged += new System.EventHandler(this.radioUseExisting_CheckedChanged);
@@ -94,7 +94,6 @@
             this.trackNumSiteColls.LargeChange = 1;
             this.trackNumSiteColls.Location = new System.Drawing.Point(256, 180);
             this.trackNumSiteColls.Maximum = 20;
-            this.trackNumSiteColls.Minimum = 1;
             this.trackNumSiteColls.Name = "trackNumSiteColls";
             this.trackNumSiteColls.Size = new System.Drawing.Size(550, 45);
             this.trackNumSiteColls.TabIndex = 11;
@@ -122,7 +121,6 @@
             // 
             // txtOwnerEmail
             // 
-            this.txtOwnerEmail.Enabled = false;
             this.txtOwnerEmail.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.txtOwnerEmail.Location = new System.Drawing.Point(396, 255);
             this.txtOwnerEmail.Name = "txtOwnerEmail";
@@ -132,7 +130,6 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Enabled = false;
             this.label3.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.label3.ForeColor = System.Drawing.Color.DarkSlateGray;
             this.label3.Location = new System.Drawing.Point(261, 258);
@@ -143,7 +140,6 @@
             // 
             // txtOwnerUserName
             // 
-            this.txtOwnerUserName.Enabled = false;
             this.txtOwnerUserName.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.txtOwnerUserName.Location = new System.Drawing.Point(396, 229);
             this.txtOwnerUserName.Name = "txtOwnerUserName";
@@ -153,7 +149,6 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Enabled = false;
             this.label1.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.label1.ForeColor = System.Drawing.Color.DarkSlateGray;
             this.label1.Location = new System.Drawing.Point(261, 232);

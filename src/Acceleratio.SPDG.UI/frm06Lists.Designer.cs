@@ -49,10 +49,14 @@
             this.lblBigLists = new System.Windows.Forms.Label();
             this.lblTotalNumOfLists = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
+            this.trackNumberOfListsToDelete = new System.Windows.Forms.TrackBar();
+            this.label6 = new System.Windows.Forms.Label();
+            this.lblNumListsDelete = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.trackMaxNumberListLibraries)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackMaxFoldersInLib)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackMaxNumberNestedFolders)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBigListsCount)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackNumberOfListsToDelete)).BeginInit();
             this.SuspendLayout();
             // 
             // btnBack
@@ -95,14 +99,14 @@
             this.label3.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.label3.Location = new System.Drawing.Point(265, 155);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(246, 15);
+            this.label3.Size = new System.Drawing.Size(198, 15);
             this.label3.TabIndex = 13;
-            this.label3.Text = "Maximal Number of List and Libraries per Site";
+            this.label3.Text = "Number of List and Libraries per Site";
             // 
             // trackMaxFoldersInLib
             // 
             this.trackMaxFoldersInLib.LargeChange = 1;
-            this.trackMaxFoldersInLib.Location = new System.Drawing.Point(259, 420);
+            this.trackMaxFoldersInLib.Location = new System.Drawing.Point(259, 442);
             this.trackMaxFoldersInLib.Maximum = 20;
             this.trackMaxFoldersInLib.Name = "trackMaxFoldersInLib";
             this.trackMaxFoldersInLib.Size = new System.Drawing.Size(543, 45);
@@ -115,7 +119,7 @@
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.label2.ForeColor = System.Drawing.Color.DarkSlateGray;
-            this.label2.Location = new System.Drawing.Point(265, 402);
+            this.label2.Location = new System.Drawing.Point(265, 424);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(246, 15);
             this.label2.TabIndex = 15;
@@ -124,7 +128,7 @@
             // trackMaxNumberNestedFolders
             // 
             this.trackMaxNumberNestedFolders.LargeChange = 1;
-            this.trackMaxNumberNestedFolders.Location = new System.Drawing.Point(259, 484);
+            this.trackMaxNumberNestedFolders.Location = new System.Drawing.Point(259, 506);
             this.trackMaxNumberNestedFolders.Name = "trackMaxNumberNestedFolders";
             this.trackMaxNumberNestedFolders.Size = new System.Drawing.Size(543, 45);
             this.trackMaxNumberNestedFolders.TabIndex = 18;
@@ -135,7 +139,7 @@
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.label4.ForeColor = System.Drawing.Color.DarkSlateGray;
-            this.label4.Location = new System.Drawing.Point(265, 466);
+            this.label4.Location = new System.Drawing.Point(265, 488);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(305, 15);
             this.label4.TabIndex = 17;
@@ -146,7 +150,7 @@
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.label5.ForeColor = System.Drawing.Color.DarkSlateGray;
-            this.label5.Location = new System.Drawing.Point(265, 284);
+            this.label5.Location = new System.Drawing.Point(265, 306);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(126, 15);
             this.label5.TabIndex = 19;
@@ -157,7 +161,7 @@
             this.chkDocLib.AutoSize = true;
             this.chkDocLib.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.chkDocLib.ForeColor = System.Drawing.Color.DarkSlateGray;
-            this.chkDocLib.Location = new System.Drawing.Point(269, 332);
+            this.chkDocLib.Location = new System.Drawing.Point(269, 354);
             this.chkDocLib.Name = "chkDocLib";
             this.chkDocLib.Size = new System.Drawing.Size(121, 19);
             this.chkDocLib.TabIndex = 20;
@@ -170,7 +174,7 @@
             this.chkTasks.AutoSize = true;
             this.chkTasks.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.chkTasks.ForeColor = System.Drawing.Color.DarkSlateGray;
-            this.chkTasks.Location = new System.Drawing.Point(493, 309);
+            this.chkTasks.Location = new System.Drawing.Point(493, 331);
             this.chkTasks.Name = "chkTasks";
             this.chkTasks.Size = new System.Drawing.Size(54, 19);
             this.chkTasks.TabIndex = 21;
@@ -182,7 +186,7 @@
             this.chkCalendar.AutoSize = true;
             this.chkCalendar.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.chkCalendar.ForeColor = System.Drawing.Color.DarkSlateGray;
-            this.chkCalendar.Location = new System.Drawing.Point(493, 332);
+            this.chkCalendar.Location = new System.Drawing.Point(493, 354);
             this.chkCalendar.Name = "chkCalendar";
             this.chkCalendar.Size = new System.Drawing.Size(73, 19);
             this.chkCalendar.TabIndex = 22;
@@ -196,7 +200,7 @@
             this.chkCreateFolders.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkCreateFolders.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.chkCreateFolders.ForeColor = System.Drawing.Color.DarkSlateGray;
-            this.chkCreateFolders.Location = new System.Drawing.Point(268, 373);
+            this.chkCreateFolders.Location = new System.Drawing.Point(268, 395);
             this.chkCreateFolders.Name = "chkCreateFolders";
             this.chkCreateFolders.Size = new System.Drawing.Size(250, 19);
             this.chkCreateFolders.TabIndex = 23;
@@ -209,7 +213,7 @@
             this.chkList.AutoSize = true;
             this.chkList.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.chkList.ForeColor = System.Drawing.Color.DarkSlateGray;
-            this.chkList.Location = new System.Drawing.Point(269, 309);
+            this.chkList.Location = new System.Drawing.Point(269, 331);
             this.chkList.Name = "chkList";
             this.chkList.Size = new System.Drawing.Size(44, 19);
             this.chkList.TabIndex = 24;
@@ -232,7 +236,7 @@
             this.lblNumOfFolders.AutoSize = true;
             this.lblNumOfFolders.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.lblNumOfFolders.ForeColor = System.Drawing.Color.DarkSlateGray;
-            this.lblNumOfFolders.Location = new System.Drawing.Point(810, 423);
+            this.lblNumOfFolders.Location = new System.Drawing.Point(810, 445);
             this.lblNumOfFolders.Name = "lblNumOfFolders";
             this.lblNumOfFolders.Size = new System.Drawing.Size(13, 15);
             this.lblNumOfFolders.TabIndex = 26;
@@ -243,7 +247,7 @@
             this.lblNumLevels.AutoSize = true;
             this.lblNumLevels.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.lblNumLevels.ForeColor = System.Drawing.Color.DarkSlateGray;
-            this.lblNumLevels.Location = new System.Drawing.Point(810, 488);
+            this.lblNumLevels.Location = new System.Drawing.Point(810, 510);
             this.lblNumLevels.Name = "lblNumLevels";
             this.lblNumLevels.Size = new System.Drawing.Size(13, 15);
             this.lblNumLevels.TabIndex = 27;
@@ -252,7 +256,7 @@
             // trackBigListsCount
             // 
             this.trackBigListsCount.LargeChange = 1;
-            this.trackBigListsCount.Location = new System.Drawing.Point(261, 232);
+            this.trackBigListsCount.Location = new System.Drawing.Point(261, 256);
             this.trackBigListsCount.Maximum = 5;
             this.trackBigListsCount.Name = "trackBigListsCount";
             this.trackBigListsCount.Size = new System.Drawing.Size(543, 45);
@@ -263,7 +267,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.label1.Location = new System.Drawing.Point(266, 214);
+            this.label1.Location = new System.Drawing.Point(266, 238);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(86, 15);
             this.label1.TabIndex = 28;
@@ -274,7 +278,7 @@
             this.lblBigLists.AutoSize = true;
             this.lblBigLists.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.lblBigLists.ForeColor = System.Drawing.Color.DarkSlateGray;
-            this.lblBigLists.Location = new System.Drawing.Point(811, 233);
+            this.lblBigLists.Location = new System.Drawing.Point(811, 257);
             this.lblBigLists.Name = "lblBigLists";
             this.lblBigLists.Size = new System.Drawing.Size(13, 15);
             this.lblBigLists.TabIndex = 30;
@@ -301,11 +305,45 @@
             this.label7.TabIndex = 32;
             this.label7.Text = "Total Lists and Libraries";
             // 
+            // trackNumberOfListsToDelete
+            // 
+            this.trackNumberOfListsToDelete.Location = new System.Drawing.Point(534, 208);
+            this.trackNumberOfListsToDelete.Maximum = 100;
+            this.trackNumberOfListsToDelete.Name = "trackNumberOfListsToDelete";
+            this.trackNumberOfListsToDelete.Size = new System.Drawing.Size(269, 45);
+            this.trackNumberOfListsToDelete.TabIndex = 44;
+            this.trackNumberOfListsToDelete.ValueChanged += new System.EventHandler(this.trackNumberOfListsToDelete_ValueChanged);
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.label6.ForeColor = System.Drawing.Color.DarkSlateGray;
+            this.label6.Location = new System.Drawing.Point(341, 213);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(193, 15);
+            this.label6.TabIndex = 43;
+            this.label6.Text = "Number of Lists/Libraries to Delete:";
+            // 
+            // lblNumListsDelete
+            // 
+            this.lblNumListsDelete.AutoSize = true;
+            this.lblNumListsDelete.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.lblNumListsDelete.ForeColor = System.Drawing.Color.DarkSlateGray;
+            this.lblNumListsDelete.Location = new System.Drawing.Point(811, 218);
+            this.lblNumListsDelete.Name = "lblNumListsDelete";
+            this.lblNumListsDelete.Size = new System.Drawing.Size(13, 15);
+            this.lblNumListsDelete.TabIndex = 45;
+            this.lblNumListsDelete.Text = "0";
+            // 
             // frm06Lists
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(921, 644);
+            this.Controls.Add(this.lblNumListsDelete);
+            this.Controls.Add(this.trackNumberOfListsToDelete);
+            this.Controls.Add(this.label6);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.lblTotalNumOfLists);
             this.Controls.Add(this.lblBigLists);
@@ -356,13 +394,22 @@
             this.Controls.SetChildIndex(this.lblBigLists, 0);
             this.Controls.SetChildIndex(this.lblTotalNumOfLists, 0);
             this.Controls.SetChildIndex(this.label7, 0);
+            this.Controls.SetChildIndex(this.label6, 0);
+            this.Controls.SetChildIndex(this.trackNumberOfListsToDelete, 0);
+            this.Controls.SetChildIndex(this.lblNumListsDelete, 0);
             ((System.ComponentModel.ISupportInitialize)(this.trackMaxNumberListLibraries)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackMaxFoldersInLib)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackMaxNumberNestedFolders)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBigListsCount)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackNumberOfListsToDelete)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
+        }
+
+        private void TrackNumberOfListsToDelete_ValueChanged(object sender, System.EventArgs e)
+        {
+            throw new System.NotImplementedException();
         }
 
         #endregion
@@ -388,5 +435,8 @@
         private System.Windows.Forms.Label lblBigLists;
         private System.Windows.Forms.Label lblTotalNumOfLists;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.TrackBar trackNumberOfListsToDelete;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label lblNumListsDelete;
     }
 }

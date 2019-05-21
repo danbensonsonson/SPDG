@@ -45,7 +45,8 @@ namespace Acceleratio.SPDG.UI
         {
             if (chkUseOnlyExistingSites.Checked)
             {
-                panelSiteOptions.Enabled = false;
+                trackNumSitesToCreate.Value = 0;
+                panelSiteOptions.Enabled = false;                
             }
             else
             {

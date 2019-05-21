@@ -53,6 +53,7 @@ namespace Acceleratio.SPDG.UI
         public override void loadData()
         {
             trackMaxNumberListLibraries.Value = Common.WorkingDefinition.MaxNumberOfListsAndLibrariesPerSite;
+            trackNumberOfListsToDelete.Value = Common.WorkingDefinition.NumberOfListsAndLibrariesToDelete;
             trackBigListsCount.Value = Common.WorkingDefinition.NumberOfBigListsPerSite;
             chkDocLib.Checked = Common.WorkingDefinition.LibTypeDocument;
             chkTasks.Checked = Common.WorkingDefinition.LibTypeTasks;
@@ -72,6 +73,7 @@ namespace Acceleratio.SPDG.UI
             }
 
             Common.WorkingDefinition.MaxNumberOfListsAndLibrariesPerSite = trackMaxNumberListLibraries.Value;
+            Common.WorkingDefinition.NumberOfListsAndLibrariesToDelete = trackNumberOfListsToDelete.Value;
             Common.WorkingDefinition.LibTypeDocument = chkDocLib.Checked;
             Common.WorkingDefinition.LibTypeTasks = chkTasks.Checked;
             Common.WorkingDefinition.LibTypeCalendar = chkCalendar.Checked;
@@ -111,6 +113,11 @@ namespace Acceleratio.SPDG.UI
                 trackMaxFoldersInLib.Value = 0;
                 trackMaxNumberNestedFolders.Value = 0;
             }
+        }
+
+        private void trackNumberOfListsToDelete_ValueChanged(object sender, EventArgs e)
+        {
+            lblNumListsDelete.Text = trackNumberOfListsToDelete.Value.ToString();
         }
 
         private void trackMaxFoldersInLib_ValueChanged(object sender, EventArgs e)

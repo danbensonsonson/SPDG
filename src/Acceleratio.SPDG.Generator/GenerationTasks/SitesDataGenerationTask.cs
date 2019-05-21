@@ -14,7 +14,7 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
 
         public override string Title
         {
-            get { return "Creating Sites"; }
+            get { return "Sites"; }
         }
 
         public SitesDataGenerationTask(IDataGenerationTaskOwner owner) : base(owner)
@@ -40,7 +40,8 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
 
         public override bool IsActive
         {
-            get { return !WorkingDefinition.UseOnlyExistingSites; }
+            //get { return !WorkingDefinition.UseOnlyExistingSites; }
+            get { return true; }
         }
 
         private int SiteCounter { get; set; }

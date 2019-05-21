@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Acceleratio.SPDG.Generator.SPModel;
 using Acceleratio.SPDG.Generator.Structures;
+
 
 namespace Acceleratio.SPDG.Generator.GenerationTasks
 {
@@ -8,7 +11,7 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
     {
         SPDGListTemplateType _lastTemplateType = SPDGListTemplateType.NoListTemplate;
         string _lastListPrefix = "List";
-        const string OOB_Lists_Libraries = "Documents,MicroFeed,Form Templates,Site Pages,Site Assets,Style Library";
+        const string OOB_Lists_Libraries = "Documents,MicroFeed,Form Templates,Composed Looks,Master Page Gallery,Site Pages,Site Assets,Style Library";
 
         public ListsDataGenerationTask(IDataGenerationTaskOwner owner) : base(owner)
         {
@@ -19,7 +22,7 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
             get { return "Lists and Libraries"; }
         }      
 
-        public override int CalculateTotalSteps()
+        public override int  CalculateTotalSteps()
         {
             int totalSteps = (WorkingDefinition.MaxNumberOfListsAndLibrariesPerSite + WorkingDefinition.NumberOfBigListsPerSite) * WorkingDefinition.NumberOfSitesToCreate;
             totalSteps = totalSteps * Owner.WorkingSiteCollections.Count;
@@ -39,7 +42,8 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                 {
                     foreach (SiteInfo siteInfo in siteCollInfo.Sites)
                     {
-                        using(var web = siteColl.OpenWeb(siteInfo.ID)) 
+                        IEnumerable<SPDGList> lists = null;
+                        using (var web = siteColl.OpenWeb(siteInfo.ID)) 
                         {
                             Random rnd = new Random();
                             //int listsToCreate = rnd.Next(WorkingDefinition.MaxNumberOfListsAndLibrariesPerSite+1);
@@ -48,12 +52,14 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                             
                             listsToCreate += bigListsToCreate;
                             int bigListsCreated = 0;
-                            
                             Log.Write("Getting existing lists in site  '" + web.Url + "'");
+                            lists = web.Lists;
                             // Add existing list for this site for adding items
-                            foreach (var existing in web.Lists)
+                            int totalLists = 0;
+                            foreach (var existing in lists)
                             {
-                                if (OOB_Lists_Libraries.Contains(existing.Title))
+                                totalLists++;
+                                if (!SampleData.BusinessDocsTypes.Contains(existing.Title))
                                     continue;
                                 if (existing.BaseTemplate == SPDGListTemplateType.GenericList || existing.BaseTemplate == SPDGListTemplateType.DocumentLibrary)
                                 {
@@ -67,12 +73,38 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                                     siteInfo.Lists.Add(listInfo);
                                     Owner.IncrementCurrentTaskProgress("Getting list '" + listInfo.Name + "' in site '" + web.Url + "'" + " Type: " + listInfo.TemplateType);
                                 }
-                            }                                
-                            Log.Write("Creating lists in site '" + web.Url + "'");
+                                
+                            }
+                            // delete                            
+                            int listsToDelete = siteInfo.Lists.Count > WorkingDefinition.NumberOfListsAndLibrariesToDelete ? WorkingDefinition.NumberOfListsAndLibrariesToDelete : siteInfo.Lists.Count;
+                            if (listsToDelete > 0)
+                            {
+                                int listsDeleted = 0;
+                                Owner.IncrementCurrentTaskProgress("Deleting lists in site: " + web.Url);
+                                for (int i = 0; i < totalLists; i++)
+                                {
+                                    if (listsDeleted >= listsToDelete)
+                                        break;
+                                    var list = lists.ElementAt(i);
+                                    if (!SampleData.BusinessDocsTypes.Contains(list.Title))
+                                        continue;
+                                    string listName = list.Title;
+                                    list.Delete();
+                                    Owner.IncrementCurrentTaskProgress("Deleted list: " + listName);
+                                    var remove = siteInfo.Lists.FirstOrDefault(x => x.Name == listName);
+                                    siteInfo.Lists.Remove(remove);
+                                    i--; // if a list was deleted, we have fewer in the lists
+                                    listsDeleted++;
+                                }
+                            }
+
                             // Resume: if it's not incremental, only create the amount of lists that haven't already been created
                             // Incremental: create the amount of lists asked for, regardless of what's there
                             if (WorkingDefinition.Mode == DataGeneratorMode.Resume)
                                 listsToCreate = listsToCreate - siteInfo.Lists.Count;
+
+                            if (listsToCreate > 0)
+                                Log.Write("Creating lists in site '" + web.Url + "'");
 
                             for ( int s = 0; s < listsToCreate; s++ )
                             {

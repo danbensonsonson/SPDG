@@ -40,6 +40,13 @@ namespace Acceleratio.SPDG.Generator.Server.SPModel
             }
         }
 
+        public override void Delete()
+        {
+            //_spList.AllowDeletion = true;
+            //_spList.Update();
+            _spList.Delete();
+        }
+
         public override void AddFields(IEnumerable<SPDGFieldInfo> fields, bool addToDefaultView)
         {
             var defaultView = _spList.DefaultView;

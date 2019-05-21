@@ -77,6 +77,7 @@ namespace Acceleratio.SPDG.Generator
         public int NumberOfSitesToDelete { get; set; }
         public int MaxNumberOfLevelsForSites { get; set; }
         public int MaxNumberOfListsAndLibrariesPerSite { get; set; }
+        public int NumberOfListsAndLibrariesToDelete { get; set; }
         public int NumberOfBigListsPerSite { get; set; }
         public bool LibTypeList { get; set; }
         public bool LibTypeDocument { get; set; }
@@ -279,8 +280,7 @@ namespace Acceleratio.SPDG.Generator
             set { _maxNumberOfUsersInCreatedSecurityGroups = value; }
         }
 
-        
-        private const string configDir = "config\\";
+        const string configDir = "\\config";
         public static void SerializeDefinition(string path, GeneratorDefinitionBase gdb)
         {
             if (!Directory.Exists(configDir))

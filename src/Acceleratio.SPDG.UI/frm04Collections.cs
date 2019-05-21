@@ -56,13 +56,14 @@ namespace Acceleratio.SPDG.UI
                 label3.Enabled = true;
                 txtOwnerEmail.Enabled = true;
                 txtOwnerUserName.Enabled = true;
-                WorkingDefinition.Mode = DataGeneratorMode.New;
+                //WorkingDefinition.Mode = DataGeneratorMode.New;
             }
             else
             {
                 if (!siteCollectionsLoaded)
                     loadSiteCollections();
                 trackNumSiteColls.Enabled = false;
+                trackNumSiteColls.Value = 0;
                 lbSiteCollection.Enabled = true;
                 label1.Enabled = false;
                 label3.Enabled = false;
@@ -122,9 +123,9 @@ namespace Acceleratio.SPDG.UI
                     //TODO:rf zamijeniti sve Common.WorkingDefinition s WorkingDefinition property
                     //dodatno, ovo se moze unutar getera za propertye rijesiti za ovaj if
                     Common.WorkingDefinition.UseExistingSiteCollection = false;
-                    trackNumSiteColls.Minimum = 1;
+                    //trackNumSiteColls.Minimum = 1;
                     Common.WorkingDefinition.CreateNewSiteCollections = 1;
-                    radioCreateNewSiteColl.Checked = true;
+                    //radioCreateNewSiteColl.Checked = true;
                     radioUseExisting.Enabled = false;
                 }
                 else
@@ -132,6 +133,7 @@ namespace Acceleratio.SPDG.UI
                     trackNumSiteColls.Minimum = 0;
                     radioUseExisting.Enabled = true;
                 }
+                trackNumSiteColls.Value = Common.WorkingDefinition.CreateNewSiteCollections;
                 trackNumMySites.Value = Common.WorkingDefinition.CreateMySites;
                 if (Common.WorkingDefinition.CreateMySites > 0)
                     chkCreateMySites.Checked = true;
@@ -157,8 +159,8 @@ namespace Acceleratio.SPDG.UI
             {
                 trackNumSiteColls.Value = Common.WorkingDefinition.CreateNewSiteCollections;
             }
-            radioUseExisting.Checked = Common.WorkingDefinition.UseExistingSiteCollection;
-            radioCreateNewSiteColl.Checked = !Common.WorkingDefinition.UseExistingSiteCollection;
+            //radioUseExisting.Checked = Common.WorkingDefinition.UseExistingSiteCollection;
+            //radioCreateNewSiteColl.Checked = !Common.WorkingDefinition.UseExistingSiteCollection;
             foreach (string sc in Common.WorkingDefinition.SiteCollections)
             {
                 // TODO make sure list box items are selection lbSiteCollection

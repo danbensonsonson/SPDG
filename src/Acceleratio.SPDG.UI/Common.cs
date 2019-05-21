@@ -37,13 +37,21 @@ namespace Acceleratio.SPDG.UI
         {
             public GeneratorDefinitionBase Definition { get; set; }
         }
+
         public static void SerializeDefinition(string path)
-        {            
+        {
+            if (!Directory.Exists(Common.ConfigDir))
+                Directory.CreateDirectory(Common.ConfigDir);
             XmlSerializer serializer = new XmlSerializer(typeof(SerializeWrapper), new Type[] { typeof(ClientGeneratorDefinition), typeof(ServerGeneratorDefinition) });
-            using (TextWriter writer = new StreamWriter(path))
+            using (TextWriter writer = new StreamWriter(Common.ConfigDir + path))
             {
                 serializer.Serialize(writer, new SerializeWrapper() { Definition = WorkingDefinition });
             }            
+        }
+
+        public static string ConfigDir
+        {
+            get { return "config\\";  }
         }
 
         public static void DeserializeDefinition(string path)
