@@ -383,7 +383,7 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
             // Add/Modify users/groups to SP Groups 
             // Incremental: Remove 1 member and add 1
             int membersPerSPGroup = 10;
-            int membersToDelete = WorkingDefinition.IncrementalUpdateSPGroups ? 1 : 0;
+            int membersToDelete = WorkingDefinition.IncrementalUpdateSPGroupMembership;
             if (_siteSpGroups.Count > 0)
             {
                 var candidates = _siteSpUsers.Union(_siteAdGroupSpUsers).ToList();

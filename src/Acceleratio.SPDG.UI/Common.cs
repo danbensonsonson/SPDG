@@ -107,7 +107,7 @@ namespace Acceleratio.SPDG.UI
             definition.PermissionsPercentForSPGroups = 3;
             definition.PermissionsPercentOfListItems = 3;
             definition.PermissionsPercentOfFolders = 3;
-            definition.IncrementalUpdateSPGroups = true;
+            definition.IncrementalUpdateSPGroupMembership = 1;
 
         }
     }
