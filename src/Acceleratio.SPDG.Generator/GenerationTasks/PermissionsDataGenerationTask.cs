@@ -304,8 +304,12 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
         private void EnsureUsersAndGroups(SPDGWeb web)
         {
             /// ENSURE AD USERS TO SHAREPOINT
+            /// INCREMENTAL: If the correct number of users/groups have already been ensured and we have SP groups create, shuffle which users are in the groups
             // need some users here to fill created SP Groups
+            _siteSpUsers = web.SiteUsers.Where(x => !x.IsDomainGroup).ToList();
+            _siteAdGroupSpUsers = web.SiteUsers.Where(x => x.IsDomainGroup).ToList();
             int numOfUsers = _adUsers.Count > 20 ? 20 : _adUsers.Count;
+            numOfUsers = numOfUsers - _siteSpUsers.Count; // SPDG Users already created in a previous run
             //int numOfUsers = _adUsers.Count;
             for (int i = 0; i < numOfUsers; i++)
             {
@@ -326,9 +330,10 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
             }
 
             /// ENSURE AD GROUPS TO SHAREPOINT
-            numOfUsers = _adUsers.Count > 20 ? 20 : _adUsers.Count;
+            int numOfGroups = _adUsers.Count > 20 ? 20 : _adUsers.Count;
+            numOfGroups = numOfGroups - _siteAdGroupSpUsers.Count; // SPDG Users/Groups already created in a previous run
             //numOfUsers = _adGroups.Count;
-            for (int i = 0; i < numOfUsers; i++)
+            for (int i = 0; i < numOfGroups; i++)
             {
                 string groupName = _adGroups[SampleData.GetRandomNumber(0, _adGroups.Count)];
 
@@ -347,10 +352,13 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
             }
 
             HashSet<string> createdGroups = new HashSet<string>();
+            /// Modify existing SharePoint Groups
+            int numOfSPGroups = 10;
+            numOfSPGroups = numOfSPGroups - (web.SiteGroups.Count() -1); // -1 for the built in excel services group
             /// CREATE SHAREPOINT GROUPS            
             if (WorkingDefinition.PermissionsPercentForSPGroups > 0)
             {
-                for (int i = 0; i < 10; i++)
+                for (int i = 0; i < numOfSPGroups; i++)
                 {
                     string nameCandidate = SampleData.GetSampleValueRandom(SampleData.Accounts) + " Group";
                     try
@@ -372,20 +380,31 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
             _siteSpUsers = web.SiteUsers.Where(x => !x.IsDomainGroup).ToList();
             _siteAdGroupSpUsers = web.SiteUsers.Where(x => x.IsDomainGroup).ToList();
 
-            if (createdGroups.Count > 0)
+            // Add/Modify users/groups to SP Groups 
+            // Incremental: Remove 1 member and add 1
+            int membersPerSPGroup = 10;
+            int membersToDelete = WorkingDefinition.IncrementalUpdateSPGroups ? 1 : 0;
+            if (_siteSpGroups.Count > 0)
             {
                 var candidates = _siteSpUsers.Union(_siteAdGroupSpUsers).ToList();
-                var groups = web.SiteGroups.ToList();
-                foreach (var @group in createdGroups)
+                foreach (var grp in _siteSpGroups)
                 {
                     try
                     {
+                        int membersToAdd = membersPerSPGroup;
+                        int usersInGroup = grp.Users.Count();
+                        if (usersInGroup >= membersPerSPGroup)
+                        {
+                            grp.RemoveUsers(membersToDelete);
+                            membersToAdd = membersToDelete; // Removing, then adding the same amount during incremental updates
+                            Log.Write(string.Format("Removing {0} memeber(s) from SharePoint group {1}:", membersToDelete, grp.Name));
+                        }
                         candidates.Shuffle();
-                        var elementsToTake = Math.Min(candidates.Count, 10);
+                        var elementsToTake = Math.Min(candidates.Count, membersToAdd);
                         var users = candidates.Take(elementsToTake).ToList();
-                        var grp = groups.First(x => x.Name == @group);
+                        //var grp = _siteSpGroups.First(x => x.Name == @group);
                         grp.AddUsers(users);
-                        Log.Write(string.Format("added {0} users to SharePoint group {1}:", users.Count, @group));
+                        Log.Write(string.Format("Added {0} members to SharePoint group {1}:", users.Count, grp.Name));
                     }
                     catch (Exception ex)
                     {
@@ -393,6 +412,7 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                     }
                 }
             }
+
         }
 
         private void setSitePermissions(SPDGWeb web)

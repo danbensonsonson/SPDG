@@ -227,6 +227,7 @@ namespace Acceleratio.SPDG.Generator
         public int PermissionsPercentForSPGroups { get; set; }
         public int PermissionsPerObject { get; set; }
         public int PermissionsPerObjectDelete { get; set; }
+        public bool IncrementalUpdateSPGroups { get; set; }
         public bool GenerateUsersAndSecurityGroupsInDirectory { get; set; }
 
         public int NumberOfUsersToCreate

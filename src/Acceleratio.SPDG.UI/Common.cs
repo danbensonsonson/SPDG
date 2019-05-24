@@ -43,7 +43,7 @@ namespace Acceleratio.SPDG.UI
             if (!Directory.Exists(Common.ConfigDir))
                 Directory.CreateDirectory(Common.ConfigDir);
             XmlSerializer serializer = new XmlSerializer(typeof(SerializeWrapper), new Type[] { typeof(ClientGeneratorDefinition), typeof(ServerGeneratorDefinition) });
-            using (TextWriter writer = new StreamWriter(Common.ConfigDir + path))
+            using (TextWriter writer = new StreamWriter(path))
             {
                 serializer.Serialize(writer, new SerializeWrapper() { Definition = WorkingDefinition });
             }            
@@ -107,6 +107,7 @@ namespace Acceleratio.SPDG.UI
             definition.PermissionsPercentForSPGroups = 3;
             definition.PermissionsPercentOfListItems = 3;
             definition.PermissionsPercentOfFolders = 3;
+            definition.IncrementalUpdateSPGroups = true;
 
         }
     }

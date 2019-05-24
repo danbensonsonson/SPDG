@@ -120,8 +120,6 @@ namespace Acceleratio.SPDG.UI
             {
                 if (serverDefinition.CreateNewWebApplications > 0)
                 {
-                    //TODO:rf zamijeniti sve Common.WorkingDefinition s WorkingDefinition property
-                    //dodatno, ovo se moze unutar getera za propertye rijesiti za ovaj if
                     Common.WorkingDefinition.UseExistingSiteCollection = false;
                     //trackNumSiteColls.Minimum = 1;
                     Common.WorkingDefinition.CreateNewSiteCollections = 1;

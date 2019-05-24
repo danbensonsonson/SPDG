@@ -35,6 +35,8 @@ namespace Acceleratio.SPDG.Generator.SPModel
         }
 
         public abstract void AddUsers(IEnumerable<SPDGUser> users);
+        public abstract void RemoveUsers(int count);
+        public abstract IEnumerable<SPDGUser> Users { get; }
 
     }
 }

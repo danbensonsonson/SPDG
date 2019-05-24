@@ -89,12 +89,21 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                                     if (!SampleData.BusinessDocsTypes.Contains(list.Title))
                                         continue;
                                     string listName = list.Title;
-                                    list.Delete();
-                                    Owner.IncrementCurrentTaskProgress("Deleted list: " + listName);
-                                    var remove = siteInfo.Lists.FirstOrDefault(x => x.Name == listName);
-                                    siteInfo.Lists.Remove(remove);
-                                    i--; // if a list was deleted, we have fewer in the lists
-                                    listsDeleted++;
+                                    try
+                                    {
+                                        list.Delete();
+                                        Owner.IncrementCurrentTaskProgress("Deleted list: " + listName);
+                                        var remove = siteInfo.Lists.FirstOrDefault(x => x.Name == listName);
+                                        siteInfo.Lists.Remove(remove);
+                                        i--; // if a list was deleted, we have fewer in the lists
+                                        listsDeleted++;
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        Log.Write("Failed to delete list: " + listName + " in site '" + web.Url + "' Reason: " + ex.Message);
+                                        break;
+                                    }
+                                    
                                 }
                             }
 

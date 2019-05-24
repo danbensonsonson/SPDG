@@ -216,11 +216,11 @@
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.label8.ForeColor = System.Drawing.Color.DarkSlateGray;
-            this.label8.Location = new System.Drawing.Point(283, 361);
+            this.label8.Location = new System.Drawing.Point(285, 361);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(152, 15);
+            this.label8.Size = new System.Drawing.Size(148, 15);
             this.label8.TabIndex = 24;
-            this.label8.Text = "create SharePoint groups in";
+            this.label8.Text = "asign SharePoint groups in";
             // 
             // txtPercentGroupCases
             // 
@@ -340,9 +340,9 @@
             this.label15.ForeColor = System.Drawing.Color.DarkSlateGray;
             this.label15.Location = new System.Drawing.Point(283, 504);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(244, 15);
+            this.label15.Size = new System.Drawing.Size(363, 15);
             this.label15.TabIndex = 37;
-            this.label15.Text = "Number of permissions to remove per object";
+            this.label15.Text = "Number of permissions to remove per object (Incremental updates)";
             // 
             // trackPermissionsDeletePerObject
             // 

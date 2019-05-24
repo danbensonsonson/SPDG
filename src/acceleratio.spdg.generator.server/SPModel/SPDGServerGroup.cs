@@ -25,5 +25,26 @@ namespace Acceleratio.SPDG.Generator.Server.SPModel
                 _group.AddUser(((SPDGServerUser)spdgUser).SPUser);
             }
         }
+
+        public override void RemoveUsers(int count)
+        {            
+            int numUsersInGroup = _group.Users.Count;
+            int numberToDelete = count < numUsersInGroup ? count : numUsersInGroup;
+            for (int i = 0; i < numberToDelete; i++)
+            {
+                _group.RemoveUser(_group.Users[i]);
+            }
+        }
+
+        public override IEnumerable<SPDGUser> Users
+        {
+            get
+            {
+                foreach (SPUser spuser in _group.Users)
+                {
+                    yield return new SPDGServerUser(spuser);
+                }
+            }
+        }
     }
 }
