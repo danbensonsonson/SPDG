@@ -203,11 +203,10 @@ namespace Acceleratio.SPDG.Generator.Server.SPModel
         public override IEnumerable<SPDGGroup> SiteGroups
         {
             get
-            {
-                
+            {                
                 foreach (SPGroup spGroup in _spWeb.SiteGroups)
                 {
-                    yield return  new SPDGServerGroup(spGroup);
+                    yield return new SPDGServerGroup(spGroup);
                 }
             }
         }
