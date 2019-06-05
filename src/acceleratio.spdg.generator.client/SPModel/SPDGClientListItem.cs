@@ -12,6 +12,7 @@ namespace Acceleratio.SPDG.Generator.Client.SPModel
     {
         private readonly ListItem _item;
         private readonly ClientContext _context;
+        private ISPDGListItemAttachmentInfo _attachment;
 
         public static Expression<Func<ListItem, object>>[] IncludeExpression
         {
@@ -21,6 +22,7 @@ namespace Acceleratio.SPDG.Generator.Client.SPModel
                 includeExpression.Add(item => item.Id);
                 includeExpression.Add(item => item.DisplayName);
                 includeExpression.Add(item => item.HasUniqueRoleAssignments);
+                includeExpression.Add(item => item.RoleAssignments);
                 includeExpression.Add(item => item["EncodedAbsUrl"]);
                 return includeExpression.ToArray();
             }
@@ -54,7 +56,7 @@ namespace Acceleratio.SPDG.Generator.Client.SPModel
 
         public override void RemoveRoleAssignment()
         {
-            throw new NotImplementedException();
+            ClientRoleAssignmentHelper.RemoveRoleAssignment(_item, _context);
         }
 
         public override void RemoveRoleAssignment(SPDGPrincipal principal)
@@ -103,12 +105,20 @@ namespace Acceleratio.SPDG.Generator.Client.SPModel
 
         public override bool HasUniqueRoleAssignments
         {
-            get { return _item.HasUniqueRoleAssignments; }
+            get
+            {
+                return _item.HasUniqueRoleAssignments;
+            }
         }
 
         public override int NumUniqueRoleAssignments
         {
-            get { return _item.RoleAssignments.Count; }
+            get
+            {
+                if (_item.HasUniqueRoleAssignments)
+                    return _item.RoleAssignments.Count;
+                return 0;
+            }
         }
 
         public override int Id
@@ -129,6 +139,16 @@ namespace Acceleratio.SPDG.Generator.Client.SPModel
             _context.ExecuteQuery();
         }
 
-        public override ISPDGListItemAttachmentInfo Attachment { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public void Delete()
+        {
+            _item.DeleteObject();
+            _context.ExecuteQuery();
+        }
+
+        public override ISPDGListItemAttachmentInfo Attachment
+        {
+            set { _attachment = value; }
+            get { return _attachment; }
+        }
     }
 }

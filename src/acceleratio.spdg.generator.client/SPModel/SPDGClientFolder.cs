@@ -33,6 +33,8 @@ namespace Acceleratio.SPDG.Generator.Client.SPModel
                 _context.ExecuteQuery();
                 foreach (var subFolder in _folder.Folders)
                 {
+                    _context.Load(subFolder, f => f.ListItemAllFields.HasUniqueRoleAssignments); // TODO: Dan change, is this the best way to do this?
+                    _context.ExecuteQuery();
                     yield return new SPDGClientFolder(subFolder, _context);
                 }
             }

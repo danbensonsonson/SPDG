@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.IO;
 using Acceleratio.SPDG.Generator.SPModel;
 using Microsoft.SharePoint.Client;
 
@@ -69,7 +70,10 @@ namespace Acceleratio.SPDG.Generator.Client.SPModel
                 includeExpression.Add(web => web.DefaultViewUrl);
                 includeExpression.Add(web => web.RootFolder);
                 includeExpression.Add(web => web.HasUniqueRoleAssignments);
+                includeExpression.Add(web => web.RoleAssignments);
                 includeExpression.Add(web => web.BaseTemplate);
+                includeExpression.Add(web => web.ItemCount);
+                includeExpression.Add(web => web.Views);
                 return includeExpression.ToArray();
             }
         }
@@ -95,19 +99,28 @@ namespace Acceleratio.SPDG.Generator.Client.SPModel
 
         public override void AddItems(IEnumerable<ISPDGListItemInfo> items)
         {
-            
+
             int counter = 0;
             foreach (var itemInfo in items)
             {
                 counter++;
-                var itemCreationInfo=new ListItemCreationInformation();
-                var item=_list.AddItem(itemCreationInfo);
+                var itemCreationInfo = new ListItemCreationInformation();
+                var item = _list.AddItem(itemCreationInfo);
                 foreach (var field in itemInfo.GetAvailableFields())
                 {
                     item[field] = itemInfo[field];
                 }
                 item.Update();
-                if (counter >=500)
+                if (itemInfo.Attachment != null)
+                {
+                    _context.ExecuteQuery(); // List item needs to be added before attachments can be added
+                    var attInfo = new AttachmentCreationInformation();
+                    Stream stream = new MemoryStream(itemInfo.Attachment.Content);
+                    attInfo.ContentStream = stream;
+                    attInfo.FileName = itemInfo.Attachment.Name;
+                    var attachment = item.AttachmentFiles.Add(attInfo);
+                }
+                if (counter >= 500)
                 {
                     counter = 0;
                     _context.ExecuteQuery();
@@ -118,7 +131,28 @@ namespace Acceleratio.SPDG.Generator.Client.SPModel
 
         public override int DeleteItems(int numberOfItemsToDelete)
         {
-            throw new NotImplementedException();
+            var items = this.Items;
+            int deletes = numberOfItemsToDelete;
+            int success = 0;
+
+            if (ItemCount < numberOfItemsToDelete)
+                deletes = ItemCount;
+            for (int i = 0; i < deletes; i++)
+            {
+                var item = (SPDGClientListItem)items.ElementAt(i);
+                try
+                {
+                    Log.Write("Deleting item: " + item.DisplayName); // Verbose
+                    item.Delete();
+                    success++;
+                }
+                catch (Exception ex)
+                {
+                    Log.Write("Failed to delete item: " + ex.Message);
+                }
+
+            }
+            return success;
         }
 
         public override void Delete()
@@ -139,7 +173,7 @@ namespace Acceleratio.SPDG.Generator.Client.SPModel
 
         public override void RemoveRoleAssignment()
         {
-            throw new NotImplementedException();
+            ClientRoleAssignmentHelper.RemoveRoleAssignment(_list, _context);
         }
 
         public override void RemoveRoleAssignment(SPDGPrincipal principal)
@@ -149,7 +183,12 @@ namespace Acceleratio.SPDG.Generator.Client.SPModel
 
         public override int NumUniqueRoleAssignments
         {
-            get { return _list.RoleAssignments.Count;  }
+            get
+            {
+                if (_list.HasUniqueRoleAssignments)
+                    return _list.RoleAssignments.Count;
+                return 0;
+            }
         }
 
         public override void BreakRoleInheritance(bool copyRoleDefinitions)
@@ -179,7 +218,10 @@ namespace Acceleratio.SPDG.Generator.Client.SPModel
 
         public override int ItemCount
         {
-            get { return _list.ItemCount; }
+            get
+            {      
+                return _list.ItemCount;
+            }
         }
 
         private List<SPDGListItem> loadListItems()
@@ -197,7 +239,8 @@ namespace Acceleratio.SPDG.Generator.Client.SPModel
 
                 foreach (var item in itemBatch)
                 {
-                    retVal.Add(new SPDGClientListItem(item, _context));
+                    //if (item.Folder == null)
+                        retVal.Add(new SPDGClientListItem(item, _context));
                 }
 
             } while (itemPosition != null);
@@ -219,7 +262,16 @@ namespace Acceleratio.SPDG.Generator.Client.SPModel
             _context.ExecuteQuery();            
         }
 
-        public override IEnumerable<SPDGView> Views => throw new NotImplementedException();
+        public override IEnumerable<SPDGView> Views
+        {
+            get
+            {
+                foreach (View view in _list.Views)
+                {
+                    yield return new SPDGView(view.Title);
+                }
+            }
+        }
 
     }
 }

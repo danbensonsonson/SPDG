@@ -108,7 +108,8 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                                         {
                                             // TODO: Add the 10% attachments to the wizard as configurable
                                             // if itemCount % 10 = 0, add attachment to list item.
-                                            if (i % 10 == 0)                                         
+                                            //if (i % 10 == 0) // Old: Hard coded 10%
+                                            if (SampleData.GetRandomNumber(1, 100) <= WorkingDefinition.PercentListItemsWithAttachments)
                                                 populateItemInfo(list, itemInfo, false, true);
                                             else
                                                 populateItemInfo(list, itemInfo, false);                               

@@ -65,6 +65,11 @@ namespace Acceleratio.SPDG.UI
             trackMinDocSize.Value = Common.WorkingDefinition.MinDocumentSizeKB > 20 ? Common.WorkingDefinition.MinDocumentSizeKB : 20;
             trackMaxDocSize.Value = Common.WorkingDefinition.MaxDocumentSizeMB;
             BigListItemsToGenerate = Common.WorkingDefinition.MaxNumberofItemsBigListToGenerate;
+            if (WorkingDefinition.Mode == Generator.DataGeneratorMode.New)
+            {
+                trackNumberOfItemsDelete.Enabled = false;
+                rackMaxNumberOrDocLibItemsDelete.Enabled = false;
+            }
         }
 
         public override bool saveData()

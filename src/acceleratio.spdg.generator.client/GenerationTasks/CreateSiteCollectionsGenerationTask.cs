@@ -9,7 +9,7 @@ namespace Acceleratio.SPDG.Generator.Client.GenerationTasks
     {
         public override string Title
         {
-            get { return "Creating Site Collections"; }
+            get { return "Site Collections"; }
         }
 
         public CreateSiteCollectionsGenerationTask(ClientDataGenerator owner) : base(owner)
@@ -37,7 +37,9 @@ namespace Acceleratio.SPDG.Generator.Client.GenerationTasks
             {
                 existingSites.Add(siteCollectionUrl);
             }
-            for (int s = 0; s < WorkingDefinition.CreateNewSiteCollections; s++)
+            // Resume: calculate the number of site collections left
+            int numSiteCollections = WorkingDefinition.CreateNewSiteCollections - Owner.WorkingSiteCollections.Count;
+            for (int s = 0; s < numSiteCollections; s++)
             {
                 string siteName = "";
                 string siteUrl = "";
@@ -63,6 +65,10 @@ namespace Acceleratio.SPDG.Generator.Client.GenerationTasks
                 SiteCollInfo siteCollInfo = new SiteCollInfo();
                 siteCollInfo.URL = siteUrl;
                 Owner.WorkingSiteCollections.Add(siteCollInfo);
+                WorkingDefinition.SiteCollections.Add(siteCollInfo.URL); // Add to configuration for serialization
+                WorkingDefinition.UseExistingSiteCollection = true;
+                WorkingDefinition.Mode = DataGeneratorMode.Resume;
+                GeneratorDefinitionBase.SerializeDefinition(DataGenerator.SessionID + ".xml", WorkingDefinition);
             }
         }        
     }

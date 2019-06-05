@@ -120,7 +120,7 @@ namespace Acceleratio.SPDG.Generator.Client.GenerationTasks
                             }
 
                             usedGroupNames.Add(displayName);
-                            var mailNickname = Regex.Replace(displayName, @"[^a-z0-9]", "");
+                            var mailNickname = Regex.Replace(displayName, @"[^a-zA-Z0-9]", "");
                             Group group = new Group();
                             group.DisplayName = displayName;
                             group.MailEnabled = false;
@@ -128,6 +128,7 @@ namespace Acceleratio.SPDG.Generator.Client.GenerationTasks
                             group.MailNickname = mailNickname;
                             batchCounter++;
                             client.Groups.AddGroupAsync(group, true).Wait();
+                            //client.Groups.
                             if (batchCounter >= 50)
                             {
 
@@ -144,14 +145,21 @@ namespace Acceleratio.SPDG.Generator.Client.GenerationTasks
                     }
                     if (batchCounter > 0)
                     {
-                        client.Context.SaveChangesAsync().Wait();
-                        Owner.IncrementCurrentTaskProgress(string.Format("Created {0} security groups", WorkingDefinition.NumberOfSecurityGroupsToCreate), batchCounter);
+                        try
+                        {
+                            client.Context.SaveChangesAsync().Wait();
+                            Owner.IncrementCurrentTaskProgress(string.Format("Created {0} security groups", WorkingDefinition.NumberOfSecurityGroupsToCreate), batchCounter);
+                        }
+                        catch (Exception ex)
+                        {
+                            Errors.Log(ex);
+                        }                        
                     }
                     if (WorkingDefinition.NumberOfSecurityGroupsToCreate > 0 && WorkingDefinition.MaxNumberOfUsersInCreatedSecurityGroups > 0)
                     {
                         Owner.IncrementCurrentTaskProgress("Retriving groups and users.", 0);
                         var allGroups = _generator.DataHelper.GetAvailableGroupObjectsInDirectory();
-
+                        
                         var allUsers = _generator.DataHelper.GetAvailableUserObjectsInDirectory();
                         Owner.IncrementCurrentTaskProgress("Adding users to groups.", 0);
                         foreach (var @group in allGroups)
@@ -159,7 +167,8 @@ namespace Acceleratio.SPDG.Generator.Client.GenerationTasks
                             if (usedGroupNames.Contains(@group.DisplayName))
                             {
                                 var userGroupMaxCount = Math.Min(WorkingDefinition.MaxNumberOfUsersInCreatedSecurityGroups, allUsers.Count);
-                                var userGroupCount = SampleData.GetRandomNumber(0, userGroupMaxCount);
+                                //var userGroupCount = SampleData.GetRandomNumber(0, userGroupMaxCount);
+                                var userGroupCount = userGroupMaxCount;
                                 if (userGroupCount > 0)
                                 {
                                     allUsers.Shuffle();

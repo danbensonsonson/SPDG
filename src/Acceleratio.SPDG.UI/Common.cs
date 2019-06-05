@@ -77,6 +77,7 @@ namespace Acceleratio.SPDG.UI
             definition.NumberofDocumentLibraryItemsToDelete = 0;
             definition.MaxNumberOfLevelsForSites = 1;
             definition.MaxNumberOfListsAndLibrariesPerSite = 90;
+            definition.PercentListItemsWithAttachments = 10;
             definition.MaxNumberOfViewsPerList = 0;         
             definition.CreateNewSiteCollections = 1;
             definition.SiteTemplate = "Team Site";

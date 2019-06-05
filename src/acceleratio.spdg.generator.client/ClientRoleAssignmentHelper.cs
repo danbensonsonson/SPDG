@@ -46,5 +46,13 @@ namespace Acceleratio.SPDG.Generator.Client
                 return null;
             }
         }
+
+        public static void RemoveRoleAssignment(SecurableObject securableObject, ClientContext context)
+        {
+            int count = securableObject.RoleAssignments.Count;
+            int index = SampleData.GetRandomNumber(0, count - 1);
+            securableObject.RoleAssignments[index].DeleteObject();
+            context.ExecuteQuery();
+        }
     }
 }

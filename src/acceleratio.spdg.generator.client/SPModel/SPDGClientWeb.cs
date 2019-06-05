@@ -21,7 +21,8 @@ namespace Acceleratio.SPDG.Generator.Client.SPModel
                 includeExpression.Add(web => web.RootFolder);
                 includeExpression.Add(web => web.CurrentUser);
                 includeExpression.Add(web => web.Language);
-                includeExpression.Add(web => web.HasUniqueRoleAssignments);
+                includeExpression.Add(web => web.HasUniqueRoleAssignments); 
+                includeExpression.Add(web => web.RoleAssignments);
 
 
                 return includeExpression.ToArray();
@@ -130,7 +131,12 @@ namespace Acceleratio.SPDG.Generator.Client.SPModel
 
         public override int NumUniqueRoleAssignments
         {
-            get { return _web.RoleAssignments.Count; }
+            get
+            {
+                if (_web.HasUniqueRoleAssignments)
+                    return _web.RoleAssignments.Count;
+                return 0;
+            } // There were 6 role assignments OOB, this should be zero if has unique is false
         }
 
         public override SPDGRoleAssignment GetRoleAssignmentByPrincipal(SPDGPrincipal principal)
@@ -145,7 +151,7 @@ namespace Acceleratio.SPDG.Generator.Client.SPModel
 
         public override void RemoveRoleAssignment()
         {
-            throw new NotImplementedException();
+            ClientRoleAssignmentHelper.RemoveRoleAssignment(_web, _context);
         }
 
         public override void RemoveRoleAssignment(SPDGPrincipal principal)
@@ -368,6 +374,7 @@ namespace Acceleratio.SPDG.Generator.Client.SPModel
             _context.Load(folder);
             _context.Load(folder.ListItemAllFields);
             _context.Load(folder, f => f.ListItemAllFields.HasUniqueRoleAssignments);
+            _context.Load(folder, f => f.ListItemAllFields.RoleAssignments);
             _context.ExecuteQuery();
 
             return new SPDGClientFolder(folder, _context);

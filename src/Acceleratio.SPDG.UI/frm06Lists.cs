@@ -62,6 +62,8 @@ namespace Acceleratio.SPDG.UI
             chkCreateFolders.Checked = Common.WorkingDefinition.CreateSomeFoldersInDocumentLibraries;
             trackMaxFoldersInLib.Value = Common.WorkingDefinition.MaxNumberOfFoldersToGenerate;
             trackMaxNumberNestedFolders.Value = Common.WorkingDefinition.MaxNumberOfNestedFolderLevelPerLibrary;
+            if (WorkingDefinition.Mode == Generator.DataGeneratorMode.New)
+                trackNumberOfListsToDelete.Enabled = false;
         }
 
         public override bool saveData()

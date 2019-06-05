@@ -51,8 +51,8 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
             SetListsToHaveUniquePermissions(allLists);
             SetFoldersToHaveUniquePermissions(allFolders);
 
-            var allItemsCount = allLists.Sum(x => x.ItemCount);
-            if (WorkingDefinition.Mode == DataGeneratorMode.Incremental)
+            var allItemsCount = allLists.Sum(x => x.ItemCount); // This doesn't work in RESUME using Client APIs
+            if (WorkingDefinition.Mode == DataGeneratorMode.Incremental || WorkingDefinition.Mode == DataGeneratorMode.Resume)
                 allItemsCount += 1; // during an incremental run, we don't know how many items we have
 
             _doSitePermissions = WorkingDefinition.PermissionsPercentOfSites > 0 && allSites.Count > 0;
@@ -384,6 +384,7 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
             // Incremental: Remove 1 member and add 1
             int membersPerSPGroup = 10;
             int membersToDelete = WorkingDefinition.IncrementalUpdateSPGroupMembership;
+            //if (_siteSpGroups.Count > 0 && membersToDelete > 0)
             if (_siteSpGroups.Count > 0)
             {
                 var candidates = _siteSpUsers.Union(_siteAdGroupSpUsers).ToList();
@@ -449,7 +450,7 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                 {                
                     setupNextRoleAssignment(web, web);
                     roleAssignments++;
-                    if (roleAssignments++ >= _permissionsPerObject)
+                    if (roleAssignments >= _permissionsPerObject)
                         break;
                 }
             }
@@ -495,7 +496,7 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
             {
                 setupNextRoleAssignment(web, list);
                 roleAssignments++;
-                if (roleAssignments++ >= _permissionsPerObject)
+                if (roleAssignments >= _permissionsPerObject)
                     break;
             }
 
@@ -538,7 +539,7 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
             {
                 setupNextRoleAssignment(web, folder.Item);
                 roleAssignments++;
-                if (roleAssignments++ >= _permissionsPerObject)
+                if (roleAssignments >= _permissionsPerObject)
                     break;
             }
 
@@ -580,7 +581,7 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                         for (int i = 0; i < _permissionsPerObjectDelete; i++)
                         {
                             // delete permissions
-                            Owner.IncrementCurrentTaskProgress("Remvoing permission from item/document '" + item.DisplayName + "' in list '" + list.Title, 0);
+                            Owner.IncrementCurrentTaskProgress("Removing permission from item/document '" + item.DisplayName + "' in list '" + list.Title, 0);
                             item.RemoveRoleAssignment();
                             roleAssignments--;
                         }

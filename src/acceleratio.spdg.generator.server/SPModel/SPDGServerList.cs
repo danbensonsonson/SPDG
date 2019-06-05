@@ -163,7 +163,8 @@ namespace Acceleratio.SPDG.Generator.Server.SPModel
             {
                 foreach (SPListItem item in _spList.Items)
                 {
-                    yield return new SPDGServerListItem(item);
+                    //if (item.Folder == null)
+                        yield return new SPDGServerListItem(item);
                 }
             }
         }

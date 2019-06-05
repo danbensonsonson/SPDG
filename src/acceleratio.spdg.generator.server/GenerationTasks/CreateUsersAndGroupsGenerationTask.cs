@@ -76,7 +76,7 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
                     catch (Exception ex)
                     {
                         Errors.Log(ex);
-                        // catastrophic user error
+                        // TODO: catastrophic user error
                     }
                 }
 
@@ -117,8 +117,8 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
             {
                 ou = null;
             }
-            //using (PrincipalContext ctx = new PrincipalContext(contextType, domain, ou, ConfigurationManager.AppSettings["adUser"], ConfigurationManager.AppSettings["adPassword"]))
-            using (PrincipalContext ctx = new PrincipalContext(contextType, domain, ou))
+            using (PrincipalContext ctx = new PrincipalContext(contextType, domain, ou, ConfigurationManager.AppSettings["adUser"], ConfigurationManager.AppSettings["adPassword"]))
+            //using (PrincipalContext ctx = new PrincipalContext(contextType, domain, ou))
             {
                 // TODO: test if there is something wrong with the context, then throw exception
                 for (int i = 0; i < numOfUsers; i++)

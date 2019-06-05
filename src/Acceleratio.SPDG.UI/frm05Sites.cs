@@ -104,6 +104,9 @@ namespace Acceleratio.SPDG.UI
             {
                 cboSiteTemplates.Text = Common.WorkingDefinition.SiteTemplate;
             }
+
+            if (WorkingDefinition.Mode == Generator.DataGeneratorMode.New)
+                trackNumSitesToDelete.Enabled = false;
         }
 
         public override bool saveData()

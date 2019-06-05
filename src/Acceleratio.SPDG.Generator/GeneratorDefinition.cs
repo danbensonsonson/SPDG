@@ -140,6 +140,8 @@ namespace Acceleratio.SPDG.Generator
             set { _maxNumberofItemsToGenerate = value; }
         }
 
+        public int PercentListItemsWithAttachments { get; set; }
+
         public int NumberofItemsToDelete { get; set; }
 
         public int MaxNumberofDocumentLibraryItemsToGenerate
@@ -281,7 +283,7 @@ namespace Acceleratio.SPDG.Generator
             set { _maxNumberOfUsersInCreatedSecurityGroups = value; }
         }
 
-        const string configDir = "\\config";
+        const string configDir = "config\\";
         public static void SerializeDefinition(string path, GeneratorDefinitionBase gdb)
         {
             if (!Directory.Exists(configDir))
