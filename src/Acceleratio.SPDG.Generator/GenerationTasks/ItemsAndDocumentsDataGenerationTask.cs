@@ -110,7 +110,10 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
                                             // if itemCount % 10 = 0, add attachment to list item.
                                             //if (i % 10 == 0) // Old: Hard coded 10%
                                             if (SampleData.GetRandomNumber(1, 100) <= WorkingDefinition.PercentListItemsWithAttachments)
+                                            {
                                                 populateItemInfo(list, itemInfo, false, true);
+                                                Log.Write("Adding Attachment to : " + itemInfo["Title"]);
+                                            }
                                             else
                                                 populateItemInfo(list, itemInfo, false);                               
                                             
