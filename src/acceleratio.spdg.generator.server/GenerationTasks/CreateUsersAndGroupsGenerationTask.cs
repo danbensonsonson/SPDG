@@ -10,7 +10,7 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
 {
     class CreateUsersAndGroupsGenerationTask : DataGenerationTaskBase
     {
-        private List<string> prinicpals;
+        private List<string> prinicpals = new List<string>();
         private List<string> shuffled = new List<string>();
 
         public override string Title
@@ -55,6 +55,7 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
             // TODO, you don't always get the exact number you ask for due to silent expection handling. change eventually
             foreach (ServerUsersGroupsDefinition sugd in ugDefinitions)
             {
+                var users = new List<string>();
                 Owner.WorkingDomains.Add(sugd.ADDomainName);
                 int numUsersToCreate = sugd.NumberOfUsersToCreate;
                 int numGroupsToCreate = sugd.NumberOfSecurityGroupsToCreate;
@@ -71,7 +72,7 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
                         Log.Write("Creating Active Directory users.");
                         if (WorkingDefinition.Mode != DataGeneratorMode.Incremental)
                             WorkingDefinition.Mode = DataGeneratorMode.Resume;
-                        createUsers(sugd.ADDomainName, sugd.ADOrganizationalUnit, numUsersToCreate);
+                        users = createUsers(sugd.ADDomainName, sugd.ADOrganizationalUnit, numUsersToCreate);
                     }
                     catch (Exception ex)
                     {
@@ -89,27 +90,24 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
                     numGroupsToCreate = numGroupsToCreate - Owner.WorkingGroups.Count;
                 }
 
-                if (numGroupsToCreate > 0)
+                try
                 {
-                    try
-                    {
-                        Log.Write("Creating Active Directory groups.");
-                        if (WorkingDefinition.Mode != DataGeneratorMode.Incremental)
-                            WorkingDefinition.Mode = DataGeneratorMode.Resume;
-                        createGroups(sugd.ADDomainName, sugd.ADOrganizationalUnit, numGroupsToCreate, sugd.MaxNumberOfUsersInCreatedSecurityGroups);
-                    }
-                    catch (Exception ex)
-                    {
-                        Errors.Log(ex);
-                    }
-
+                    Log.Write("Creating Active Directory groups.");
+                    if (WorkingDefinition.Mode != DataGeneratorMode.Incremental)
+                        WorkingDefinition.Mode = DataGeneratorMode.Resume;
+                    createGroups(sugd.ADDomainName, sugd.ADOrganizationalUnit, numGroupsToCreate, sugd.MaxNumberOfUsersInCreatedSecurityGroups, users);
                 }
+                catch (Exception ex)
+                {
+                    Errors.Log(ex);
+                }
+
                 // Write config file to resume?
                 GeneratorDefinitionBase.SerializeDefinition(DataGenerator.SessionID + ".xml", WorkingDefinition);
             }
         }
 
-        public void createUsers(string domain, string ou, int numOfUsers)
+        public List<String> createUsers(string domain, string ou, int numOfUsers)
         {
             ContextType contextType = ContextType.Domain;
             //must pass null parameter to principalcontext if no ou selected
@@ -117,8 +115,9 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
             {
                 ou = null;
             }
-            using (PrincipalContext ctx = new PrincipalContext(contextType, domain, ou, ConfigurationManager.AppSettings["adUser"], ConfigurationManager.AppSettings["adPassword"]))
-            //using (PrincipalContext ctx = new PrincipalContext(contextType, domain, ou))
+            var createdPrincipals = new List<string>();
+            //using (PrincipalContext ctx = new PrincipalContext(contextType, domain, ou, ConfigurationManager.AppSettings["adUser"], ConfigurationManager.AppSettings["adPassword"]))
+            using (PrincipalContext ctx = new PrincipalContext(contextType, domain, ou))
             {
                 // TODO: test if there is something wrong with the context, then throw exception
                 for (int i = 0; i < numOfUsers; i++)
@@ -142,7 +141,7 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
                         Owner.IncrementCurrentTaskProgress(string.Format("Creating {0}/{1} users: {2}", i, numOfUsers, domain + "\\" + userPrincipal.SamAccountName));
                         userPrincipal.Save();
                         Owner.IncrementCurrentTaskProgress(string.Format("Created {0}/{1} users: {2}", i, numOfUsers, userPrincipal.SamAccountName));
-                        //createdPrincipals.Add(userPrincipal.UserPrincipalName);  // this was SID, wonder if I need to assign user to groups
+                        createdPrincipals.Add(userPrincipal.Sid.Value);  // this was SID, wonder if I need to assign user to groups
                     }
                     catch (Exception ex)
                     {
@@ -150,9 +149,10 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
                     }
                 }
             }
+            return createdPrincipals;
         }
 
-        public void createGroups(string domain, string ou, int numOfGroups, int maxNumberOfUsersPerGroup)
+        public void createGroups(string domain, string ou, int numOfGroups, int maxNumberOfUsersPerGroup, List<string> principalList)
         {
             ContextType contextType = ContextType.Domain;
             //must pass null parameter to principalcontext if no ou selected
@@ -161,7 +161,29 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
                 ou = null;
             }
 
-            using (PrincipalContext ctx = new PrincipalContext(contextType, domain, ou, ConfigurationManager.AppSettings["adUser"], ConfigurationManager.AppSettings["adPassword"]))
+            // Resume - Look through the groups to see if the correct number of users have been added
+            if (WorkingDefinition.Mode == DataGeneratorMode.Resume)
+            {
+                using (PrincipalContext ctx = new PrincipalContext(contextType, domain, ou))
+                {
+                    foreach (string groupSid in Owner.WorkingGroups)
+                    {
+                        GroupPrincipal gp = GroupPrincipal.FindByIdentity(ctx, groupSid);
+                        if (gp == null)
+                            continue;
+                        PrincipalCollection pc = gp.Members;
+                        int membersToAdd = maxNumberOfUsersPerGroup - pc.Count;
+                        addPrincipalsToGroup(gp, membersToAdd);
+                        gp.Save();
+                    }
+                }
+            }
+
+            prinicpals = principalList;
+
+            // Create
+            // using (PrincipalContext ctx = new PrincipalContext(contextType, domain, ou, ConfigurationManager.AppSettings["adUser"], ConfigurationManager.AppSettings["adPassword"]))
+            using (PrincipalContext ctx = new PrincipalContext(contextType, domain, ou))
             {
                 for (int i = 0; i < numOfGroups; i++)
                 {
@@ -176,6 +198,7 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
                         groupPrincipal.Save();
                         Owner.IncrementCurrentTaskProgress(string.Format("Created {0}/{1} groups.", i, numOfGroups));
                         Owner.WorkingGroups.Add(groupPrincipal.Sid.Value);
+                        principalList.Add(groupPrincipal.Sid.Value);
                     }
                     catch (Exception ex)
                     {
@@ -187,9 +210,15 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
 
         private void addPrincipalsToGroup(GroupPrincipal group, int maxNumberOfUsersPerGroup)
         {
+            if (maxNumberOfUsersPerGroup < 1)
+                return;
+
             if (shuffled.Count == 0)
             {
-                shuffled.AddRange(Owner.WorkingUsers);
+                if (prinicpals.Count > Owner.WorkingUsers.Count)
+                    shuffled.AddRange(prinicpals);
+                else
+                    shuffled.AddRange(Owner.WorkingUsers);
                 shuffled.Shuffle();
             }
             int takeCt = Math.Min(maxNumberOfUsersPerGroup, shuffled.Count);
@@ -199,7 +228,15 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
                 shuffled.RemoveRange(0, takeCt);
                 foreach (var randomPrincipal in randomPrincipals)
                 {
-                    group.Members.Add(group.Context, IdentityType.UserPrincipalName, randomPrincipal); // this was Sid
+                    try
+                    {
+                        if (prinicpals.Count > Owner.WorkingUsers.Count)
+                            group.Members.Add(group.Context, IdentityType.Sid, randomPrincipal); // this was Sid
+                        else
+                            group.Members.Add(group.Context, IdentityType.UserPrincipalName, randomPrincipal);
+                    }
+                    catch (Exception ex)
+                    { }
                 }
             }
         }
