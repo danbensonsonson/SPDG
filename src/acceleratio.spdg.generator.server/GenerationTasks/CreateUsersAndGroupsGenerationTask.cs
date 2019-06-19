@@ -116,8 +116,8 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
                 ou = null;
             }
             var createdPrincipals = new List<string>();
-            //using (PrincipalContext ctx = new PrincipalContext(contextType, domain, ou, ConfigurationManager.AppSettings["adUser"], ConfigurationManager.AppSettings["adPassword"]))
-            using (PrincipalContext ctx = new PrincipalContext(contextType, domain, ou))
+            using (PrincipalContext ctx = new PrincipalContext(contextType, domain, ou, ConfigurationManager.AppSettings["adUser"], ConfigurationManager.AppSettings["adPassword"]))
+            //using (PrincipalContext ctx = new PrincipalContext(contextType, domain, ou))
             {
                 // TODO: test if there is something wrong with the context, then throw exception
                 for (int i = 0; i < numOfUsers; i++)
@@ -182,8 +182,8 @@ namespace Acceleratio.SPDG.Generator.Server.GenerationTasks
             prinicpals = principalList;
 
             // Create
-            // using (PrincipalContext ctx = new PrincipalContext(contextType, domain, ou, ConfigurationManager.AppSettings["adUser"], ConfigurationManager.AppSettings["adPassword"]))
-            using (PrincipalContext ctx = new PrincipalContext(contextType, domain, ou))
+            using (PrincipalContext ctx = new PrincipalContext(contextType, domain, ou, ConfigurationManager.AppSettings["adUser"], ConfigurationManager.AppSettings["adPassword"]))
+            //using (PrincipalContext ctx = new PrincipalContext(contextType, domain, ou))
             {
                 for (int i = 0; i < numOfGroups; i++)
                 {

@@ -26,7 +26,7 @@ namespace Acceleratio.SPDG.Generator.GenerationTasks
         {
             int totalSteps = (WorkingDefinition.MaxNumberOfListsAndLibrariesPerSite + WorkingDefinition.NumberOfBigListsPerSite) * WorkingDefinition.NumberOfSitesToCreate;
             totalSteps = totalSteps * Owner.WorkingSiteCollections.Count;
-            if (WorkingDefinition.Mode == DataGeneratorMode.Incremental)
+            if (WorkingDefinition.Mode == DataGeneratorMode.Incremental || WorkingDefinition.Mode == DataGeneratorMode.Resume)
             {
                 totalSteps += 1; // TODO hack to make sure it is active
             }
